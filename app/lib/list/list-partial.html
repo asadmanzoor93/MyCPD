@@ -1,0 +1,22 @@
+﻿<div class="alert alert-success alert-dismissable" ng-show="issuccess">
+    <strong>Success!</strong> {{status}}.
+</div>
+<section id="CPDList">
+    <md-list flex>
+        <md-list-item ng-repeat="item  in  model">
+            <ice-list-item itemurl={{url}} details="item"></ice-list-item>
+            <md-checkbox class="md-secondary" ng-model="item.selected"></md-checkbox>
+            <div class="md-secondary md-hue-3">
+                <md-button class="md-fab" aria-label="Refresh">
+                    <md-tooltip md-direction="down">View Course</md-tooltip>
+                    <i class="fa fa-eye"></i>
+                </md-button>
+                <md-button class="md-fab" aria-label="Refresh" ng-show="{{config.registerbutton}}" ng-click="register()">
+                    <md-tooltip md-direction="down">Register Course</md-tooltip>
+                    <i class="fa fa-pencil"></i>
+                </md-button>
+            </div>
+        </md-list-item>
+    </md-list>
+    <button class="btn btn-primary" type="button" style="margin-left:50%">Load More</button>
+</section>

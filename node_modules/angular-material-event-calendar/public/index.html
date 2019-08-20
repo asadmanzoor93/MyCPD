@@ -1,0 +1,53 @@
+<html>
+<head>
+  <title>Angular Material Test</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- css:css -->
+  <link rel="stylesheet" href="eventCalendar-colors.css">
+  <link rel="stylesheet" href="eventCalendar.css">
+  <link rel="stylesheet" href="style.css">
+  <!-- endinject -->
+
+  <!-- bower:css  -->
+  <link rel="stylesheet" href="angular-material/angular-material.css">
+  <!-- endinject -->
+
+  <!-- bower:js  -->
+  <script src="angular/angular.js"></script>
+  <script src="angular-animate/angular-animate.js"></script>
+  <script src="angular-messages/angular-messages.js"></script>
+  <script src="angular-aria/angular-aria.js"></script>
+  <script src="angular-material/angular-material.js"></script>
+  <script src="angular-mocks/angular-mocks.js"></script>
+  <script src="angular-route/angular-route.js"></script>
+  <!-- endinject -->
+
+  <!-- scripts:js -->
+  <script src="eventCalendar.js"></script>
+  <script src="js/eventCalendar.directive.js"></script>
+  <script src="js/eventCalendarBuilder.service.js"></script>
+  <script src="js/eventCalendarMonth.directive.js"></script>
+  <script src="js/eventCalendarNext.directive.js"></script>
+  <script src="js/eventCalendarPrev.directive.js"></script>
+  <script src="js/eventCalendarTitle.directive.js"></script>
+  <script src="js/eventCalendarToday.directive.js"></script>
+  <script src="js/utij.js"></script>
+  <!-- endinject  -->
+  <!-- theme:js -->
+  <script src="js/_theme.js"></script>
+  <script src="templates.js"></script>
+  <!-- endinject  -->
+
+  <!-- appscripts:js -->
+  <script src="app.js"></script>
+  <script src="pages/home/home.controller.js"></script>
+  <!-- endinject  -->
+
+</head>
+<body ng-app="eventCalendarApp" layout="row">
+  <md-content md-scroll-y layout="column" flex>
+    <div ng-view class="view-container"></div>
+  </md-content>
+</body>
+</html>

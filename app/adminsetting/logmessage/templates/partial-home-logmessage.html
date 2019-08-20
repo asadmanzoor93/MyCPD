@@ -1,0 +1,32 @@
+﻿<nav-header css="headerpages" text="Log Message" contactus="NO" aboutus="NO"></nav-header>
+<admin-sidebar></admin-sidebar>
+
+<div>
+    <div class="table-responsive">
+        <table st-table="model" class="table table-striped table-hover" width="100%" align="center">
+            <thead>
+                <tr class="header">
+                    <th>LogId</th>
+                    <th>Level</th>
+                    <th>Message</th>
+                    <th>InnerException</th>
+                    <th>StackTrace</th>
+                    <th>Logged On Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in vm.logerrorMessagedata">
+                    <td>{{row.LogId}}</td>
+                    <td>{{row.Level}}</td>
+                    <td>{{row.Message}}</td>
+                    <td>{{row.InnerException}}</td>
+                    <td>{{row.StackTrace}}</td>
+                    <td>{{row.LoggedOnDate |  date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+    </div>
+</div>

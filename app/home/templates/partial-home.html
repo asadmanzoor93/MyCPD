@@ -1,0 +1,23 @@
+﻿<nav-header css="headerdashboard" text="Home Page" homeicon="NO" quicknav ="NO" usermodel="usermodel" contactus="{{conatactus}}" aboutus="{{aboutus}}"></nav-header>
+<section id="portfolio" class="smallfont">
+    <div class="container margin-top-100">
+        <div class="row">
+            <div class="col-sm-4 portfolio-item" ng-repeat="row in vm.model">
+                <a href="" ng-click="vm.action(row.Action)">
+                    <div class="panel panel-default">
+
+                        
+                        <div class="panel-heading panel-heading-cpd">{{row.FeatureName}} <span ng-if="vm.cpdQueueCount > 0 && row.Action == 'ACCREDTADMIN' " class="label label-danger">{{vm.cpdQueueCount}}</span></div>
+                        <div class="panel-body" style="text-align: center">
+                            <img id="mycpd" ng-src="{{row.Face}}" width="100" height="100"  ng-alt="row.FeatureName" />
+                        </div>
+                        <div class="panel-footer cpdfooter" >{{row.FeatureDesc}}</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!--<div ng-if="vm.showDeclare">
+            <a class="btn DeclareButton btn-lg btn-block" role="button" ng-click="vm.declareCPD()"><span class="glyphicon glyphicon-thumbs-up"></span> Declare</a>
+        </div>-->
+    </div>
+</section>

@@ -1,0 +1,59 @@
+@import "grid-mixin.less";
+
+mwl-calendar {
+
+  [class*="cal-cell"] {
+    float: left;
+    margin-left: 0;
+    min-height: 1px;
+  }
+
+  .cal-row-fluid {
+    width: 100%;
+    *zoom: 1;
+  }
+
+  .cal-row-fluid:before,
+  .cal-row-fluid:after {
+    display: table;
+    content: "";
+    line-height: 0;
+  }
+
+  .cal-row-fluid:after {
+    clear: both;
+  }
+
+  .cal-row-fluid [class*="cal-cell"] {
+    display: block;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    float: left;
+    margin-left: 0%;
+    *margin-left: -0.05213764337851929%;
+  }
+
+  .cal-row-fluid [class*="cal-cell"]:first-child {
+    margin-left: 0;
+  }
+
+  .cal-row-fluid .controls-row [class*="cal-cell"] + [class*="cal-cell"] {
+    margin-left: 0%;
+  }
+
+  .gridForWeeks();
+
+  [class*="cal-cell"].hide,
+  .cal-row-fluid [class*="cal-cell"].hide {
+    display: none;
+  }
+
+  [class*="cal-cell"].pull-right,
+  .cal-row-fluid [class*="cal-cell"].pull-right {
+    float: right;
+  }
+
+
+}

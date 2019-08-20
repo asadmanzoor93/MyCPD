@@ -1,0 +1,208 @@
+﻿<nav-header css="headerpages" text="Record MyCPD"></nav-header>
+<nav-sidebar></nav-sidebar>
+
+<wizard on-finish="finishedWizard()" indicators-position="top" on-cancel="cancelledWizard()" edit-mode="vm.editmode">
+    <wz-step wz-title="Submitter Details">
+        <div style="margin-top:60px;"></div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Submitter Details</div>
+
+            <div class="container container-table">
+                <div class="row vertical-center-row" id="step-1">
+
+                    <div style="margin-top:40px;"></div>
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="form-group">
+                            <label class="control-label">First Name</label>
+                            <input maxlength="100" type="text" class="form-control" placeholder="Enter First Name" disabled ng-model="vm.memberInfo.FirstName" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Last Name</label>
+                            <input maxlength="100" type="text" class="form-control" placeholder="Enter Last Name" disabled ng-model="vm.memberInfo.Surname" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Membership Number</label>
+                            <input maxlength="100" type="text" class="form-control" placeholder="Enter MembershipNumber" disabled ng-model="vm.memberInfo.MemberNumber" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Email</label>
+                            <input maxlength="100" type="text" class="form-control" placeholder="Enter Email" disabled ng-model="vm.memberInfo.Email" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Address</label>
+                            <textarea required="required" class="form-control" disabled placeholder="Enter your address" rows="4" ng-model="vm.memberInfo.Address"></textarea>
+                        </div>
+                        <div style="margin-bottom:60px;">
+                            <button class="btn btn-primary pull-right" wz-next>Next step <i class="fa fa-arrow-right"></i></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </wz-step>
+    <wz-step wz-title="Confirm CPD Activity Details"  canexit="exitStepOne">
+
+        <div style="margin-top:60px;"></div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Confirm CPD Activity Details</div>
+
+
+            <div class="alert alert-danger alert-white rounded" ng-if="vm.errorMessage">
+                <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                <div class="icon">
+                    <i class="fa fa-times-circle"></i>
+                </div>
+                <strong>Error!</strong> {{vm.errorMessage}}
+            </div>
+
+
+
+            <div class="container container-table">
+
+                <div class="row vertical-center-row" id="step-2" name="editForm" ng-form novalidate role="form">
+                    <div style="margin-top:40px;"></div>
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="form-group required">
+                            <label class="control-label" for="cbdtype">CPD Type</label>
+                            <select class="form-control" name="cbdtype" ng-model='vm.selectedItem' ng-options='item.CPDTypeId as item.Description for item in vm.cbdtypes' ng-change="vm.CPDTitle()" required ng-disabled="vm.viewmode"></select>
+                        </div>
+
+                        <div class="form-group required" ng-hide="vm.addNewCPD">
+                            <label class="control-label" for="course">Course Title</label>
+                            <div id="custom-search-input">
+                                <ui-select name="course" ng-model="vm.selctedCourse" ng-change="vm.populateFullCourse()" ng-required="!vm.addNewCPD" ng-disabled="vm.viewmode">
+                                    <ui-select-match>
+                                        <span ng-bind="$select.selected.CourseName"></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in (vm.cpdDetails.itemArray | filter: $select.search) track by item.CourseId">
+                                        <span ng-bind="item.CourseName"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group required" ng-hide="!vm.addNewCPD">
+                            <label for="courseTitle" class="control-label">Course Title</label>
+                            <input type="text" class="form-control" name="courseTitle" id="courseTitle" ng-model="vm.cpdDetails.courseTitle" placeholder="Course Title" ng-maxlength="500" ng-required="vm.addNewCPD">
+                        </div>
+
+
+                        <div class="form-group required">
+                            <label for="cmbformat" class="control-label">Format</label>
+                            <select class="form-control" name="cmbformat" ng-model="vm.cpdDetails.CPDFormatId" ng-options="item.ID as item.Name for item in vm.cbdFormat" required ng-disabled="!vm.addNewCPD"></select>
+                        </div>
+
+                        <div class="form-group required" ng-class="{ 'has-error' : editForm.txtDescription.$invalid && !editForm.txtDescription.$pristine }">
+                            <label class="control-label" for="txtDescription">Description</label>
+                            <textarea class="form-control" name="txtDescription" id="txtDescription" rows="4" ng-model="vm.cpdDetails.Description" ng-disabled="vm.viewmode" required></textarea>
+                            <span id='helpText' class="small" style='color:blue;' ng-hide="!vm.addNewCPD"><em>Please include a full course description/outline/agenda. Submission will be rejected if not enough detail to approve is provided.</em></span>
+                        </div>
+                        <div class="form-group required" ng-class="{ 'has-error' : editForm.intputVenue.$invalid && !editForm.intputVenue.$pristine }">
+                            <label for="intputVenue" class="control-label">Venue</label>
+                            <input type="text" class="form-control" name="intputVenue" id="intputVenue" ng-model="vm.cpdDetails.Venue" placeholder="Venue" ng-disabled="vm.viewmode" ng-maxlength="500" required>
+                        </div>
+
+                        <div class="form-group col-xs-4 col-md-4 required" style="margin-left:-16px;">
+                            <label class="control-label" for="InputHour">CPD Hours</label>
+                            <input type="number" class="form-control" id="InputHour" name="InputHour" placeholder="Hour" step="1" max="100" min="0" value="0" ng-model="vm.cpdDetails.DurationHours" ng-disabled="vm.viewmode" required>
+                        </div>
+                        <div class="form-group col-xs-4 col-md-4">
+                            <label class="control-label" for="InputMin">Minutes</label>
+                            <input type="number" class="form-control" id="InputMin" placeholder="Minute" step="15" max="45" min="0" value="0" ng-model="vm.cpdDetails.Minutes" ng-disabled="vm.viewmode">
+                        </div>
+                        <div class="form-group col-xs-4 col-md-4">
+                            <label for="year" class="control-label">CPD Year</label>
+                            <select class="form-control" name="year" ng-model="vm.cpdDetails.CPDYear" ng-options="year for year in [2017,2018,2019,2020]" ng-disabled="vm.viewmode"></select>
+                        </div>
+
+                        <div class="form-group required"  ng-class="{ 'has-error' : editForm.courseDate.$invalid && !editForm.courseDate.$pristine &&  editForm.courseDate.$touched}">
+                            <label for="courseDate"  class="control-label">Date Completed</label>
+                            <span class="label label-danger" ng-if="vm.dateError">{{vm.dateError}}</span>
+                            <div class="input-group">
+                            <input type="text" class="form-control" name="courseDate" ng-model="vm.cpdDetails.completedDate" my-date-picker  end-date="+1d" required />
+                                <span class="input-group-addon" data-toggle="datepicker">
+                                    <span class="glyphicon glyphicon-calendar" ng-model="vm.cpdDetails.completedDate"></span>
+                                </span> 
+                            </div>
+                        </div>
+
+
+                        <div class="form-group required">
+                            <label class="control-label">Upload Evidence of Attendance</label>
+                            <div class="upload-field" ng-if="!vm.viewmode">
+                                {{(vm.editmode) && !vm.cpdDetails.myFile ? vm.cpdDetails.FileName : vm.cpdDetails.myFile.name || "Choose a file please"}}
+                                <input id="uploadFileInput" type="file" valid-file ng-model="filename" class="form-control" data-show-preview="false" file-model="vm.cpdDetails.myFile" ng-required='!(vm.viewmode || vm.editmode)'>
+                                <button class="icon-folder"></button>
+                            </div>
+                            <div class="inner-addon right-addon" ng-if="vm.viewmode">
+                                <i class="glyphicon glyphicon-folder-open"></i>
+                                <input type="text" class="form-control" disabled ng-model="vm.cpdDetails.FileName" />
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom:20px;">
+                            <button class="btn btn-default" name="previous" type="button" wz-previous><i class="fa fa-arrow-left"></i> Previous step</button>
+                            <button class="btn btn-primary pull-right" type="submit" ng-click="vm.validate(editForm)" ng-disabled="editForm.$invalid && !vm.viewmode" wz-next>Next step <i class="fa fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </wz-step>
+
+    <wz-step wz-title="CPD Details">
+        <div style="margin-top:60px;"></div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">CPD Details</div>
+
+            <div class="alert alert-danger alert-white rounded" ng-if="vm.errorMessage">
+                <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                <div class="icon">
+                    <i class="fa fa-times-circle"></i>
+                </div>
+                <strong>Error!</strong> {{vm.errorMessage}}
+            </div>
+
+
+            <div class="container container-table">
+                <div class="row vertical-center-row" id="step-3">
+                    <div style="margin-top:40px;"></div>
+                    <div class="col-md-6 col-md-offset-3">
+
+                        <div class="form-group required">
+                            <label for="host" class="control-label">Host</label>
+                            <select name="host" class="form-control" ng-model="vm.cpdDetails.HostId" ng-options="item.ID as item.Name for item in vm.hosts" ng-disabled="!vm.addNewCPD"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Trainer</label>
+                            <input maxlength="200" type="text" required="required" ng-model="vm.cpdDetails.Trainer" class="form-control" placeholder="Trainer" ng-disabled="!vm.addNewCPD" />
+                        </div>
+
+                        <div class="form-group required">
+                            <label for="location" class="control-label">Location</label>
+                            <select name="location" class="form-control" ng-model="vm.cpdDetails.LocationId" ng-options="item.ID as item.Name for item in vm.locations" ng-disabled="!vm.addNewCPD"></select>
+                        </div>
+
+                        <div class="form-group required">
+                            <input type="checkbox" name="declare" id="declare"  ng-disabled="vm.viewmode" ng-model="vm.cpdDetails.IsDeclared" />
+                            <label for="declare">I declare this CPD is relevant to my role and in accordance with the ATI CPD </label>
+                            <label for="declare">Guidelines and Rules.</label>
+                        </div>
+
+                        <div style="margin-bottom:20px;">
+                            <button class="btn btn-default" name="previous" type="button" wz-previous><i class="fa fa-arrow-left"></i> Previous step</button>
+                            <button class="btn btn-success pull-right" type="button" wz-next ng-click="vm.showConfirm()" ng-disabled="vm.viewmode || (!vm.cpdDetails.IsDeclared)"> <i class="fa fa-floppy-o"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </wz-step>
+</wizard>

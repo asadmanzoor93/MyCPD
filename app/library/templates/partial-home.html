@@ -1,0 +1,131 @@
+﻿<nav-header css="headerpages" text="Library"></nav-header>
+<nav-sidebar></nav-sidebar>
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading-cpd-3"><i class="fa fa-filter" title="Search" style="padding-top:10px;padding-bottom:10px;padding-left:10px;" tooltip> <strong>Search</strong></i></div>
+
+    <div class="shadow">
+        <div flex="100" class="flex flex-col">
+            <div style="padding: 1rem 1rem">
+
+
+                <div class="form-group input-group">
+                    <span class="has-float-label" style="width:590px;">
+                        <input class="form-control" ng-model="vm.pagingInfo.CourseName" type="text" placeholder="Course Name" id="courseName" ng-keyup="oncourseNameKeyPress($event)">
+                        <label for="courseName">Course Name</label>
+                    </span>
+                    <span class="has-float-label" style="width:590px;">
+                        <input class="form-control" ng-model="vm.pagingInfo.LocationName" type="text" id="LocationName" placeholder="Location Name" ng-keyup="oncourseNameKeyPress($event)">
+                        <label for="LocationName">Location Name</label>
+                    </span>
+                </div>
+
+                <div class="form-group input-group">
+                    <div class="has-float-label" style="width:560px;">
+                        <select class="form-control" id="courseType" ng-model="vm.selectedcbdtypes" ng-options="item.CPDTypeId as item.Description for item in vm.cbdtypes"></select>
+                        <label for="courseType">CPD Type</label>
+                    </div>
+
+                    <span class="has-float-label" style="width:560px;">
+                        <input class="form-control" ng-model="vm.pagingInfo.Venue" id="Venue" type="text" placeholder="Venue" ng-keyup="oncourseNameKeyPress($event)">
+                        <label for="Venue">Venue</label>
+                    </span>
+
+                </div>
+
+                <div class="form-group input-group">
+                    <div class="has-float-label" style="width:560px;">
+                        <select class="form-control" id="host" ng-model="vm.HostId" ng-options="item.ID as item.Name for item in vm.hosts"></select>
+                        <label for="host">Host</label>
+                    </div>
+                </div>
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <button class="btn btn-primary" ng-click="vm.search()" style="margin-left:40px;margin-bottom:10px;"><span class="glyphicon glyphicon-search"></span> Search</button>
+                        <button class="btn btn-primary" ng-click="vm.clear()" style="margin-left:10px;margin-bottom:10px;"><span class="glyphicon glyphicon-remove-sign"></span> Clear</button>
+                    </div>
+
+                </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div id="gridTopItems">
+        <div class="gridTopButtons">
+            <button type="button" class="btn btn-danger btn-circle btn-lg" tooltip ng-click="vm.print()"><i class="fa fa-print"></i></button>
+            <button type="button" class="btn btn-success btn-circle btn-lg" tooltip ng-click="vm.DownloadExcel()"><i class="fa fa-file-excel-o"></i></button>
+        </div>
+        <div class="gridTopDropdown">
+            Show <select class="input-sm" ng-model="vm.pagingInfo.pageSize" ng-options="o for o in vm.entries" ng-change="vm.setItemsPerPage(vm.pagingInfo.pageSize)" ng-init="vm.pagingInfo.pageSize = vm.entries[0]"></select>  entries
+        </div>
+    </div>
+</div>
+
+
+<div ng-if="vm.loadingLibrarydata">
+    <div class="col-xs-4"></div>
+    <div class="col-xs-4">
+        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading Library...</label>
+    </div>
+    <div class="col-xs-4"></div>
+</div>
+<div class="table-responsive" ng-if="!vm.loadingLibrarydata">
+    <table class="table table-striped table-bordered table-hover table-condensed" id="cpdtable">
+        <thead>
+            <tr class="header">
+                <th style="width:60px;"></th>
+                <th ng-click="vm.sort('CourseName')" class="col-md-3">Course<i class="fa fa-fw" ng-class="vm.getIcon('CourseName')"></i></th>
+                <th style="min-width:100px; height:45px" ng-click="vm.sort('Expr1')">Location<i class="fa fa-fw" ng-class="vm.getIcon('Expr1')"></i></th>
+                <th ng-click="vm.sort('DurationHours')" style="min-width:120px;">CPD Hours<i class="fa fa-fw" ng-class="vm.getIcon('DurationHours')"></i></th>
+                <th ng-click="vm.sort('Description')" style="min-width:80px;">Type<i class="fa fa-fw" ng-class="vm.getIcon('Description')"></i></th>
+                <th ng-click="vm.sort('Name')" style="min-width:80px;">Host<i class="fa fa-fw" ng-class="vm.getIcon('Name')"></i></th>
+                <th ng-click="vm.sort('Trainer')">Trainer<i class="fa fa-fw" ng-class="vm.getIcon('Trainer')"></i></th>
+                <th ng-click="vm.sort('Venue')" style="min-width:80px;">Venue<i class="fa fa-fw" ng-class="vm.getIcon('Venue')"></i></th>
+                <th ng-click="vm.sort('StartDate')" style="min-width:100px;">Start Date <i class="fa fa-fw" ng-class="vm.getIcon('StartDate')"></i> </th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in vm.libraryinfo">
+                <td><img ng-src="{{row.ImagePath}}" class="img-responsive center-block" style="width:60px;" /></td>
+                <td>{{::row.CourseName}}</td>
+                <td>{{::row.Expr1}}</td>
+                <td>
+                    {{row.DurationHours > 0 ? row.DurationHours + 'h' :''}}
+                    {{row.DurationMins > 0 ? row.DurationMins + 'm' :'' }}
+                </td>
+                <td>{{::row.Description}}</td>
+                <td>{{::row.Name}}</td>
+                <td>{{::row.Trainer}}</td>
+                <td>{{::row.Venue}}</td>
+                <td>{{::row.StartDate | dateformat }}</td>
+                <td>
+                    <i class="fa fa fa-eye" style="font-size:20px;cursor:pointer" ng-click="vm.editDialog.open(row)" title="View" tooltip></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div ng-if="!vm.loadingLibrarydata && vm.totalItems == '0'">
+        <div class="col-md-10" style="margin-top:5px;">
+            There is no data to show in the grid for the current selection.<br />
+            If you can't find what you are looking for? Check out our online offerings in CPDgo
+        </div>
+    </div>
+
+    <edit-custom-dialog model="vm.editDialog" itemurl="app/library/templates/course_snapshot.html"></edit-custom-dialog>
+    <pagination page="vm.pagingInfo.page"
+                total-items="vm.totalItems"
+                items-per-page="vm.pagingInfo.pageSize"
+                on-select-page="vm.selectPage(page)"
+                max-size="10"
+                rotate="false"
+                boundary-links="true"></pagination>
+
+</div>

@@ -1,0 +1,156 @@
+// Borders
+$border: #DDD;
+$todayBorder: #AAA;
+
+// Backgrounds
+$headerBackground: #FFF;
+$eventBackground: #DDD;
+$eventBackgroundSelected: #EEE;
+$rowBackground: #FFF;
+$previousMonthDayBackground: #F5F5F5;
+$buttonHover: rgba(158,158,158,0.2);
+
+// Fonts
+$eventFont: #666;
+$headerFont: #666;
+$monthDayfont: #999;
+$monthDayHeaderFont: #999;
+$showMoreLink: #4189b8;
+$eventSelectedFont: #888;
+$button: #333;
+$buttonDisabled: #CCC;
+
+
+
+
+md-event-calendar:not(._md) {
+  md-event-calendar-header {
+    color: $headerFont;
+    background: $headerBackground;
+    border-color: $border;
+
+    md-event-calendar-next, md-event-calendar-prev {
+      .md-arrow svg {
+        fill: $headerFont;
+      }
+    }
+  }
+
+  .md-button:not([disabled]) {
+    color: $button;
+    &:hover {
+      background: $buttonHover;
+    }
+  }
+
+  .md-button[disabled] {
+    color: $buttonDisabled;
+  }
+
+
+  md-event-calendar-month {
+    .md-event-calendar-month-row-header {
+      color: $monthDayHeaderFont;
+      background: $headerBackground;
+      border-color: $border;
+    }
+
+    .md-event-calendar-month-row {
+      background: $rowBackground;
+      border-color: $border;
+
+      .md-event-calendar-month-cell-divider {
+        border-color: $border;
+      }
+
+      .md-event-calendar-month-cell {
+        border-color: $border;
+
+        .md-event-calendar-month-cell-content {
+          .md-event-calendar-create-link {
+            color: $showMoreLink;
+          }
+
+          .md-event-calendar-cell-data-label {
+            color: $monthDayfont;
+          }
+
+          .md-event-calendar-cell-event-show-more-link {
+            color: $showMoreLink;
+          }
+        }
+
+
+
+        &.different-month {
+          background: $previousMonthDayBackground;
+        }
+
+        &.today {
+          box-shadow: inset 0px 0px 0px 1px $todayBorder;
+
+          .md-event-calendar-month-cell-content {
+            .md-event-calendar-cell-data-label {
+              color: $headerFont;
+            }
+          }
+
+          .md-event-calendar-month-cell-divider {
+            border-color: $todayBorder;
+          }
+        }
+
+        &:last-child {
+          border-color: $border;
+        }
+      }
+    }
+  }
+
+  .md-event-calendar-cell-event {
+    background: $eventBackground;
+    color: $eventFont;
+
+    &.md-selected {
+      color: $eventBackgroundSelected;
+      background: $eventSelectedFont;
+    }
+
+    &.md-continue-left, &.md-end-left {
+      &:after {
+        border-right-color: $eventBackground;
+      }
+    }
+
+    &.md-continue-right, &.md-start-right {
+      &:after {
+        border-left-color: $eventBackground;
+      }
+    }
+
+
+    &.md-selected {
+      &.md-continue-left, &.md-end-left {
+        &:after {
+          border-right-color: $eventSelectedFont;
+        }
+      }
+
+      &.md-continue-right, &.md-start-right {
+        &:after {
+          border-left-color: $eventSelectedFont;
+        }
+      }
+    }
+  }
+
+  .md-event-calendar-show-more-container {
+    .md-event-calendar-show-more-date-label {
+      color: $monthDayfont;
+    }
+
+    .md-event-calendar-show-more-close svg {
+      fill: $monthDayfont;
+    }
+  }
+}

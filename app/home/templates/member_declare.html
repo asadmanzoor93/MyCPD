@@ -1,0 +1,18 @@
+﻿<div class="modal-body">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" aria-label="close dialog" ng-click="cancel()">×</button>
+    <div class="row" style="text-align:center;font-weight:bold">
+        DECLARE
+    </div>
+        <div class="row">
+            <canvas id="doughnut" class="chart chart-doughnut" chart-data="data" chart-labels="labels" ></canvas>
+        </div>
+        <div class="row" style="text-align:center;font-weight:bold;color:forestgreen;padding-left:5px;padding-right:5px;">
+            Congratulations! You have completed your CPD Return
+        </div>
+        <div class="row" style="text-align:center">
+            <button class="btn btn-success" ng-click="ok()">Declare CPD
+                <md-tooltip md-direction="down">Declare</md-tooltip>
+            </button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </div>

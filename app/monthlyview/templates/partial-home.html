@@ -1,0 +1,58 @@
+﻿<nav-header css="headerpages" text="Monthly View" contactus="NO"></nav-header>
+<admin-sidebar></admin-sidebar>
+
+<div class="marginfix"></div>
+<h2 class="text-center">{{ vm.calendarTitle }}</h2>
+<div class="row">
+    <div class="col-md-6 text-center">
+        <div class="btn-group">
+
+            <button class="btn btn-success"
+                    mwl-date-modifier
+                    date="vm.viewDate"
+                    decrement="vm.calendarView"
+                    ng-click="vm.previous()">
+                Previous
+            </button>
+            <button class="btn btn-success"
+                    mwl-date-modifier
+                    date="vm.viewDate"
+                    set-to-today
+                    ng-click="vm.setcurrent()">
+                Today
+            </button>
+            <button class="btn btn-success"
+                    mwl-date-modifier
+                    date="vm.viewDate"
+                    increment="vm.calendarView"
+                    ng-click="vm.next()">
+                Next
+            </button>
+        </div>
+    </div>
+    <div class="col-md-6 text-center">
+        <div class="btn-group">
+            <button type="button" class="btn btn-success" ng-click="vm.calendarView = 'year'">Year</button>
+            <button type="button" class="btn btn-success" ng-click="vm.calendarView = 'month'">Month</button>
+            <button type="button" class="btn btn-success" ng-click="vm.calendarView = 'week'">Week</button>
+            <!--<button type="button" class="btn btn-primary" ng-click="vm.calendarView = 'day'">Day</button>-->
+        </div>
+    </div>
+</div>
+<div>
+</div>
+<edit-custom-dialog model="vm.editDialog" itemurl="app/library/templates/course_snapshot.html"></edit-custom-dialog>
+<mwl-calendar events="vm.events"
+              view="vm.calendarView"
+              view-title="vm.calendarTitle"
+              view-date="vm.viewDate"
+              on-event-click="vm.eventClicked(calendarEvent)"
+              on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+              cell-is-open="vm.cellIsOpen"
+              day-view-start="06:00"
+              day-view-end="22:59"
+              day-view-split="30"
+              cell-modifier="vm.modifyCell(calendarCell)"
+              cell-auto-open-disabled="true"
+              on-timespan-click="vm.timespanClicked(calendarDate, calendarCell)">
+</mwl-calendar>

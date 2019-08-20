@@ -1,0 +1,37 @@
+﻿<div class="table-responsive">
+    <table class="table table-striped table-hover table-condensed">
+        <thead>
+            <tr class="header">
+                <!--<th>Host</th>-->
+                <th><a href="" ng-click="sort('Name')">Course</a></th>
+                <th><a href="" ng-click="sort('TotalDuration')">Duration</a></th>
+                <th><a href="" ng-click="sort('SubmittedDate')">Submitted Date</a></th>
+                <th><a href="" ng-click="sort('HostName')">Host</a></th>
+                <th><a href="" ng-click="sort('LocationName')">Location</a></th>
+                <th><a href="" ng-click="sort('CPDTypeDesc')">CPD Type</a></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in model">
+                <!--<td><img ng-src="{{row.HostImagePath}}" class="img-responsive center-block" alt="" width="70"/><md-tooltip md-direction="down">{{row.CPDTypeDesc}}</md-tooltip></td>-->
+                <td>{{row.Name}}</td>
+                <td>{{row.TotalDuration}}h</td>
+                <td>{{row.SubmittedDate | dateformat}}</td>
+                <td>{{row.HostName}}</td>
+                <td><div style="font-weight:bold">{{row.LocationName}}</div></td>
+                <td>{{row.CPDTypeDesc}}</td>
+                <td>
+                    <i class="fa fa fa-eye" style="font-size:20px;cursor:pointer" ng-click="Bubblevent('VIEW COURSE',row)" title="View Course" tooltip><md-tooltip md-direction="down">View Course</md-tooltip></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <pagination page="paging.page"
+                total-items="paging.totalItems"
+                items-per-page="paging.itemsPerPage"
+                on-select-page="selectPage(page)"
+                max-size="10"
+                rotate="false"
+                boundary-links="true"></pagination>
+</div>

@@ -1,0 +1,70 @@
+﻿<nav-header css="headerpages" text="User Management" contactus="NO" aboutus="NO"></nav-header>
+<admin-sidebar></admin-sidebar>
+
+<div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading-cpd-3"><i class="fa fa-filter" title="Search" style="padding-top:10px;padding-bottom:10px;padding-left:10px;" tooltip> Search</i></div>
+        <div layout="row">
+            <md-input-container class="filterWidth">
+                <label>User Name</label>
+                <input name="clientName" ng-model="vm.UserName">
+            </md-input-container>
+            <md-input-container class="filterWidth">
+                <label>Email</label>
+                <input ng-model="vm.Email">
+            </md-input-container>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <button class="btn btn-primary" ng-click="vm.search()" style="margin-left:40px;margin-bottom:10px;"><span class="glyphicon glyphicon-search"></span> Search</button>
+            <button class="btn btn-primary" ng-click="vm.clear()" style="margin-left:10px;margin-bottom:10px;"><span class="glyphicon glyphicon-remove-sign"></span> Clear</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="gridTopItems">
+            <div class="gridTopButtons">
+                <button type="button" class="btn btn-primary btn-circle btn-lg" ng-click="vm.addUser()" title="ADD External User" tooltip>
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="marginfix" />
+
+    <div>
+        <div class="table-responsive">
+            <table st-table="model" class="table table-striped table-hover" width="100%" align="center">
+                <thead>
+                    <tr class="header">
+                        <th>UserName</th>
+                        <th>Email</th>
+                        <th>FirstName</th>
+                        <th>Surname</th>
+                        <th>LastLoginTime</th>
+                        <th>EmployerName</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in vm.userData | filter:{UserName:vm.UserName, Email:vm.Email}">
+                        <td>{{row.UserName}}</td>
+                        <td>{{row.Email}}</td>
+                        <td>{{row.FirstName}}</td>
+                        <td>{{row.Surname}}</td>
+                        <td>{{row.LastLoginTime  |  date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td>{{row.EmployerName}}</td>
+                        <td>
+                            <i title="Edit User detials" class="fa fa-edit" style="font-size:20px;cursor:pointer" data-placement="top" ng-click="vm.editUser(row)" tooltip> </i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+
+</div>

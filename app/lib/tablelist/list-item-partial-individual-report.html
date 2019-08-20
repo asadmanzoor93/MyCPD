@@ -1,0 +1,41 @@
+﻿<div class="table-responsive">
+    <table st-table="model" class="table table-striped table-hover" width="100%" align="center">
+        <thead>
+            <tr class="header">
+                <th st-sort="reportid">Membership Number</th>
+                <th st-sort="user">User</th>
+                <th st-sort="cpdcompliant">CPD Compliant</th>
+                <th st-sort="year">Year</th>
+                <th st-sort="coursename">Course Name</th>
+                <th st-sort="venue">Venue</th>
+                <th st-sort="trainer">Trainer</th>
+                <th st-sort="date">Date</th>
+                <th st-sort="duration">Duration</th>
+                <th st-sort="duration">Attachment</th>
+                <th st-sort="reportdescription">View/Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in model">
+                <td>{{row.CourseName}}</td>
+                <td>{{row.user}}</td>
+                <td ><img src="app/images/yes-icon.png" alt="compliant" /></td>
+                <td>{{row.TotalPages}}</td>
+                <td>{{row.coursename}}</td>
+                <td>{{row.venue}}</td>
+                <td>{{row.trainer}}</td>
+                <td>{{row.date}}</td>
+                <td>{{row.duration}}</td>
+                <td><i class="fa fa-paperclip" style="cursor:pointer;font-size:20px" ></i></td>
+                <td><i class="fa fa-eye" style="font-size:20px;cursor:pointer"><md-tooltip md-direction="down">View report</md-tooltip></i></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div st-pagination="" st-items-by-page="4" st-displayed-pages="2"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

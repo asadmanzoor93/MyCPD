@@ -1,0 +1,53 @@
+﻿<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover table-condensed" id="cpdtable">
+        <thead>
+            <tr class="header">
+                <th></th>
+                <th><a href="" ng-click="sort('CourseName')">Course Name</a></th>
+                <th><a href="" ng-click="sort('Expr1')">Location</a></th>
+                <th><a href="" ng-click="sort('Name')">Host</a></th>
+                <th><a href="" ng-click="sort('Venue')">Venue</a></th>
+                <th><a href="" ng-click="sort('DurationHours')">Duration</a></th>
+                <th><a href="" ng-click="sort('Description')">Type</a></th>
+                <th><a href="" ng-click="sort('StartDate')">Start Date</a></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in model" ng-class="row.Active == false || row.Active == null ? 'overlay' : ''">
+                <td><img ng-src="{{row.ImagePath}}" class="img-responsive center-block" alt="" width="30" height="30" title="{{row.Description}}" tooltip /></td>
+                <td>{{row.CourseName}}</td>
+                <td>{{row.Expr1}}</td>
+                <td>{{row.Name}}</td>
+                <td>{{row.Venue}}</td>
+                <td>
+                    {{row.DurationHours > 0 ? row.DurationHours + 'h' :''}}
+                    {{row.DurationMins > 0 ? row.DurationMins + 'm' :'' }}
+                </td>
+                <td>{{::row.Description}}</td>
+                <td>{{row.StartDate | dateformat }}</td>
+                <td>
+                    <i class="fa fa-pencil" style="font-size:20px;cursor:pointer" ng-click="Bubblevent('EDIT COURSE',row)" title="Edit Course" tooltip></i>
+                </td>
+                <td ng-show="row.Active == true">
+                    <i class="fa fa-file-archive-o" style="font-size:20px;cursor:pointer" ng-click="Bubblevent('ARCHIVE COURSE',row)" title="Archive Course" tooltip><md-tooltip md-direction="down">Archive Course</md-tooltip></i>
+                </td>
+                <td ng-show="row.Active == false || row.Active == null">
+                    <i class="fa fa-flickr" style="font-size:20px;cursor:pointer" ng-click="Bubblevent('LIVE COURSE',row)" title="Live Course" tooltip><md-tooltip md-direction="down">Live Course</md-tooltip></i>
+                </td>
+            </tr>
+            <tr ng-show="model == null || model.length == 0">
+                <td colspan="8">No Records Found</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <pagination page="paging.page"
+                total-items="paging.totalItems"
+                items-per-page="paging.itemsPerPage"
+                on-select-page="selectPage(page)"
+                max-size="10"
+                rotate="false"
+                boundary-links="true"></pagination>
+</div>

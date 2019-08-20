@@ -1,0 +1,43 @@
+﻿<nav-header css="headerpages" text="Approval Queue" contactus="NO" aboutus="NO"></nav-header>
+
+<admin-sidebar></admin-sidebar>
+<form class="panel panel-default" ng-submit="vm.search()" id="searchPanel" name="searchPanel" novalidate>
+    <div class="panel-heading-cpd-3"><i class="fa fa-filter" style="padding-top:10px;padding-bottom:10px;padding-left:10px;"><md-tooltip md-direction="down">Filter Record</md-tooltip></i></div>
+    <div class="shadow">
+        <div layout="row">
+            <md-input-container flex="100">
+                <label style="margin-left:70px">User Name</label>
+                <input ng-model="vm.username" type="text">
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container flex="100">
+                <label style="margin-left:70px">Host Name</label>
+                <input ng-model="vm.providername" type="text">
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container flex="100">
+                <label style="margin-left:70px">Course Name</label>
+                <input ng-model="vm.coursename" type="text">
+            </md-input-container>
+        </div>
+            <div layout="row">
+                <md-input-container flex="50">
+                    <button class="btn btn-success">Search</button>
+                    <button class="btn btn-success" ng-click="vm.clear()">Clear</button>
+                </md-input-container>
+            </div>
+        </div>
+</form>
+    <div class="row demo-md-panel-content">
+        <table-list url="app/lib/tablelist/list-item-partial-cpd-accreditedadmin.html" model="vm.cpdrecords" paging="vm.pagingInfo" config="vm.configuration" pagefunc="vm.pagefunction(page)" sortfunc="vm.sortfunction(column,order)" actionfunc="vm.actionfunc(arg,row)" ng-if="vm.cpdrecords != null"></table-list>
+    </div>
+
+<edit-custom-dialog model="vm.editDialog" itemurl="app/library/templates/course_snapshot.html"></edit-custom-dialog>
+<div layout="row">
+    <md-input-container flex="50">
+        <button class="btn btn-success" ng-click="vm.Submit('APPROVED',3)">Approve</button>
+        <button class="btn btn-danger" ng-click="vm.Submit('REJECTED',1)">Reject</button>
+    </md-input-container>
+</div>

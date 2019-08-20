@@ -1,0 +1,51 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading-cpd-3"><i class="fa fa-filter" style="padding-top:10px;padding-bottom:10px;padding-left:10px;"><md-tooltip md-direction="down">Filter Record</md-tooltip></i></div>
+    <div class="shadow">
+        <div layout-gt-sm="row">
+            <md-input-container flex="50">
+                <label>Course Name</label>
+                <input name="coursename" ng-model="coursename">
+            </md-input-container>
+            <div flex="50">
+                <md-autocomplete md-selected-item="selectedItem"
+                                 md-search-text="searchText"
+                                 md-item-text="item.Name"
+                                 md-items="item in query(searchText)"
+                                 md-floating-label="Course Location">
+                    <md-item-template>
+                        <span md-highlight-text="searchText">{{item.Name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No Location matching "{{searchText}}" were found.
+                    </md-not-found>
+                </md-autocomplete>
+            </div>
+        </div>
+        <div layout-gt-sm="row">
+            <div flex="50">
+                <md-autocomplete md-selected-item="selectedItemcpdt"
+                                 md-search-text="searchTextcpdt"
+                                 md-item-text="itemcpdt.Description"
+                                 md-items="itemcpdt in querycpdtype(searchTextcpdt)"
+                                 md-floating-label="Course Type">
+                    <md-item-template>
+                        <span md-highlight-text="searchTextcpdt">{{itemcpdt.Description}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No course type matching "{{searchTextcpdt}}" were found.
+                    </md-not-found>
+                </md-autocomplete>
+            </div>
+            <md-input-container flex="50">
+                <md-datepicker ng-model="curdate" md-placeholder="Enter Start Date"></md-datepicker>
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container flex="50">
+                <button class="btn btn-success" ng-click="search()">Search</button>
+                <button class="btn btn-success" ng-click="Clear()">Clear</button>
+                <!--<md-button class="md-raised md-primary" ng-click="search()">Search</md-button>-->
+            </md-input-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿<nav-header css="headerdashboard" text="Register Details" contactus="NO" quicknav="NO"></nav-header>
+
+<form class="form-login" id="registerform" name="registerform" role="form" novalidate>
+    <div style="margin-top:30px;"></div>
+    <div class="panel panel-primary">
+
+        <div class="panel-heading"><label class="label label-danger">Admin Section</label></div>
+
+        <div class="container container-table">
+            <div class="row vertical-center-row" >
+
+                <div style="margin-top:10px;"></div>
+                <div class="col-md-6 col-md-offset-3">
+
+                    <ul class="text-danger"> 
+                        <li ng-repeat="e in vm.errors">{{e}}</li>
+                    </ul>
+
+                    <div class="form-group required">
+                        <label class="control-label">User Name</label>
+                        <input maxlength="200" ng-model="vm.userDetails.UserName" type="text" class="form-control" placeholder="Enter User Name" value="" required />
+                    </div>
+                    <div class="form-group required">
+                        <label class="control-label">First Name</label>
+                        <input maxlength="30" ng-model="vm.userDetails.FirstName" type="text" class="form-control" placeholder="Enter First Name" value="" />
+                    </div>
+                    <div class="form-group required">
+                        <label class="control-label">Surname</label>
+                        <input maxlength="30" ng-model="vm.userDetails.Surname" type="text" class="form-control" placeholder="Enter Surname" value="" />
+                    </div>
+                    <div class="form-group required" ng-if="!vm.editmode" >
+                        <label class="control-label">Password</label>
+                        <input maxlength="100" type="password" ng-model="vm.password" class="form-control" placeholder="Enter Password" value="" required />
+                    </div>
+                    <div class="form-group required" ng-if="!vm.editmode">
+                        <label class="control-label">Confirm Password</label>
+                        <input maxlength="100" type="password" class="form-control" ng-model="vm.confirmpassword" placeholder="Enter Password" value="" required />
+                    </div>
+                    <div class="form-group required">
+                        <label class="control-label">Email</label>
+                        <input maxlength="200" type="email" class="form-control" ng-model="vm.userDetails.Email" placeholder="Enter Email" value="" required />
+                    </div>
+                    <div class="form-group required">
+                        <label class="control-label">Role</label>
+                        <select class="form-control" ng-model='vm.selectedRole' ng-options='role for role in vm.roles'></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="employerDetails">Employer Details</label>
+                        <ui-select ng-model="vm.userDetails.selctedEmployer" theme="bootstrap">
+                            <ui-select-match placeholder="Type 'a' to display results...">
+                                {{$select.selected.EmployerName}}
+                            </ui-select-match>
+                            <ui-select-choices refresh="fetch($select)"
+                                               refresh-delay="300"
+                                               repeat="item in vm.items | filter: $select.search">
+                                {{item.EmployerName}}
+                            </ui-select-choices>
+                        </ui-select>
+
+                    </div>
+
+                        <button class="btn btn-primary nextBtn btn-success pull-right" type="submit" ng-disabled="registerform.$invalid" ng-click="vm.register()">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</form>

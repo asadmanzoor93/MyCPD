@@ -1,0 +1,179 @@
+﻿<nav-header css="headerpages" text="CPD Reports" contactus="NO" aboutus="NO"></nav-header>
+<admin-sidebar></admin-sidebar>
+
+<div class="row">
+    <div id="gridTopItems">
+
+        <div style="float:right;padding-right:15px;">
+            Year <select class="input-sm" ng-model="vm.selectYear" ng-options="o for o in vm.years" ng-change="vm.getCPDCompliantInfo(vm.selectYear)" ng-init="vm.selectYear=vm.currentYear"></select>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-xl-3 col-sm-4">
+        <div class="report-dashboard-box-1">
+            <div class="pull-right ">
+                <i class="fa fa-graduation-cap"></i>
+            </div>
+            {{vm.CPDInfo.CPDCompliantPercentage}} % / {{vm.CPDInfo.CPDCompliant}}
+            <div class="white_progress">
+
+                <div class="white_progress_inner" style="width:100%;"></div>
+
+            </div>
+            <div class="report-dashboard-box-footer" id="dashBox1">
+                <div id="courseToDo">
+                    <span>CPD Compliant</span>
+                    <span style="padding-left:155px;">{{vm.selectYear}}</span>
+                    <span class="font-20"> <i title="View Compliant Report" class="fa fa-folder-open" style="font-size:20px;cursor:pointer" ng-click="vm.viewReport('CPD0002')" tooltip></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-4">
+        <div class="report-dashboard-box-3">
+            <div class="pull-right">
+                <i class="fa fa-exclamation-circle"></i>
+            </div>
+            {{vm.CPDInfo.NoNCPDCompliantPercentage}} % / {{vm.CPDInfo.NonCPDCompliant}}
+            <div class="white_progress">
+
+                <div class="white_progress_inner" style="width:100%;"></div>
+
+            </div>
+            <div class="report-dashboard-box-footer" id="dashBox1">
+                <div id="courseToDo">
+                    <span>CPD Non Compliant</span>
+                    <span style="padding-left:110px;">{{vm.selectYear}}</span>
+                    <span class="font-20"><i title="Non Compliant Report" class="fa fa-folder-open" style="font-size:20px;cursor:pointer" ng-click="vm.viewReport('CPD0003')" tooltip></i></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="report-dashboard-box-1">
+            <div class="pull-right">
+                <i class="fa fa-trophy"></i>
+            </div>
+            {{vm.CPDInfo.EightPlusHrRecordedPercentage}} % / {{vm.CPDInfo.EightPlusHrRecorded}}
+            <div class="white_progress">
+
+                <div class="white_progress_inner" style="width:100%;"></div>
+
+            </div>
+            <div class="report-dashboard-box-footer" id="dashBox1">
+                <div id="courseToDo">
+                    <span>8hr+ Recorded</span>
+                    <span style="padding-left:155px;">{{vm.selectYear}}</span>
+                    <span class="font-20"><i title="8hr+ Recorded" class="fa fa-folder-open" style="font-size:20px;cursor:pointer" ng-click="vm.viewReport('CPD0001')" tooltip></i></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4">
+        <div class="report-dashboard-box-3">
+            <div class="pull-right">
+                <i class="fa fa-desktop"></i>
+            </div>
+            {{vm.CPDInfo.SystemUsagePercentage}} % / {{vm.CPDInfo.SystemUsage}}
+            <div class="white_progress">
+
+                <div class="white_progress_inner" style="width:100%;"></div>
+
+            </div>
+            <div class="report-dashboard-box-footer" id="dashBox1">
+                <div id="courseToDo">
+                    <span>System Usage</span>
+                    <span style="padding-left:155px;">{{vm.selectYear}}</span>
+                    <span class="font-20"><i title="system usage" class="fa fa-folder-open" style="font-size:20px;cursor:pointer" ng-click="vm.viewReport('CPD0005')" tooltip></i></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="report-dashboard-box-1">
+            <div class="pull-right">
+                <i class="fa fa-clock-o"></i>
+            </div>
+            {{vm.CPDInfo.FifteenMinutesToThreeHrPercentage}} % / {{vm.CPDInfo.FifteenMinutesToThreeHrRecorded}}
+            <div class="white_progress">
+
+                <div class="white_progress_inner" style="width:100%;"></div>
+
+            </div>
+            <div class="report-dashboard-box-footer" id="dashBox1">
+                <div id="courseToDo">
+                    <span>Recorded 15m-3hr</span>
+                    <span style="padding-left:130px;">{{vm.selectYear}}</span>
+                    <span class="font-20"><i title="Recorded 15m-3hr" class="fa fa-folder-open" style="font-size:20px;cursor:pointer" ng-click="vm.viewReport('CPD0001')" tooltip></i></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4">
+        <div class="report-dashboard-box-3">
+            <div class="pull-right">
+                <i class="fa fa-clock-o"></i>
+            </div>
+            {{vm.CPDInfo.FourToFiveHrRecordedPercentage}} % / {{vm.CPDInfo.FourToFiveHrRecorded}}
+            <div class="white_progress">
+
+                <div class="white_progress_inner" style="width:100%;"></div>
+
+            </div>
+            <div class="report-dashboard-box-footer" id="dashBox1">
+                <div id="courseToDo">
+                    <span>Recorded 4h-5hr</span>
+                    <span style="padding-left:145px;">{{vm.selectYear}}</span>
+                    <span class="font-20"><i title="Recorded 4h-5hr" class="fa fa-folder-open" style="font-size:20px;cursor:pointer" ng-click="vm.viewReport('CPD0001')" tooltip></i></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="marginfix" />
+<div class="marginfix" />
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover table-condensed">
+        <thead>
+            <tr class="header">
+                <th>Report ID</th>
+                <th>Report Name</th>
+                <th>Report Description</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in vm.cpdreportrecord">
+                <td>{{row.reportid}}</td>
+                <td>{{row.reportname}}</td>
+                <td>{{row.reportdescription}}</td>
+                <td>
+                    <i title="View report" class="fa fa fa-eye" style="font-size:20px;cursor:pointer" ng-click="vm.viewReport(row.reportid)" tooltip></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+

@@ -1,0 +1,93 @@
+﻿<nav-header css="headerpages" text="System Usage Report" contactus="NO" aboutus="NO"></nav-header>
+<admin-sidebar></admin-sidebar>
+
+
+<div>
+    <form class="panel panel-default"  ng-submit="vm.search()" id="searchPanel" name="searchPanel" novalidate>
+        <div class="panel-heading-cpd-3"><i class="fa fa-filter" title="Search" style="padding-top:10px;padding-bottom:10px;padding-left:10px;" tooltip> Search</i></div>
+        <div layout="row">
+            <md-input-container class="filterWidth">
+                <label>User Name</label>
+                <input name="clientName" ng-model="vm.pagingInfo.UserName">
+            </md-input-container>
+            <md-input-container class="filterWidth">
+                <label>Membership Number</label>
+                <input ng-model="vm.pagingInfo.MemberNumber">
+            </md-input-container>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <button class="btn btn-primary" style="margin-left:40px;margin-bottom:10px;"><span class="glyphicon glyphicon-search"></span> Search</button>
+            <button class="btn btn-primary" ng-click="vm.clear()" style="margin-left:10px;margin-bottom:10px;"><span class="glyphicon glyphicon-remove-sign"></span> Clear</button>
+        </div>
+    </form>
+
+    <div class="row">
+        <div id="gridTopItems">
+            <div class="gridTopButtons">
+                <button type="button" class="btn btn-danger btn-circle btn-lg" tooltip ng-click="vm.print()"><i class="fa fa-print"></i></button>
+                <div class="btn-group" dropdown is-open="status.isopen">
+                    <button type="button" class="btn btn-success  btn-lg dropdown-toggle" style="border-radius: 24px;" ng-disabled="disabled">
+                        <i class="fa fa-file-pdf-o"></i>
+                    </button>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-repeat="year in vm.printYear">
+                            <a ng-click="vm.downloadExcel(year)" download>{{year}}</a>
+                            <span class="divider"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="gridTopDropdown">
+                Show <select class="input-sm" ng-model="vm.pagingInfo.pageSize" ng-options="o for o in vm.entries" ng-change="vm.setItemsPerPage(vm.pagingInfo.pageSize)" ng-init="vm.pagingInfo.pageSize = vm.entries[0]"></select>  entries
+            </div>
+        </div>
+    </div>
+<div class="marginfix" />
+
+<div class="table-responsive">
+    <table st-table="model" class="table table-striped table-hover" width="100%" align="center">
+        <thead>
+            <tr class="header">
+                <th ng-click="vm.sort('MemberNumber')">Membership Number</th>
+                <th ng-click="vm.sort('username')">User</th>
+                <th ng-click="vm.sort('Email')">Email</th>
+                <th ng-click="vm.sort('CountryName')">CountryName</th>
+                <th ng-click="vm.sort('DistrictSociety')">DistrictSociety</th>
+                <th ng-click="vm.sort('LastLoginTime')">Last Login Time</th>
+                <th ng-click="vm.sort('EmployerName')">Employer</th>
+                <th ng-click="vm.sort('ExternalId')">ExternalId</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in vm.cpdreportrecord">
+                <td>{{row.MemberNumber}}</td>
+                <td>{{row.username}}</td>
+                <td>{{row.Email}}</td>
+                <td>{{row.CountryName}}</td>
+                <td>{{row.DistrictSociety}}</td>
+                <td>{{row.LastLoginTime |  date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                <td>{{row.EmployerName}}</td>
+                <td>{{row.ExternalId}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div ng-if="!vm.loadingaccreditdata && vm.totalItems == '0'">
+        <p>There is no data to show in the grid.</p><br />
+    </div>
+
+    <pagination page="vm.pagingInfo.page"
+                total-items="vm.totalItems"
+                items-per-page="vm.pagingInfo.pageSize"
+                on-select-page="vm.selectPage(page)"
+                max-size="10"
+                rotate="false"></pagination>
+
+</div>
+</div>
+
+

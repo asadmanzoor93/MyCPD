@@ -1,0 +1,41 @@
+﻿<div class="panel panel-default shadow">
+    <div class="panel-heading-cpd-3"><i class="fa fa-filter" style="padding-top:10px;padding-bottom:10px;padding-left:10px;"><md-tooltip md-direction="down">Filter Record</md-tooltip></i></div>
+    <div layout="row">
+        <md-input-container flex="50">
+            <label>Course Name</label>
+            <input name="coursename" ng-model="coursename">
+        </md-input-container>
+        <md-input-container flex="50">
+            <label>Course Location</label>
+            <md-autocomplete
+                   md-selected-item="selectedItem"
+                   md-search-text="searchText"
+                   md-item-text="item.Name"
+                   md-items="item in query(searchText)">
+                    <md-item-template>
+                        <span md-highlight-text="searchText">{{item.Name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No Location matching "{{searchText}}" were found.
+                    </md-not-found>
+                </md-autocomplete>
+        </md-input-container>
+    </div>
+    <div layout="row">
+        <md-input-container flex="50">
+            <label>Course Date</label>
+            <md-datepicker ng-model="date" md-placeholder="Enter date"></md-datepicker>
+        </md-input-container>
+        <md-input-container flex="50">
+            <label>CPD Year</label>
+            <md-select name="type" ng-model="year" >
+                <md-option ng-repeat="n in yearreq" value="n">{{n}}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+    <div layout="row">
+        <md-input-container flex="50">
+            <md-button class="md-raised md-primary">Search</md-button>
+        </md-input-container>
+    </div>
+</div>

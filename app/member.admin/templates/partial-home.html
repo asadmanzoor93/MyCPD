@@ -1,0 +1,61 @@
+﻿<nav-header css="headerpages" text="Member Accounts" contactus="NO" aboutus="NO"></nav-header>
+<admin-sidebar></admin-sidebar>
+<div class="md-padding">
+    <form class="panel panel-default" ng-submit="vm.search()" id="searchPanel" name="searchPanel" novalidate>
+        <div class="panel-heading-cpd-3"><i class="fa fa-filter" style="padding-top:10px;padding-bottom:10px;padding-left:10px;"><md-tooltip md-direction="down">Filter Record</md-tooltip></i></div>
+        <div class="shadow">
+            <div layout="row">
+                <md-input-container flex="50">
+                    <label>Name</label>
+                    <input name="userName" ng-model="vm.userName">
+                </md-input-container>
+
+                <md-input-container flex="50">
+                    <label>CPD Compliant ?</label>
+                    <md-select name="type" ng-model="vm.isComaplaint" >
+                        <md-option value="true">YES</md-option>
+                        <md-option value="false">NO</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container flex="50">
+                    <label>Membership Number</label>
+                    <input name="memnum" ng-model="vm.memberId">
+                </md-input-container>
+                <md-input-container flex="50">
+                    <label>Year</label>
+                    <md-select name="type" ng-model="vm.year">
+                        <md-option ng-repeat="n in vm.yearreq" value="{{n}}">{{n}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container flex="50">
+                    <!--<md-button class="md-raised md-primary" ng-click="vm.search()">Search</md-button>-->
+                    <button class="btn btn-success">Search</button>
+                    <button class="btn btn-success" ng-click="vm.clear()">Clear</button>
+                </md-input-container>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <md-button class="md-fab" aria-label="Refresh" ng-click="vm.print()">
+            <md-tooltip md-direction="down">Print</md-tooltip>
+            <i class="fa fa-print"></i>
+        </md-button>
+        <md-button class="md-fab" aria-label="Refresh" pdf-save-button="idOne" pdf-name="Admin-Member.pdf">
+            <md-tooltip md-direction="down">Download</md-tooltip>
+            <i class="fa fa-download"></i>
+        </md-button>
+    </div>
+    <div pdf-save-content="idOne">
+        <div class="row">
+            <table-List url="app/lib/tablelist/list-item-partial-member-admin.html" model="vm.cpdrecords" paging="vm.pagingInfo" config="vm.configuration" pagefunc="vm.pagefunction(page)" sortfunc="vm.sortfunction(column,order)" ng-if="vm.cpdrecords != null"></table-List>
+        </div>
+    </div>
+    </div>
+
+
+
+

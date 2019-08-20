@@ -1,0 +1,33 @@
+﻿<div class="table-responsive">
+    <table st-table="model" class="table table-striped table-hover" width="100%" align="center">
+        <thead>
+            <tr class="header">
+                <th st-sort="reportid">Membership Number</th>
+                <th st-sort="user">User</th>
+                <th st-sort="year">Email</th>
+                <th st-sort="cpdcompliant">CPD Compliant</th>
+                <th st-sort="year">Year</th>
+                <th st-sort="coursename">CPD Hours Recorded</th>
+                <th st-sort="date">Report Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in model">
+                <td>{{row.membernumber}}</td>
+                <td>{{row.user}}</td>
+                <td>{{row.email}}</td>
+                <td><img src="app/images/yes-icon.png" alt="compliant" /></td>
+                <td>{{row.year}}</td>
+                <td>{{row.hoursrecorded}}</td>
+                <td>{{row.reportdate}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div st-pagination="" st-items-by-page="4" st-displayed-pages="2"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

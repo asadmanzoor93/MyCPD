@@ -1,0 +1,139 @@
+md-event-calendar._md {
+  md-event-calendar-header {
+    color: '{{foreground-1}}';
+    background: '{{background-hue-1}}';
+    border-color: '{{foreground-4}}';
+
+    md-event-calendar-next, md-event-calendar-prev {
+      .md-arrow svg {
+        fill: '{{foreground-2}}';
+      }
+    }
+  }
+
+
+  md-event-calendar-month {
+    .md-event-calendar-month-row-header {
+      color: '{{foreground-3}}';
+      background: '{{background-hue-1}}';
+      border-color: '{{foreground-4}}';
+    }
+
+    .md-event-calendar-month-row {
+      background: '{{background-hue-1}}';
+      border-color: '{{foreground-4}}';
+
+
+      .md-event-calendar-month-cell-divider {
+        border-color: '{{foreground-4}}';
+      }
+
+      .md-event-calendar-month-cell {
+        border-color: '{{foreground-4}}';
+
+        .md-event-calendar-month-cell-content {
+          .md-event-calendar-create-link {
+            color: '{{primary-default}}';
+          }
+
+          .md-event-calendar-cell-data-label {
+            color: '{{foreground-3}}';
+          }
+
+          .md-event-calendar-cell-event-show-more-link {
+            color: '{{primary-default}}';
+          }
+        }
+
+
+
+        &.different-month {
+          background: '{{background-hue-2}}';
+        }
+
+        &.today {
+          box-shadow: inset 0px 0px 0px 1px '{{primary-default}}';
+
+          .md-event-calendar-month-cell-content {
+            .md-event-calendar-cell-data-label {
+              color: '{{primary-default}}';
+            }
+          }
+        }
+
+        &:last-child {
+          border-color: '{{foreground-4}}';
+        }
+      }
+    }
+  }
+
+  .md-event-calendar-cell-event {
+    background: '{{foreground-4}}';
+    color: '{{background-900}}';
+
+    &.md-selected {
+      color: #EEE;
+      background: '{{primary-default}}';
+    }
+
+    &.md-continue-left, &.md-end-left {
+      &:after {
+        border-right-color:'{{foreground-4}}';
+      }
+    }
+
+    &.md-continue-right, &.md-start-right {
+      &:after {
+        border-left-color: '{{foreground-4}}';
+      }
+    }
+
+
+    &.md-selected {
+      &.md-continue-left, &.md-end-left {
+        &:after {
+          border-right-color: '{{primary-default}}';
+        }
+      }
+
+      &.md-continue-right, &.md-start-right {
+        &:after {
+          border-left-color: '{{primary-default}}';
+        }
+      }
+    }
+  }
+
+
+  .md-event-calendar-show-more-container {
+    .md-event-calendar-show-more-date-label {
+      color: '{{foreground-3}}';
+    }
+    .md-event-calendar-show-more-close svg {
+      fill: '{{foreground-1}}';
+    }
+  }
+}
+
+
+
+md-event-calendar._md.md-primary {
+  md-event-calendar-header {
+    color: '{{background-100}}';
+    background: '{{primary-default}}';
+
+    md-event-calendar-next, md-event-calendar-prev {
+      .md-arrow svg {
+        fill: '{{background-100}}';
+      }
+    }
+  }
+
+  md-event-calendar-month {
+    .md-event-calendar-month-row-header {
+      color: '{{background-100}}';
+      background: '{{primary-default}}';
+    }
+  }
+}

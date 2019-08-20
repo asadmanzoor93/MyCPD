@@ -1,0 +1,151 @@
+﻿<div class="modal-content">
+    <form ng-cloak name="updateCourse" novalidate>
+        <div class="modal-header modal-header-primary">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+                <i class="fa fa-close"></i>
+            </button>
+            <h4>{{operation}} CPD Course</h4>
+        </div>
+
+
+        <style>
+            .md-datepicker-calendar-pane {
+                z-index: 1200
+            }
+        </style>
+
+        <div class="modal-body form-horizontal">
+            <div>
+                <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="courseTitle">Course Title</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="courseTitle" placeholder="Course Title" ng-model="model.CourseName" required ng-required="true">
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="Description">Course Description</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="Description" rows="4" ng-model="model.CourseDescription" required ng-required="true"></textarea>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="ddlLocation" class="col-sm-2 control-label">Course Location</label>
+                    <div class="col-sm-10">
+                        <select name="ddlLocation" ng-model="model.LocationID" ng-options="item.ID as item.Name for item in locations"></select>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="CourseVenue">Course Venue</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="CourseVenue" name="CourseVenue" aria-describedby="emailHelp" placeholder="Course Venue" ng-model="model.Venue" required ng-required="true">
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="courseType" class="col-sm-2 control-label">Course Type</label>
+                    <div class="col-sm-10">
+                        <select name="courseType" id="courseType" ng-model="model.CPDTypeId" ng-options="item.CPDTypeId as item.Description for item in cpdtypes"></select>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="cmbformat" class="col-sm-2 control-label">Format</label>
+                    <div class="col-sm-10">
+                        <select name="cmbformat" ng-model="model.CPDFormatId" ng-options="item.ID as item.Name for item in cbdFormat"></select>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label for="host" class="col-sm-2 control-label">Host</label>
+                    <div class="col-sm-10">
+                        <select name="host" ng-model="model.HostID" ng-options="item.ID as item.Name for item in hosts"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="Trainer">Trainer</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="Trainer" name="Trainer" placeholder="Trainer" ng-model="model.Trainer">
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="startDate" class="col-sm-2 control-label">Start Date</label>
+                    <div class="input-group col-sm-4" style="padding-left: 15px;">
+                        <input type="text" class="form-control" name="startDate" ng-model="model.StartDate" my-date-picker end-date="+3y" />
+                        <span class="input-group-addon" data-toggle="datepicker">
+                            <span class="glyphicon glyphicon-calendar" ng-model="model.StartDate"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label for="hours" class="col-sm-2 control-label">CPD Hours</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="hours" placeholder="Hour" ng-model="model.DurationHours" required ng-required="true">
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="minutes" placeholder="Minutes" ng-model="model.DurationMins">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="howToBook">How To Book</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="howToBook" rows="2" ng-model="model.HowToBook"></textarea>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="AdminOnly">Admin Only</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input type="checkbox" id="AdminOnly" class="checkbox" ng-model="model.AdminOnly">
+                        </div>
+                        <label class="col-sm-2 control-label" for="InhouseOnly">In-House Only</label>
+                        <div class="col-sm-3">
+                            <input type="checkbox" id="InhouseOnly" class="checkbox" ng-model="model.InHouseOnly">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-show='model.InHouseOnly'>
+                    <label class="col-sm-2 control-label" for="employerDetails">Employer Details</label>
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <ui-select ng-model="model.selctedEmployer" theme="bootstrap">
+                                <ui-select-match placeholder="Type 'a' to display results...">
+                                    {{$select.selected.EmployerName}}
+                                </ui-select-match>
+                                <ui-select-choices refresh="fetch($select)"
+                                                   refresh-delay="300"
+                                                   repeat="item in items | filter: $select.search">
+                                    {{item.EmployerName}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleTextarea" class="col-sm-2 control-label">Archive</label>
+                    <div class="col-sm-3">
+                        <md-switch aria-label="Active" ng-model="model.Active">
+                            Active
+                        </md-switch>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-warning" ng-click="cancel()">Cancel</a>
+                <button type="submit" class="btn btn-primary"  ng-show="operation == 'ADD'" ng-click="submitForm('contactus', 'ADD', model)">Add</button>
+                <button type="submit" class="btn btn-primary" ng-show="operation == 'UPDATE'" ng-click="submitForm('contactus', 'UPDATE', model)">Submit</button>
+            </div>
+        </div>
+
+
+    </form>
+</div>

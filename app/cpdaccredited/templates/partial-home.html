@@ -1,0 +1,102 @@
+﻿<nav-header css="headerpages" text="Approved CPD Providers"></nav-header>
+<nav-sidebar></nav-sidebar>
+
+<form class="panel panel-default" ng-submit="vm.search()" id="searchPanel" name="searchPanel" novalidate>
+    <div class="panel-heading-cpd-3"><i class="fa fa-filter" title="Search" style="padding-top:10px;padding-bottom:10px;padding-left:10px;" tooltip> <strong>Search</strong></i></div>
+    <div layout="row">
+        <md-input-container class="filterWidth">
+            <label>Course Name</label>
+            <input ng-model="vm.pagingInfo.CourseName" type="text">
+        </md-input-container>
+        <md-input-container class="filterWidth">
+            <label>Host</label>
+            <input ng-model="vm.pagingInfo.HostName" type="text">
+        </md-input-container>
+    </div>
+    <div layout="row">
+        <md-input-container class="filterWidth">
+            <label>Location</label>
+            <input ng-model="vm.pagingInfo.LocationName" type="text">
+        </md-input-container>
+        <md-input-container>
+            <label>Start Date</label>
+            <p class="input-group">
+                <md-datepicker ng-model="vm.pagingInfo.StartDate" md-placeholder="Start Date"></md-datepicker>
+            </p>
+        </md-input-container>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <button class="btn btn-primary" style="margin-left:40px;margin-bottom:10px;"><span class="glyphicon glyphicon-search"></span> Search</button>
+        <button class="btn btn-primary" ng-click="vm.clear()" style="margin-left:10px;margin-bottom:10px;"><span class="glyphicon glyphicon-remove-sign"></span> Clear</button>
+    </div>
+</form>
+
+<div class="row">
+    <div id="gridTopItems">
+        <div class="gridTopButtons">
+            <button type="button" class="btn btn-danger btn-circle btn-lg" tooltip ng-click="vm.print()"><i class="fa fa-print"></i></button>
+            <button type="button" class="btn btn-success btn-circle btn-lg" tooltip ng-click="vm.DownloadExcel()"><i class="fa fa-file-excel-o"></i></button>
+        </div>
+        <div class="gridTopDropdown">
+            Show <select class="input-sm" ng-model="vm.pagingInfo.pageSize" ng-options="o for o in vm.entries" ng-change="vm.setItemsPerPage(vm.pagingInfo.pageSize)" ng-init="vm.pagingInfo.pageSize = vm.entries[0]"></select>  entries
+        </div>
+    </div>
+</div>
+
+<div ng-if="vm.loadingaccreditdata">
+    <div class="col-xs-4"></div>
+    <div class="col-xs-4">
+        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading Approved CPD Providers...</label>
+    </div>
+    <div class="col-xs-4"></div>
+</div>
+
+<div class="table-responsive" ng-if="!vm.loadingaccreditdata">
+    <table class="table table-striped table-bordered table-hover table-condensed" id="cpdtable">
+        <thead>
+            <tr class="header">
+                <th></th>
+                <th ng-click="vm.sort('CourseName')" class="col-md-3">Course<i class="fa fa-fw" ng-class="vm.getIcon('CourseName')"></i></th>
+                <th style="min-width:100px; height:45px" ng-click="vm.sort('LocationName')">Location<i class="fa fa-fw" ng-class="vm.getIcon('LocationName')"></i></th>
+                <th ng-click="vm.sort('Duration')" style="min-width:120px;">CPD Hours<i class="fa fa-fw" ng-class="vm.getIcon('Duration')"></i></th>
+                <th ng-click="vm.sort('HostName')" style="min-width:80px;">Host<i class="fa fa-fw" ng-class="vm.getIcon('HostName')"></i></th>
+                <th>Type</th>
+                <th ng-click="vm.sort('Trainer')" class="col-md-2">Trainer<i class="fa fa-fw" ng-class="vm.getIcon('Trainer')"></i></th>
+                <th ng-click="vm.sort('StartDate')" style="min-width:100px;">Start Date <i class="fa fa-fw" ng-class="vm.getIcon('StartDate')"></i> </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in vm.approvedCPDData">
+                <td><img ng-src="{{row.ImagePath}}" class="img-responsive center-block" style="width:60px;" /></td>
+                <td>{{::row.CourseName}}</td>
+                <td>{{::row.LocationName}}</td>
+                <td>                
+                    {{row.Duration > 0 ? row.Duration + 'h' :''}}
+                    {{row.Minutes > 0 ? row.Minutes + 'm' :'' }}
+                </td>
+                <td>{{::row.HostName}}</td>
+                <td>{{::row.CPDTypeName}}</td>
+                <td>{{::row.Trainer}}</td>
+                <td>{{::row.StartDate |  dateformat}}</td>
+                <td>
+                    <i class="fa fa fa-eye" style="font-size:20px;cursor:pointer" ng-click="vm.editDialog.open(row)" title="View" tooltip></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div ng-if="!vm.loadingaccreditdata && vm.totalItems == '0'">
+        If you can't find what you are looking for? Check out our online offerings in CPDgo
+    </div>
+    <edit-custom-dialog model="vm.editDialog" itemurl="app/cpdclassroom/templates/course_snapshot.html"></edit-custom-dialog>
+    <pagination page="vm.pagingInfo.page"
+                total-items="vm.totalItems"
+                items-per-page="vm.pagingInfo.pageSize"
+                on-select-page="vm.selectPage(page)"
+                max-size="10"
+                rotate="false"
+                boundary-links="true"></pagination>
+</div>
+
+

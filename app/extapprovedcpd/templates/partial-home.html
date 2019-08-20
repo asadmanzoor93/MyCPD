@@ -1,0 +1,29 @@
+﻿<nav-header css="headerpages" text="Approved CPD"></nav-header>
+<ext-sidebar></ext-sidebar>
+<div class="row demo-md-panel-content">
+    <div class="col-md-12">
+        <div class="panel-info">
+            <div class="ext-content">
+                <div class="row">
+                    <search-content funcsearch="vm.dosearch(query)" template="generic" funcclear="vm.clear()"></search-content>
+                </div>
+                <div class="row">
+                    <md-button class="md-fab" aria-label="Refresh" ng-click="vm.print()" title="Print" tooltip>
+                        <md-tooltip md-direction="down">Print</md-tooltip>
+                        <i class="fa fa-print"></i>
+                    </md-button>
+                    <md-button class="md-fab" aria-label="Refresh" pdf-save-button="idOne" pdf-name="Ext-Lib.pdf" title="Download" tooltip>
+                        <md-tooltip md-direction="down">Download</md-tooltip>
+                        <i class="fa fa-download"></i>
+                    </md-button>
+                </div>
+
+            </div>
+        </div>
+        <edit-custom-dialog model="vm.editDialog" itemurl="app/library/templates/course_snapshot.html"></edit-custom-dialog>
+        <div class="row demo-md-panel-content" pdf-save-content="idOne">
+            <table-list url="app/lib/tablelist/list-item-partial-cpdr-extapprv.html" model="vm.cpdrecords" paging="vm.pagingInfo" config="vm.configuration" pagefunc="vm.pagefunction(page)" sortfunc="vm.sortfunction(column,order)" actionfunc="vm.actionfunc(arg,row)" ng-if="vm.cpdrecords != null"></table-list>
+        </div>
+    </div>
+</div>
+

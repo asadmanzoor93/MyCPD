@@ -1,0 +1,109 @@
+﻿<nav-header css="headerpages" text="{{vm.heading}}" contactus="NO" aboutus="NO"></nav-header>
+<admin-sidebar></admin-sidebar>
+
+
+<div>
+    <form class="panel panel-default" ng-submit="vm.search()" id="searchPanel" name="searchPanel" novalidate>
+        <div class="panel-heading-cpd-3"><i class="fa fa-filter" title="Search" style="padding-top:10px;padding-bottom:10px;padding-left:10px;" tooltip> Search</i></div>
+        <div layout="row">
+            <md-input-container class="filterWidth">
+                <label>User Name</label>
+                <input name="clientName" ng-model="vm.pagingInfo.UserName">
+            </md-input-container>
+            <md-input-container class="filterWidth">
+                <label>Email</label>
+                <input name="courseName" ng-model="vm.pagingInfo.Email">
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container class="filterWidth">
+                <label>Membership Number</label>
+                <input ng-model="vm.pagingInfo.MemberNumber">
+            </md-input-container>
+            <md-input-container class="filterWidth">
+                <label>Year</label>
+                <md-select name="type" ng-model="vm.pagingInfo.Year">
+                    <md-option ng-value="year" ng-repeat="year in vm.years">{{ year }}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <button class="btn btn-primary" style="margin-left:40px;margin-bottom:10px;"><span class="glyphicon glyphicon-search"></span> Search</button>
+            <button class="btn btn-primary" ng-click="vm.clear()" style="margin-left:10px;margin-bottom:10px;"><span class="glyphicon glyphicon-remove-sign"></span> Clear</button>
+        </div>
+    </form>
+
+    <div class="row">
+        <div id="gridTopItems">
+            <div class="gridTopButtons">
+                <button type="button" class="btn btn-danger btn-circle btn-lg" tooltip ng-click="vm.print()"><i class="fa fa-print"></i></button>
+                <div class="btn-group" dropdown is-open="status.isopen">
+                    <button type="button" class="btn btn-success  btn-lg dropdown-toggle" style="border-radius: 24px;" ng-disabled="disabled">
+                        <i class="fa fa-file-pdf-o"></i>
+                    </button>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-repeat="year in vm.printYear">
+                            <a ng-click="vm.downloadExcel(year)" download>{{year}}</a>
+                            <span class="divider"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="gridTopDropdown">
+                Show <select class="input-sm" ng-model="vm.pagingInfo.pageSize" ng-options="o for o in vm.entries" ng-change="vm.setItemsPerPage(vm.pagingInfo.pageSize)" ng-init="vm.pagingInfo.pageSize = vm.entries[0]"></select>  entries
+            </div>
+        </div>
+    </div>
+
+
+
+
+<div class="marginfix" />
+
+<div class="table-responsive">
+    <table st-table="model" class="table table-striped table-hover" width="100%" align="center">
+        <thead>
+            <tr class="header">
+                <th ng-click="vm.sort('MemberNumber')">Membership Number</th>
+                <th ng-click="vm.sort('username')">User</th>
+                <th ng-click="vm.sort('Email')">Email</th>
+                <th>CPD Compliant</th>
+                <th ng-click="vm.sort('CPDYear')">Year</th>
+                <th ng-click="vm.sort('Duration')" class="col-md-3">Completed Hours<i class="fa fa-fw" ng-class="vm.getIcon('Duration')"></i></th>
+                <th ng-click="vm.sort('RemainingDuration')" class="col-md-3">Remaining Hours<i class="fa fa-fw" ng-class="vm.getIcon('RemainingDuration')"></i></th>
+                <th ng-click="vm.sort('DeclaredDate')">Declared Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in vm.cpdreportrecord">
+                <td>{{::row.MemberNumber}}</td>
+                <td>{{::row.username}}</td>
+                <td>{{::row.Email}}</td>
+                <td><img ng-src="{{row.CPDCompliantImage}}" title="{{row.IsCPDCompliant}}" tooltip /></td>
+                <td>{{::row.CPDYear}}</td>
+                <td>{{::row.Duration}}</td>
+                <td>{{::row.RemainingDuration}} </td>
+                <td>{{row.DeclaredDate | dateformat}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div ng-if="!vm.loadingaccreditdata && vm.totalItems == '0'">
+        <p>There is no data to show in the grid.</p><br />
+    </div>
+
+    <pagination page="vm.pagingInfo.page"
+                total-items="vm.totalItems"
+                items-per-page="vm.pagingInfo.pageSize"
+                on-select-page="vm.selectPage(page)"
+                max-size="10"
+                rotate="false"></pagination>
+
+</div>
+</div>
+
+

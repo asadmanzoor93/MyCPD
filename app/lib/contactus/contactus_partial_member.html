@@ -1,0 +1,33 @@
+﻿<div class="modal-content">
+    <form ng-cloak>
+        <div class="modal-header modal-header-primary">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+                <i class="fa fa-close"></i>
+            </button>
+            <h4 class="modal-title">Contact</h4>
+        </div>
+        <div class="modal-body">
+            <div>
+                <div class="form-group">
+                    <label for="exampleSelect2">Email</label>
+                    <input type="text" class="form-control" id="inpuName" ng-model="Email" placeholder="Your Email" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="exampleSelect2">Subject</label>
+                    <input type="text" class="form-control" id="inpuName" ng-model="Subject" placeholder="Subject">
+                </div>
+                <div class="form-group">
+                    <label for="exampleTextarea">Query</label>
+                    <textarea class="form-control" id="Query" rows="4" ng-model="Query" placeholder="Your Query here"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                    <button class="btn btn-primary" ng-click="Contactus()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
