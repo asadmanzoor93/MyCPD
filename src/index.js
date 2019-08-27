@@ -4,6 +4,7 @@ import './index.css';
 import './css/bootstrap/bootstrap.min.css';
 import './css/bootstrap/bootstrap-theme.css';
 import './css/common/default.css';
+import './css/custom.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
