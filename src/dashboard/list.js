@@ -1,4 +1,4 @@
-[
+const DashboardList = [
 	{
 		"course": "stS: Pryrxss Mxtxrnasrpaxn - 5 mxnpp xn",
 		"descrption": "PrYx mxtxrnasrpaxn anvxsvxt ppx mxsp sagnafanrnp rxfxrm xf ppx PrYx syspxm sannx aps anprxtinpaxn an 5161' Rxvxnix.ax ppas nxirsx wass xxpsran PrYx Mxtxrnasrpaxn rnt aps amprnx xn Pryrxss Prxfxssaxnsrss 5 mxnpps xn sannx ap nrmx anpx xffxnp ",
@@ -95,3 +95,5 @@
 		"location": "Belfast"
 	}
 ]
+
+export default DashboardList;
