@@ -1,5 +1,4 @@
 import React from "react";
-import { Router, Route, Link } from "react-router-dom";
 
 class Header extends React.Component {
   render () {
@@ -16,7 +15,7 @@ class Header extends React.Component {
                       <span className="icon-bar"></span>
                     </button>
                     <a className="navbar-brand" href="#">
-                      <img src={'images\/MyCPDLogoImg.png'} />
+                      <img src={'images\/MyCPDLogoImg.png'} alt="" />
                     </a>
                   </div>
                   <div id="bs-example-navbar-collapse-1" className="collapse navbar-collapse animated fadeIn">
