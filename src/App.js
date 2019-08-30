@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Login from './login/index.js'
 import Home from './home/index.js'
 import Dashboard from './dashboard/index.js'
+import CPDGO from './cpdgo/index.js'
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" exact component={Login} />
         <Route path="/home" component={Home} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/cpdgo" component={CPDGO} />
       </div>
     </Router>
   );

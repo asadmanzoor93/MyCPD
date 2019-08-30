@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 class Header extends React.Component {
   render () {
@@ -21,13 +22,13 @@ class Header extends React.Component {
                   <div id="bs-example-navbar-collapse-1" className="collapse navbar-collapse animated fadeIn">
                     <ul className="nav navbar-nav animated fadeIn text16">
                       <li>
-                        <a href="#"><i className="fa fa-home"></i> Home</a>
+                        <Link to={'/'} className="fa fa-home"> Home </Link>
                       </li>
-                      <li ng-hide="quicknav == &#39;NO&#39;" aria-hidden="true" className="ng-hide active">
+                      <li aria-hidden="true" className="ng-hide active">
                         <a href="#">
                         <i className="fa fa-toggle-on"></i> Quick Navigation</a>
                       </li>
-                      <li ng-hide="contactus == &#39;NO&#39;" ng-click="eventmenu(&#39;MAIL&#39;)" role="button" tabIndex="0" aria-hidden="false" className="">
+                      <li role="button" tabIndex="0" aria-hidden="false" className="">
                         <a href="#"><i className="fa fa-paper-plane"></i> Feedback!</a>
                       </li>
                     </ul>
@@ -45,7 +46,7 @@ class Header extends React.Component {
                     </ul>
                   </div>
                   <h4 className="headerdashboard" >
-                    Home Page
+                    <Link to={'/'} className="nav-link"> Home Page </Link>
                   </h4>
                 </div>
               </nav>
