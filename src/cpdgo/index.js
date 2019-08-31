@@ -3,18 +3,10 @@ import Header from "../_components/header";
 
 class CPDGO extends React.Component {
     render () {
-
         return (
             <div>
                 <Header />
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
+                <br/><br/><br/><br/><br/><br/><br/><br/>
                 <div className="col-md-11">
                     <div className="panel panel-primary">
                         <div className="alert alert-info alert-white rounded">

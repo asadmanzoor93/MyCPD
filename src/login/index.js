@@ -36,7 +36,7 @@ class App extends React.Component {
         //   {
         //     params: {
         //       username: 'Umair',
-        //       password: 'Password19900',
+        //       password: 'Password1990',
         //       'grant_type': 'password',
         //       'client_id': 'mycpd'
         //     }

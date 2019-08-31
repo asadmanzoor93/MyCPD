@@ -22,7 +22,7 @@ class Header extends React.Component {
                   <div id="bs-example-navbar-collapse-1" className="collapse navbar-collapse animated fadeIn">
                     <ul className="nav navbar-nav animated fadeIn text16">
                       <li>
-                        <Link to={'/'} className="fa fa-home"> Home </Link>
+                        <Link to={'/home'} className="fa fa-home"> Home </Link>
                       </li>
                       <li aria-hidden="true" className="ng-hide active">
                         <a href="#">
@@ -46,7 +46,7 @@ class Header extends React.Component {
                     </ul>
                   </div>
                   <h4 className="headerdashboard" >
-                    <Link to={'/'} className="nav-link"> Home Page </Link>
+                    <Link to={'/home'} className="nav-link"> Home Page </Link>
                   </h4>
                 </div>
               </nav>
