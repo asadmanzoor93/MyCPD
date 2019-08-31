@@ -42,7 +42,7 @@ class Header extends React.Component {
                       <li aria-hidden="false" className="">
                         <a href="#"><i className="fa fa-info-circle"></i> About Us</a>
                       </li>
-                      <li><a href="#" ><i className="fa fa-sign-out"></i> Sign Out</a></li>
+                      <li onClick={}><a href="#" ><i className="fa fa-sign-out"></i> Sign Out</a></li>
                     </ul>
                   </div>
                   <h4 className="headerdashboard" >

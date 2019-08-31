@@ -24,4 +24,4 @@ const dashboard_column = [{
     accessor: 'StartDate'
 }];
 
-export default dashboard_column
+export default dashboard_column;

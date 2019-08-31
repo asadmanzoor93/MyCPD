@@ -1,23 +1,27 @@
 import React from "react";
 import Header from '../_components/header.js';
 import DashboardList from './list.js';
-// import dashboard_column from '../apis/listing_columns.js';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
+import Hour_list from "../apis/hour_list";
 
-const url = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD?Year=2019&page=1&pageSize=1000&reverse=false&sortBy=CourseName";
-const bearer = 'Bearer 8Nu2XEEkNpk8zB95Y1cwJjafutVFiSo55mDp5mgWAX2byDeLXqMbDO7o1rY35nDR1Z7lXmMFFcKC3EPIdslBvVIC2Qcr-XC4KMZmcRAb23vWVsctUtjPZCOsyHqaQ7GT4OQLIyQUrmmUURJznzllC6QcaUd_qFfcQsRKBMIelPvH_clyqX6b4Kv1AvpTZYR_LN3pffeBCVmpTpoN-fiOQJHEPP9EV0aOg3bcmmudAWcjbcpwEivWuYrlIcN7t09Cja4o2XjUUU-jwhalW5d7N1o_F52kEZGKePIJ8GoDzqcl1SS-IdgJJsaoscQeggZGIGmBy5ohgWRY1dejMBSGXmnPcov-op4pQekzcPeL7aclPrRKS0tQkjEq0kV4hIAQ8dW8JKFPPBCnpYA7V1K8bE1qcDOVXtMtoLydiPcQchZcJw2c2p0HGOpclVIviZjq';
+const dashboard_listing_url = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD?Year=2019&page=1&pageSize=1000&reverse=false&sortBy=CourseName";
+const hour_list_url = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDHours?Year=2019&UserName";
+
+const bearer = 'bearer YQh1NHyXyuW6v6EgE3v2eQIqPFE57qaoMah4Ok8iKIMhn7-QIcAsrEIPg10n5OD1lwh6GmW3DJNWP8G84WZiBV4tjpk2mYdPgamc0NxOB6WRkoACqvQHuRkt8TCfG-d_hMq6ANzOAa-RfjgoZuHOWaFNXJT2nmbJNfy9hCKuZue-32N46eHVrx37mvDgpaJV-_nGaZ70k82QAv6t-id_qVmGQIvmDIN8fpMQyyULr0oLjpHPil5o9_B9CBDJMzfcS85AeF_4dfa9Bi7aEa_36mH4CANrtuomTxBA5tfIUjxeZXKAGtoZS4RF8-sXV4h9qb0n5igfWD3c-XmOhr4HKRJvhiXa09uCt71qVgGHUOfFGY3u4ddDvNRyjD1tSaxeKOuH2HaSjpa_NvY58ztIqMW0zPd3XEWbDm5cRP2eidfO1Rv6pM_VWx7ubAO9Ozbp';
 
 class Dashboard extends React.Component {
 	constructor() {
 		super();
 		this.state = {
 			dashboard_listing: [],
+			hour_list: [],
 		}
 	};
 
 	componentDidMount() {
-		fetch(url, {
+		// Dashboard Listing
+		fetch(dashboard_listing_url, {
 			method: 'GET',
 			withCredentials: true,
 			credentials: 'include',
@@ -26,14 +30,33 @@ class Dashboard extends React.Component {
 				'Content-Type': 'application/json'
 			}
 		}).then(res => res.json())
-		.then((data) => {
-			let data_items = data.Items;
-			if(!data_items) {
-				data_items = DashboardList;
+			.then((data) => {
+				let data_items = data.Items;
+				if(!data_items) {
+					data_items = DashboardList;
+				}
+				this.setState({ dashboard_listing: data_items });
+			}).catch(console.log);
+
+		// Home List
+		fetch(hour_list_url, {
+			method: 'GET',
+			withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Authorization': bearer,
+				'Content-Type': 'application/json'
 			}
-			this.setState({ dashboard_listing: data_items });
-		})
-		.catch(console.log)
+		}).then(res => res.json())
+			.then((data) => {
+				let data_items = data.Items;
+				if(!data_items) {
+					data_items = Hour_list;
+				}
+				this.setState({ hour_list: data_items });
+			}).catch(console.log);
+
+
 	}
 
 	render () {
@@ -85,12 +108,10 @@ class Dashboard extends React.Component {
 							<div className="form-group input-group">
 								<div className="has-float-label" >
 									<select className="form-control ng-pristine ng-valid ng-empty ng-touched">
-										<option value="?" selected="selected"></option>
-										<option label="N/r: Nxp saspxt" value="number:8">N/r: Nxp saspxt</option>
-										<option label="rnnr" value="number:15">rnnr</option>
-										<option label="rnnxinpang pxnpnanarns arxsrnt" value="number:5">rnnxinpang pxnpnanarns arxsrnt</option>
-										<option label="rnnxinpangnpt.nxp" value="number:6">rnnxinpangnpt.nxp</option>
-										<option label="rppsxnx anspapipx xf pxnpnxsxgy" value="number:68">rppsxnx anspapipx xf pxnpnxsxgy</option>
+										<option value="" selected="selected"></option>
+										{this.state.hour_list.map((item, key) =>
+											<option value={item.ID} >{item.Name}</option>
+										)}
 									</select>
 									<label for="host">Host</label>
 								</div>
