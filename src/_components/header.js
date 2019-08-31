@@ -35,7 +35,7 @@ class Header extends React.Component {
                 </ul>
                 <ul className="nav navbar-nav navbar-right animated fadeIn text16">
                   <li  className="ng-binding">
-                    Mohammed Umair
+                    {localStorage.getItem('displayName')}
                   </li>
                   <li>
                     <img src={"images\/if_user_1902268.png"} />
