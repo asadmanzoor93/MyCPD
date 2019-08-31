@@ -1,6 +1,8 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-// import axios from 'axios';
+import {Redirect} from 'react-router-dom';
+import axios from 'axios';
+
+const qs = require('querystring')
 
 class App extends React.Component {
   constructor(props) {
@@ -25,33 +27,37 @@ class App extends React.Component {
   handleSubmit(e) {
       e.preventDefault();
 
-      this.setState({ submitted: true });
-      const { username, password } = this.state;
-      if (username && password) {
+        this.setState({submitted: true});
+        const {username, password} = this.state;
+        if (username && password) {
 
-        this.setState({ login: true });
+            axios.post('http://34.248.242.178/CPDCompliance/token', qs.stringify({
+                'username': username,
+                'password': password,
+                'grant_type': 'password',
+                'client_id': 'mycpd'
+            }), {
+                'headers': {
+                    'Content-Type': 'x-www-form-urlencoded'
+                }
+            })
+            .then((response) => {
+                if(response.data){
+                    // save data to local storage
+                    localStorage.setItem('access_token', response.data.access_token);
+                    localStorage.setItem('displayName', response.data.displayName);
+                    localStorage.setItem('expires_in', response.data.expires_in);
+                    localStorage.setItem('role', response.data.role);
 
-        // const response = axios.post(
-        //   'http://34.248.242.178/CPDCompliance/token',
-        //   {
-        //     params: {
-        //       username: 'Umair',
-        //       password: 'Password1990',
-        //       'grant_type': 'password',
-        //       'client_id': 'mycpd'
-        //     }
-        //   },
-        //   {
-        //     headers: {
-        //       'Content-Type': 'application/json'
-        //     }
-        //   }
-        // )
-        // console.log(response.data)
-
-
-      }
-  }
+                    //Login user to site
+                    this.setState({login: true});
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+    }
 
   render() {
     const { loggingIn } = this.props;
