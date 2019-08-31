@@ -1,21 +1,44 @@
 import React from "react";
 import Header from '../_components/header.js';
 import DashboardList from './list.js';
+import dashboard_column from '../apis/listing_columns.js';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
 
+const url = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD?Year=2019&page=1&pageSize=1000&reverse=false&sortBy=CourseName";
+const bearer = 'Bearer 8Nu2XEEkNpk8zB95Y1cwJjafutVFiSo55mDp5mgWAX2byDeLXqMbDO7o1rY35nDR1Z7lXmMFFcKC3EPIdslBvVIC2Qcr-XC4KMZmcRAb23vWVsctUtjPZCOsyHqaQ7GT4OQLIyQUrmmUURJznzllC6QcaUd_qFfcQsRKBMIelPvH_clyqX6b4Kv1AvpTZYR_LN3pffeBCVmpTpoN-fiOQJHEPP9EV0aOg3bcmmudAWcjbcpwEivWuYrlIcN7t09Cja4o2XjUUU-jwhalW5d7N1o_F52kEZGKePIJ8GoDzqcl1SS-IdgJJsaoscQeggZGIGmBy5ohgWRY1dejMBSGXmnPcov-op4pQekzcPeL7aclPrRKS0tQkjEq0kV4hIAQ8dW8JKFPPBCnpYA7V1K8bE1qcDOVXtMtoLydiPcQchZcJw2c2p0HGOpclVIviZjq';
+
 class Dashboard extends React.Component {
-  render () {
-	const columns = [{
-		Header: 'course',
-		accessor: 'course' // String-based value accessors!
-	}, {
-		Header: 'location',
-		accessor: 'location'
-	}, {
-		Header: 'descrption',
-		accessor: 'descrption'
-	}]
+	constructor() {
+		super();
+		this.state = {
+			dashboard_listing: [],
+		}
+	};
+
+	componentDidMount() {
+		fetch(url, {
+			method: 'GET',
+			withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Authorization': bearer,
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json())
+			.then((data) => {
+				let data_items = data.Items;
+				if(!data_items) {
+					data_items = DashboardList;
+				}
+				this.setState({ dashboard_listing: data_items });
+			})
+			.catch(console.log)
+	}
+
+	render () {
+
+
     return (
 	<div>
 		<Header />
@@ -31,8 +54,8 @@ class Dashboard extends React.Component {
 				    </div>
 				</div>
 				<ReactTable
-					data={DashboardList}
-					columns={columns}
+					data={this.state.dashboard_listing}
+					columns={dashboard_column}
 				/>
 			</div>
 		</div>
