@@ -1,6 +1,9 @@
 const dashboard_column = [{
     Header: 'Course Type',
-    accessor: 'CPDTypeName'// String-based value accessors!
+    accessor: 'CPDTypeName',// String-based value accessors!
+    filterMethod: (filter, row) =>
+        row[filter.id].startsWith(filter.value) &&
+        row[filter.id].endsWith(filter.value)
 }, {
     Header: 'Completed Hours',
     accessor: 'Hours'
