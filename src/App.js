@@ -4,7 +4,10 @@ import Login from './login/index.js'
 import Home from './home/index.js'
 import Dashboard from './dashboard/index.js'
 import CPDGO from './cpdgo/index.js'
-
+import RecordCPD from "./record_cpd";
+import FaceToFace from "./face_to_face_cpd";
+import ApprovedCPDProviders from "./approved_cpd_providers";
+import Library from "./library";
 
 function App() {
   return (
@@ -14,6 +17,10 @@ function App() {
             <Route exact path="/home" component={withRouter(Home)} />
             <Route exact path="/dashboard" component={withRouter(Dashboard)} />
             <Route exact path="/cpdgo" component={withRouter(CPDGO)} />
+            <Route exact path="/mycpd" component={withRouter(RecordCPD)} />
+            <Route exact path="/cpdclassroom" component={withRouter(FaceToFace)} />
+            <Route exact path="/cpdaccredt" component={withRouter(ApprovedCPDProviders)} />
+            <Route exact path="/library" component={withRouter(Library)} />
           </Switch>
       </div>
   );

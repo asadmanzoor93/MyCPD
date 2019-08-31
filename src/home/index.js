@@ -28,7 +28,7 @@ class Home extends React.Component {
 										</a>
 									</div>
 									<div className="col-sm-4 portfolio-item">
-										<a href="#">
+										<Link to={'/mycpd'}>
 											<div className="panel panel-default">
 												<div className="panel-heading panel-heading-cpd ng-binding">Record CPD</div>
 												<div className="panel-body" >
@@ -36,51 +36,45 @@ class Home extends React.Component {
 												</div>
 												<div className="panel-footer cpdfooter ng-binding">Re cord your CPD hours here</div>
 											</div>
-										</a>
+										</Link>
 									</div>
 									<div className="col-sm-4 portfolio-item">
-										<a href="#" ng-click="vm.action(row.Action)">
+										<Link to={'/cpdclassroom'}>
 											<div className="panel panel-default">
-
-
 												<div className="panel-heading panel-heading-cpd ng-binding">Face to Face CPD</div>
 												<div className="panel-body" >
 													<img id="mycpd" width="100" height="100" alt="" src={"images/FacetoFaceCPD.png"}/>
 												</div>
 												<div className="panel-footer cpdfooter ng-binding">College runs CPD throughout the year, see what’s coming up!</div>
 											</div>
-										</a>
+										</Link>
 									</div>
 									<div className="col-sm-4 portfolio-item">
 										<Link to={'/cpdgo'}>
-											<div>
-												<div className="panel panel-default">
-													<div className="panel-heading panel-heading-cpd ng-binding">
-														CPDgo
-													</div>
-													<div className="panel-body" >
-														<img id="mycpd" alt="" width="100" height="100" src={"images/CPDgo.png"}/>
-													</div>
-													<div className="panel-footer cpdfooter ng-binding">Free and discounted online CPD</div>
+											<div className="panel panel-default">
+												<div className="panel-heading panel-heading-cpd ng-binding">
+													CPDgo
 												</div>
+												<div className="panel-body" >
+													<img id="mycpd" alt="" width="100" height="100" src={"images/CPDgo.png"}/>
+												</div>
+												<div className="panel-footer cpdfooter ng-binding">Free and discounted online CPD</div>
 											</div>
 										</Link>
 									</div>
 									<div className="col-sm-4 portfolio-item">
-										<a href="#">
+										<Link to={'/cpdaccredt'}>
 											<div className="panel panel-default">
-
-
 												<div className="panel-heading panel-heading-cpd ng-binding">Approved CPD Providers</div>
 												<div className="panel-body">
 													<img id="mycpd" width="100" alt="" height="100" src={"images/ApprovedCPDProviders.png"}/>
 												</div>
 												<div className="panel-footer cpdfooter ng-binding">External CPD Accredited by College</div>
 											</div>
-										</a>
+										</Link>
 									</div>
 									<div className="col-sm-4 portfolio-item">
-										<a href="#" >
+										<Link to={'/library'}>
 											<div className="panel panel-default">
 
 
@@ -90,7 +84,7 @@ class Home extends React.Component {
 												</div>
 												<div className="panel-footer cpdfooter ng-binding">Full listing of all CPDgo, Face to Face and Approved External CPD Providers</div>
 											</div>
-										</a>
+										</Link>
 									</div>
 								</div>
 							</div>
