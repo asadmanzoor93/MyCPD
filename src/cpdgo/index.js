@@ -6,8 +6,7 @@ class CPDGO extends React.Component {
         return (
             <div>
                 <Header />
-                <br/><br/><br/><br/><br/><br/><br/><br/>
-                <div className="col-md-11">
+                <div className="container main-content">
                     <div className="panel panel-primary">
                         <div className="alert alert-info alert-white rounded">
                             <button type="button" data-dismiss="alert" aria-hidden="true" className="close">×</button>

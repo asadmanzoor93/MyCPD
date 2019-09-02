@@ -1,14 +1,18 @@
 import React from "react";
 import Header from '../_components/header.js';
 import DashboardList from './list.js';
+import axios from 'axios';
+import qs from'querystring';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import Hour_list from "../apis/hour_list";
+import _ from "lodash";
 
 const dashboard_listing_url = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD?Year=2019&page=1&pageSize=1000&reverse=false&sortBy=CourseName";
 const hour_list_url = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDHours?Year=2019&UserName";
 
-const bearer = 'bearer YQh1NHyXyuW6v6EgE3v2eQIqPFE57qaoMah4Ok8iKIMhn7-QIcAsrEIPg10n5OD1lwh6GmW3DJNWP8G84WZiBV4tjpk2mYdPgamc0NxOB6WRkoACqvQHuRkt8TCfG-d_hMq6ANzOAa-RfjgoZuHOWaFNXJT2nmbJNfy9hCKuZue-32N46eHVrx37mvDgpaJV-_nGaZ70k82QAv6t-id_qVmGQIvmDIN8fpMQyyULr0oLjpHPil5o9_B9CBDJMzfcS85AeF_4dfa9Bi7aEa_36mH4CANrtuomTxBA5tfIUjxeZXKAGtoZS4RF8-sXV4h9qb0n5igfWD3c-XmOhr4HKRJvhiXa09uCt71qVgGHUOfFGY3u4ddDvNRyjD1tSaxeKOuH2HaSjpa_NvY58ztIqMW0zPd3XEWbDm5cRP2eidfO1Rv6pM_VWx7ubAO9Ozbp';
+const bearer = 'Bearer ' + localStorage.getItem('access_token')
+
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -21,40 +25,60 @@ class Dashboard extends React.Component {
 
 	componentDidMount() {
 		// Dashboard Listing
-		fetch(dashboard_listing_url, {
-			method: 'GET',
-			withCredentials: true,
-			credentials: 'include',
-			headers: {
-				'Authorization': bearer,
-				'Content-Type': 'application/json'
-			}
-		}).then(res => res.json())
-			.then((data) => {
-				let data_items = data.Items;
-				if(!data_items) {
-					data_items = DashboardList;
-				}
-				this.setState({ dashboard_listing: data_items });
-			}).catch(console.log);
+		axios.get('http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD', qs.stringify({
+			'Year': 2019,
+			'page': 1,
+			'pageSize': 10,
+			'reverse': false,
+			'sortBy': 'CourseName'
+
+        }), {
+            'headers': {
+            	'Authorization': bearer
+            }
+        })
+        .then((response) => {
+            if(!response.data){
+            	this.setState({dashboard_listing: DashboardList})
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+		// fetch(dashboard_listing_url, {
+		// 	method: 'GET',
+		// 	withCredentials: true,
+		// 	credentials: 'include',
+		// 	headers: {
+		// 		'Authorization': bearer,
+		// 		'Content-Type': 'application/json'
+		// 	}
+		// }).then(res => res.json())
+		// 	.then((data) => {
+		// 		let data_items = data.Items;
+		// 		// if(!data_items) {
+		// 		// 	data_items = DashboardList;
+		// 		// }
+		// 		this.setState({ dashboard_listing: data_items });
+		// 	}).catch(console.log);
 
 		// Home List
-		fetch(hour_list_url, {
-			method: 'GET',
-			withCredentials: true,
-			credentials: 'include',
-			headers: {
-				'Authorization': bearer,
-				'Content-Type': 'application/json'
-			}
-		}).then(res => res.json())
-			.then((data) => {
-				let data_items = data.Items;
-				if(!data_items) {
-					data_items = Hour_list;
-				}
-				this.setState({ hour_list: data_items });
-			}).catch(console.log);
+		// fetch(hour_list_url, {
+		// 	method: 'GET',
+		// 	withCredentials: true,
+		// 	credentials: 'include',
+		// 	headers: {
+		// 		'Authorization': bearer,
+		// 		'Content-Type': 'application/json'
+		// 	}
+		// }).then(res => res.json())
+		// 	.then((data) => {
+		// 		let data_items = data.Items;
+		// 		if(!data_items) {
+		// 			data_items = Hour_list;
+		// 		}
+		// 		this.setState({ hour_list: data_items });
+		// 	}).catch(console.log);
 
 
 	}
@@ -80,7 +104,7 @@ class Dashboard extends React.Component {
 					            <div className="dashboard-box-footer" id="dashBox1">
 					                <div id="courseToDo">
 					                    <span>Required</span>
-					                    <span style={{float:'right'}} className="ng-binding">2019</span>
+					                    <span style={{float:'right'}}>2019</span>
 					                </div>
 					            </div>
 					        </div>
@@ -97,7 +121,7 @@ class Dashboard extends React.Component {
 					            <div className="dashboard-box-footer" id="remainingdashBox">
 					                <div id="courseToDo">
 					                    <span>Remaining</span>
-					                    <span style={{float:'right'}} className="ng-binding">2019</span>
+					                    <span style={{float:'right'}}>2019</span>
 					                </div>
 					            </div>
 					        </div>
@@ -114,7 +138,7 @@ class Dashboard extends React.Component {
 					            <div className="dashboard-box-footer" id="completedDashBox">
 					                <div id="courseToDo">
 					                    <span>COMPLETED</span>
-					                    <span style={{float:'right'}} className="ng-binding">2019</span>
+					                    <span style={{float:'right'}}>2019</span>
 					                </div>
 					            </div>
 					        </div>
@@ -131,23 +155,23 @@ class Dashboard extends React.Component {
 									<div className="form-group input-group" style={{width: '100%'}}>
 										<span className="has-float-label" style={{width: '50%'}}>
 											<input className="form-control ng-pristine ng-valid ng-empty ng-touched" ng-model="vm.pagingInfo.CourseName" type="text" id="courseName" placeholder="Course Name" aria-invalid="false" />
-											<label for="courseName">Course Name</label>
+											<label htmlFor="courseName">Course Name</label>
 										</span>
 									</div>
 
 										<div className="has-float-label" >
 											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" aria-invalid="false" >
 												<option aria-checked="true" value="number:2018">2018</option>
-												<option aria-checked="true" value="number:2019" selected="selected">2019</option>
+												<option aria-checked="true" value="number:2019" defaultValue>2019</option>
 												<option ng-repeat="year in vm.years" ng-value="year" aria-checked="true" value="number:2020">2020</option>
 											</select>
-											<label for="Year">Year</label>
+											<label htmlFor="Year">Year</label>
 										</div>
 									</div>
 									<div className="form-group input-group" style={{width: '100%'}}>
 										<span className="has-float-label">
 											<input className="form-control" type="text" placeholder="Location Name" />
-											<label for="LocationName">Location Name</label>
+											<label htmlFor="LocationName">Location Name</label>
 										</span>
 										<div className="has-float-label" >
 											<p className="input-group">
@@ -156,25 +180,25 @@ class Dashboard extends React.Component {
 													<span className="glyphicon glyphicon-calendar"></span>
 												</span>
 											</p>
-											<label for="courseDate">Enter Start Date</label>
+											<label htmlFor="courseDate">Enter Start Date</label>
 										</div>
 									</div>
 									<div className="form-group input-group">
 										<div className="has-float-label" >
 											<select className="form-control ng-pristine ng-valid ng-empty ng-touched">
-												<option value="" selected="selected"></option>
+												<option value="" defaultValue></option>
 												{this.state.hour_list.map((item, key) =>
 													<option value={item.ID} >{item.Name}</option>
 												)}
 											</select>
-											<label for="host">Host</label>
+											<label htmlFor="host">Host</label>
 										</div>
 									</div>
 
 									<div className="clearfix"></div>
 										<div>
-											<button className="btn btn-primary" ng-click="vm.search()" ><span className="glyphicon glyphicon-search"></span> Search</button>
-											<button className="btn btn-primary" ng-click="vm.clear()" ><span className="glyphicon glyphicon-remove-sign"></span> Clear</button>
+											<button className="btn btn-primary"><span className="glyphicon glyphicon-search"></span> Search</button>
+											<button className="btn btn-primary"><span className="glyphicon glyphicon-remove-sign"></span> Clear</button>
 										</div>
 									</div>
 								</div>
