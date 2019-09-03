@@ -13,7 +13,6 @@ const hour_list_url = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDH
 
 const bearer = 'Bearer ' + localStorage.getItem('access_token')
 
-
 class Dashboard extends React.Component {
 	constructor() {
 		super();
@@ -24,63 +23,7 @@ class Dashboard extends React.Component {
 	};
 
 	componentDidMount() {
-		// Dashboard Listing
-		axios.get('http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD', qs.stringify({
-			'Year': 2019,
-			'page': 1,
-			'pageSize': 10,
-			'reverse': false,
-			'sortBy': 'CourseName'
-
-        }), {
-            'headers': {
-            	'Authorization': bearer
-            }
-        })
-        .then((response) => {
-            if(!response.data){
-            	this.setState({dashboard_listing: DashboardList})
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-		// fetch(dashboard_listing_url, {
-		// 	method: 'GET',
-		// 	withCredentials: true,
-		// 	credentials: 'include',
-		// 	headers: {
-		// 		'Authorization': bearer,
-		// 		'Content-Type': 'application/json'
-		// 	}
-		// }).then(res => res.json())
-		// 	.then((data) => {
-		// 		let data_items = data.Items;
-		// 		// if(!data_items) {
-		// 		// 	data_items = DashboardList;
-		// 		// }
-		// 		this.setState({ dashboard_listing: data_items });
-		// 	}).catch(console.log);
-
-		// Home List
-		// fetch(hour_list_url, {
-		// 	method: 'GET',
-		// 	withCredentials: true,
-		// 	credentials: 'include',
-		// 	headers: {
-		// 		'Authorization': bearer,
-		// 		'Content-Type': 'application/json'
-		// 	}
-		// }).then(res => res.json())
-		// 	.then((data) => {
-		// 		let data_items = data.Items;
-		// 		if(!data_items) {
-		// 			data_items = Hour_list;
-		// 		}
-		// 		this.setState({ hour_list: data_items });
-		// 	}).catch(console.log);
-
-
+		this.setState({dashboard_listing: DashboardList})
 	}
 
 	render () {
@@ -159,7 +102,7 @@ class Dashboard extends React.Component {
 										</span>
 									</div>
 
-										<div className="has-float-label" >
+										<div className="has-float-label form-group input-group" style={{width: '100%'}}>
 											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" aria-invalid="false" >
 												<option aria-checked="true" value="number:2018">2018</option>
 												<option aria-checked="true" value="number:2019" defaultValue>2019</option>
@@ -167,38 +110,37 @@ class Dashboard extends React.Component {
 											</select>
 											<label htmlFor="Year">Year</label>
 										</div>
-									</div>
-									<div className="form-group input-group" style={{width: '100%'}}>
-										<span className="has-float-label">
-											<input className="form-control" type="text" placeholder="Location Name" />
-											<label htmlFor="LocationName">Location Name</label>
-										</span>
-										<div className="has-float-label" >
-											<p className="input-group">
-												<input type="text" className="form-control ng-untouched ng-empty ng-dirty ng-invalid ng-invalid-parse" name="courseDate" placeholder="Enter Start Date" ng-model="vm.pagingInfo.StartDate" my-date-picker="" end-date="+3y" aria-invalid="true" />
-												<span className="input-group-addon" data-toggle="datepicker">
-													<span className="glyphicon glyphicon-calendar"></span>
-												</span>
-											</p>
-											<label htmlFor="courseDate">Enter Start Date</label>
+										<div className="form-group input-group" style={{width: '100%'}}>
+											<span className="has-float-label">
+												<input className="form-control" type="text" placeholder="Location Name" />
+												<label htmlFor="LocationName">Location Name</label>
+											</span>
+											<div className="has-float-label" >
+												<p className="input-group">
+													<input type="text" className="form-control ng-untouched ng-empty ng-dirty ng-invalid ng-invalid-parse" name="courseDate" placeholder="Enter Start Date" ng-model="vm.pagingInfo.StartDate" my-date-picker="" end-date="+3y" aria-invalid="true" />
+													<span className="input-group-addon" data-toggle="datepicker">
+														<span className="glyphicon glyphicon-calendar"></span>
+													</span>
+												</p>
+												<label htmlFor="courseDate">Enter Start Date</label>
+											</div>
 										</div>
-									</div>
-									<div className="form-group input-group">
-										<div className="has-float-label" >
-											<select className="form-control ng-pristine ng-valid ng-empty ng-touched">
-												<option value="" defaultValue></option>
-												{this.state.hour_list.map((item, key) =>
-													<option value={item.ID} >{item.Name}</option>
-												)}
-											</select>
-											<label htmlFor="host">Host</label>
+										<div className="form-group input-group" style={{width: '45.5%'}}>
+											<div className="has-float-label" >
+												<select className="form-control ng-pristine ng-valid ng-empty ng-touched">
+													<option value="" defaultValue></option>
+													{this.state.hour_list.map((item, key) =>
+														<option value={item.ID} >{item.Name}</option>
+													)}
+												</select>
+												<label htmlFor="host">Host</label>
+											</div>
 										</div>
-									</div>
-
-									<div className="clearfix"></div>
-										<div>
-											<button className="btn btn-primary"><span className="glyphicon glyphicon-search"></span> Search</button>
-											<button className="btn btn-primary"><span className="glyphicon glyphicon-remove-sign"></span> Clear</button>
+										<div className="clearfix"></div>
+											<div>
+												<button className="btn btn-primary"><span className="glyphicon glyphicon-search"></span> Search</button>
+												<button className="btn btn-primary"><span className="glyphicon glyphicon-remove-sign"></span> Clear</button>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -219,10 +161,7 @@ class Dashboard extends React.Component {
 						filterable
 						columns={[{
 							Header: 'Course Type',
-							accessor: 'CPDTypeName',// String-based value accessors!
-							filterMethod: (filter, row) =>
-							row[filter.id].startsWith(filter.value) &&
-							row[filter.id].endsWith(filter.value)
+							accessor: 'CPDTypeName',
 						}, {
 							Header: 'Completed Hours',
 							accessor: 'Hours'
@@ -242,41 +181,8 @@ class Dashboard extends React.Component {
 							Header: 'Start Date',
 							accessor: 'StartDate'
 						}]}
-						defaultPageSize={2}
+						defaultPageSize={10}
 						className="-striped -highlight"
-						showPagination={true}
-						showPaginationTop={false}
-						showPaginationBottom={true}
-						pageSizeOptions={[5, 10, 20, 25, 50, 100]}
-						manual
-						defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
-						onFetchData={(state, instance) => {
-							return [{
-								Header: 'Course Type',
-								accessor: 'CPDTypeName',// String-based value accessors!
-								filterMethod: (filter, row) =>
-								row[filter.id].startsWith(filter.value) &&
-								row[filter.id].endsWith(filter.value)
-							}, {
-								Header: 'Completed Hours',
-								accessor: 'Hours'
-							}, {
-								Header: 'Completion Date',
-								accessor: 'CompletionDate'
-							}, {
-								Header: 'Venue',
-								accessor: 'Venue'
-							}, {
-								Header: 'Trainer',
-								accessor: 'Trainer'
-							}, {
-								Header: 'Host',
-								accessor: 'HostId'
-							}, {
-								Header: 'Start Date',
-								accessor: 'StartDate'
-							}]
-						}}
 						/>
 					</div>
 			</div>
