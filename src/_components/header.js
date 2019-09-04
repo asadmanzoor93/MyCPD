@@ -40,7 +40,7 @@ class Header extends React.Component {
                     </li>
                     <li className="active">
                       <a href="#" onClick={e => { e.preventDefault(); this.setState({quickNavShown: !this.state.quickNavShown }) }} >
-                        <i className="fa fa-toggle-on"></i> Quick Navigation
+                        <i className={this.state.quickNavShown ? "fa fa-toggle-on" : "fa fa-toggle-off"}></i> Quick Navigation
                       </a>
                     </li>
                     <li role="button" tabIndex="0" aria-hidden="false" className="">

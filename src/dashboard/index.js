@@ -5,12 +5,11 @@ import qs from'querystring';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import _ from "lodash";
+import API from '../utils/API';
 
-const dashboard_listing_url = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD?Year=2019&page=1&pageSize=1000&reverse=false&sortBy=CourseName";
-const host_list_url = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
-const hour_list_url = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDHours?Year=2019&UserName";
-
-const bearer = 'bearer ' + localStorage.getItem('access_token');
+const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
+const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
+const Hours_URL = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDHours";
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -18,34 +17,25 @@ class Dashboard extends React.Component {
 		this.state = {
 			dashboard_listing: [],
 			host_list: [],
-			overdue_hours: null,
-			overdue_minutes: null,
-			required_hours: null,
-			total_hours: null,
-			total_minutes: null
+			overdue_hours: 0,
+			overdue_minutes: 0,
+			required_hours: 0,
+			total_hours: 0,
+			total_minutes: 0
 		}
 	};
 
 	componentDidMount() {
 		// Dashboard Listing
-		fetch(dashboard_listing_url, {
-			method: 'GET',
-			withCredentials: true,
-			credentials: 'include',
-			headers: {
-				'Authorization': bearer,
-				'Content-Type': 'application/json'
-			}
-		}).then(res => res.json())
-			.then((data) => {
-				let data_items = data.Items;
-				if (data_items) {
-					this.setState({ dashboard_listing: data_items });
-				}
-			}).catch(console.log);
 
-		// Hosts List
-		fetch(host_list_url, {
+		axios.get(Listing_URL, {
+			params: {
+				page: 1,
+				pageSize: 1000,
+				Year: 2019,
+				reverse: false,
+				sortBy: 'CourseName'
+			},
 			method: 'GET',
 			withCredentials: true,
 			credentials: 'include',
@@ -53,17 +43,40 @@ class Dashboard extends React.Component {
 				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
 				'Content-Type': 'application/json'
 			}
-		}).then(res => res.json())
+		})
+			.then(response => response.data)
+			.then((data) => {
+				if (data.Items) {
+					this.setState({ dashboard_listing: data.Items });
+				}
+			}).catch(console.log);
+
+
+		// Hosts List
+		axios.get(Hosts_URL, {
+			method: 'GET',
+			withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(response => response.data)
 			.then((data) => {
 				if(data){
 					this.setState({ host_list: data });
 				}
-			})
-			.catch(console.log);
+			}).catch(console.log);
 
 
 		// Hours Data
-		fetch(hour_list_url, {
+
+		axios.get(Hours_URL, {
+			params: {
+				UserName: 'UserName',
+				Year: 2019,
+			},
 			method: 'GET',
 			withCredentials: true,
 			credentials: 'include',
@@ -71,7 +84,8 @@ class Dashboard extends React.Component {
 				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
 				'Content-Type': 'application/json'
 			}
-		}).then(res => res.json())
+		})
+			.then(response => response.data)
 			.then((data) => {
 				if (data){
 					this.setState({
@@ -82,8 +96,7 @@ class Dashboard extends React.Component {
 						total_minutes: data[0].TotalMinutes
 					});
 				}
-			})
-			.catch(console.log);
+			}).catch(console.log);
 
 	}
 
@@ -168,7 +181,6 @@ class Dashboard extends React.Component {
 											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" aria-invalid="false" >
 												<option aria-checked="true" value="number:2018">2018</option>
 												<option aria-checked="true" value="number:2019" defaultValue>2019</option>
-												<option aria-checked="true" value="number:2020">2020</option>
 											</select>
 											<label htmlFor="Year">Year</label>
 										</div>
