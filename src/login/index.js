@@ -25,7 +25,7 @@ class App extends React.Component {
   }
 
   handleSubmit(e) {
-      e.preventDefault();
+      e.preventgetDashboardListingDefault();
 
         this.setState({submitted: true});
         const {username, password} = this.state;

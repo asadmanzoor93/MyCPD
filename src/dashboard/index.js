@@ -18,7 +18,11 @@ class Dashboard extends React.Component {
 		this.state = {
 			dashboard_listing: [],
 			host_list: [],
-			hours_data: [],
+			overdue_hours: null,
+			overdue_minutes: null,
+			required_hours: null,
+			total_hours: null,
+			total_minutes: null
 		}
 	};
 
@@ -35,7 +39,9 @@ class Dashboard extends React.Component {
 		}).then(res => res.json())
 			.then((data) => {
 				let data_items = data.Items;
-				this.setState({ dashboard_listing: data_items });
+				if (data_items) {
+					this.setState({ dashboard_listing: data_items });
+				}
 			}).catch(console.log);
 
 		// Hosts List
@@ -49,7 +55,9 @@ class Dashboard extends React.Component {
 			}
 		}).then(res => res.json())
 			.then((data) => {
-				this.setState({ host_list: data });
+				if(data){
+					this.setState({ host_list: data });
+				}
 			})
 			.catch(console.log);
 
@@ -65,7 +73,15 @@ class Dashboard extends React.Component {
 			}
 		}).then(res => res.json())
 			.then((data) => {
-				this.setState({ hours_data: data });
+				if (data){
+					this.setState({
+						overdue_hours: data[0].OverdueHours,
+						overdue_minutes: data[0].OverdueMinutes,
+						required_hours: data[0].RequiredHours,
+						total_hours: data[0].TotalHours,
+						total_minutes: data[0].TotalMinutes
+					});
+				}
 			})
 			.catch(console.log);
 
@@ -85,7 +101,7 @@ class Dashboard extends React.Component {
 					            <div className="pull-right green_icon">
 					                <i className="fa fa-graduation-cap"> </i>
 					            </div>
-					            8 <span className="mediumfont">Hour</span>
+					            {this.state.required_hours} <span className="mediumfont">Hour</span>
 					            <div className="white_progress">
 					                <div className="white_progress_inner" style={{width:'100%'}}> </div>
 					            </div>
@@ -102,7 +118,7 @@ class Dashboard extends React.Component {
 					            <div className="pull-right green_icon">
 					                <i className="fa fa-clock-o"> </i>
 					            </div>
-					            0 <span className="mediumfont">Hour 0 Mins</span>
+					            {this.state.overdue_hours} <span className="mediumfont">Hour {this.state.overdue_minutes} Mins</span>
 					            <div className="white_progress">
 					                <div className="white_progress_inner" style={{width:'100%'}}> </div>
 					            </div>
@@ -119,7 +135,8 @@ class Dashboard extends React.Component {
 					            <div className="pull-right green_icon">
 					                <i className="fa fa-trophy"> </i>
 					            </div>
-					            55 <span className="mediumfont">Hour 7  Mins</span>
+					            {this.state.total_hours}
+					            <span className="mediumfont">Hour {this.state.total_minutes}  Mins</span>
 					            <div className="white_progress">
 					                <div className="white_progress_inner" style={{width:'100%'}}> </div>
 					            </div>
