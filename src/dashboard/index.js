@@ -14,6 +14,7 @@ const Hours_URL = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDHours
 class Dashboard extends React.Component {
 	constructor() {
 		super();
+		this.handleSearchFilter = this.handleSearchFilter.bind(this);
 		this.state = {
 			dashboard_listing: [],
 			host_list: [],
@@ -41,6 +42,7 @@ class Dashboard extends React.Component {
 			credentials: 'include',
 			headers: {
 				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+				'Access-Control-Allow-Origin': '*',
 				'Content-Type': 'application/json'
 			}
 		})
@@ -59,6 +61,7 @@ class Dashboard extends React.Component {
 			credentials: 'include',
 			headers: {
 				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+				'Access-Control-Allow-Origin': '*',
 				'Content-Type': 'application/json'
 			}
 		})
@@ -82,6 +85,7 @@ class Dashboard extends React.Component {
 			credentials: 'include',
 			headers: {
 				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+				'Access-Control-Allow-Origin': '*',
 				'Content-Type': 'application/json'
 			}
 		})
@@ -99,6 +103,33 @@ class Dashboard extends React.Component {
 			}).catch(console.log);
 
 	}
+
+	handleSearchFilter() {
+		axios.get(Listing_URL, {
+			params: {
+				page: 1,
+				pageSize: 1000,
+				Year: 2019,
+				reverse: false,
+				sortBy: 'CourseName'
+			},
+			method: 'GET',
+			withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(response => response.data)
+			.then((data) => {
+				if (data.Items) {
+					this.setState({ dashboard_listing: data.Items });
+				}
+			}).catch(console.log);
+	}
+
 
 	render () {
 
@@ -212,7 +243,7 @@ class Dashboard extends React.Component {
 										</div>
 										<div className="clearfix"> </div>
 											<div>
-												<button className="btn btn-primary"><span className="glyphicon glyphicon-search"> </span> Search</button>
+												<button className="btn btn-primary" onClick={this.handleSearchFilter} ><span className="glyphicon glyphicon-search"> </span> Search</button>
 												<button className="btn btn-primary"><span className="glyphicon glyphicon-remove-sign"> </span> Clear</button>
 											</div>
 										</div>
