@@ -88,8 +88,8 @@ class FaceToFace extends React.Component {
 
         let cpd_records, renderPageNumbers;
         if (this.state.cpd_records !== null) {
-            cpd_records = this.state.cpd_records.map(cpd_record => (
-                <tr key={cpd_record.CourseName}>
+            cpd_records = this.state.cpd_records.map((cpd_record , index) => (
+                <tr key={index}>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationName}</td>
                     <td>{cpd_record.Duration}</td>
