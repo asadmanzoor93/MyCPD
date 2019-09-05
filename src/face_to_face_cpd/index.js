@@ -2,7 +2,7 @@ import React from "react";
 import Header from '../_components/header.js';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import styles from './App.module.css';
+// import styles from './App.module.css';
 import axios from "axios";
 
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
@@ -107,9 +107,9 @@ class FaceToFace extends React.Component {
                 pageNumbers.push(i);
             }
             renderPageNumbers = pageNumbers.map(number => {
-                let classes = this.state.current_page === number ? styles.active : '';
+                let classes = this.state.current_page === number ? 'active' : '';
                 return (
-                    <span key={number} className={classes} onClick={() => this.makeHttpRequestWithPage(number)}>{number}</span>
+                    <li key={number} className={classes}><span onClick={() => this.makeHttpRequestWithPage(number)}>{number}</span></li>
                 );
             });
 
@@ -173,53 +173,49 @@ class FaceToFace extends React.Component {
                         </div>
                     </div>
 
-                    <div className="row ng-scope">
-                        <div id="gridTopItems">
-                            <div className="gridTopButtons">
-                                <button type="button" className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
-                                    <i className="fa fa-print"> </i>
-                                </button>
-                                <button type="button" className="btn btn-success btn-circle btn-lg ng-scope" tooltip="">
-                                    <i className="fa fa-file-excel-o"> </i>
-                                </button>
-                            </div>
-                            <div className="gridTopDropdown"> Show
-                                <select className="input-sm ng-pristine ng-untouched ng-valid ng-not-empty" onChange={(e) => this.handlePaginationFilter(e)}>
-                                    <option label="10" value="10" defaultValue >10</option>
-                                    <option label="20" value="20">20</option>
-                                    <option label="30" value="30">30</option>
-                                </select>
-                                entries
-                            </div>
+                    <div class="row" style={{paddingBottom: '30px'}}>
+                        <div className="gridTopButtons">
+                            <button type="button" className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
+                                <i className="fa fa-print"> </i>
+                            </button>
+                            <button type="button" className="btn btn-success btn-circle btn-lg ng-scope" tooltip="">
+                                <i className="fa fa-file-excel-o"> </i>
+                            </button>
+                        </div>
+                        <div className="gridTopDropdown"> Show
+                            <select className="input-sm ng-pristine ng-untouched ng-valid ng-not-empty" onChange={(e) => this.handlePaginationFilter(e)}>
+                                <option label="10" value="10" defaultValue >10</option>
+                                <option label="20" value="20">20</option>
+                                <option label="30" value="30">30</option>
+                            </select>
+                            entries
                         </div>
                     </div>
-                </div>
-
-                <div>
-                    <div className={styles.app}>
-                        <table className={styles.table}>
+                    <div class="col">
+                        <table className='table table-striped table-bordered table-hover table-condensed'>
                             <thead>
-                            <tr>
-                                <th>Course Name </th>
-                                <th>Location</th>
-                                <th>CPD Hours</th>
-                                <th>Host</th>
-                                <th>Type</th>
-                                <th>Trainer</th>
-                                <th>Start Date</th>
-                            </tr>
+                                <tr className="header">
+                                    <th>Course Name </th>
+                                    <th>Location</th>
+                                    <th>CPD Hours</th>
+                                    <th>Host</th>
+                                    <th>Type</th>
+                                    <th>Trainer</th>
+                                    <th>Start Date</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            { cpd_records }
+                                { cpd_records }
                             </tbody>
                         </table>
-                        <div className={styles.pagination}>
-                            <span onClick={() => this.makeHttpRequestWithPage(1)}>&laquo;</span>
-                            {renderPageNumbers}
-                            <span onClick={() => this.makeHttpRequestWithPage(1)}>&raquo;</span>
+                        <div>
+                            <ul className="pagination">
+                                <li><span onClick={() => this.makeHttpRequestWithPage(1)}>&laquo;</span></li>
+                                {renderPageNumbers}
+                                <li><span onClick={() => this.makeHttpRequestWithPage(1)}>&raquo;</span></li>
+                            </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         );

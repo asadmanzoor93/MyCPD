@@ -7,6 +7,11 @@ import './css/common/default.css';
 import './css/custom.css';
 import './css/common/bootstrap-float-label.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css';
+import 'jquery/src/jquery';
+import '../node_modules/bootstrap/dist/js/bootstrap';
+
+// import '../node_modules/jquery/dist/jquery.min.js';
+// import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route } from "react-router-dom";

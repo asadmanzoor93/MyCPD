@@ -33,3 +33,4 @@
 .c-footer-list li a {
 	padding: 15px;
 }
+.modal-backdrop { opacity: .5; }

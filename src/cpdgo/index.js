@@ -1,7 +1,20 @@
 import React from "react";
 import Header from "../_components/header";
+import KnowledgeInfoModal from "./_modals/knowledgeInfo";
 
 class CPDGO extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            knowledgeInfoModalShown: false
+        }
+        this.MyModal = React.createRef();
+    };
+    toggleModal = () => {
+        this.setState({
+          knowledgeInfoModalShown: !this.state.knowledgeInfoModalShown
+        });
+    }
     render () {
         return (
             <div>
@@ -27,36 +40,34 @@ class CPDGO extends React.Component {
                         </div>
 
 
-                        <form action="https://acpd.alpha.imago3.com/admLogin.asp" method="post" id="onlineAccountingform"
-                              ng-submit="vm.confirm('accountingcpd')" target="_blank" className="ng-pristine ng-valid">
+                        <form action="#" method="post" target="_blank" className="ng-pristine ng-valid">
 
                             <div className="container container-table">
                                 <div className="row vertical-center-row">
-                                    <div className="col-md-10 col-md-offset-1">
-
-
-                                        <input type="submit" className="btn btn-warning btn-lg col-lg-8"
-                                               value="Online Accounting CPD and Bites (Provided by accountingcpd.net)"
-                                               form="onlineAccountingform" />
-                                        <a className="btn btn-default btn-circle">
-                                            <i className="fa fa fa-info ng-scope" title="Help" tooltip=""></i>
-                                        </a>
+                                    <div className="col-md-8 col-md-offset-2">
+                                        <div className="input-group">
+                                            <input type="submit" style={{width: '100%'}} className="btn btn-warning btn-lg"
+                                                   value="Online Accounting CPD and Bites (Provided by accountingcpd.net)"
+                                                   form="onlineAccountingform" />
+                                            <a className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
+                                                <i className="fa fa fa-info" title="Help" tooltip=""></i>
+                                            </a>
+                                        </div>
                                         <div className="marginfix"></div>
-                                        <a href="http://34.248.242.178/ATI_Portal_Test/Index.aspx"
-                                           className="btn btn-success btn-lg col-lg-8"
-                                           target="_blank" ng-click="vm.confirm('KnowledgePoint')">KnowledgePoint</a>
-                                        <a className="btn btn-default btn-circle">
-                                            <i className="fa fa fa-info ng-scope" title="Help" tooltip=""></i>
-                                        </a>
+                                        <div className="input-group">
+                                            <a href="#" className="btn btn-success btn-lg" style={{width: '100%'}} target="_blank">KnowledgePoint</a>
+                                            <a className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}} data-toggle="modal" data-target="#exampleModal">
+                                                <i className="fa fa fa-info" title="Help"></i>
+                                            </a>
+                                        </div>
                                         <div className="marginfix"></div>
                                         <div className="marginfix"></div>
-
-                                        <a className="btn btn-primary btn-lg col-lg-8"
-                                           role="button" ng-click="vm.playVideo('lg')">ATI Code of Professional Ethics –
-                                            1 hour course</a>
-                                        <a className="btn btn-default btn-circle">
-                                            <i className="fa fa fa-info ng-scope" title="Help" tooltip=""></i>
-                                        </a>
+                                        <div className="input-group">
+                                            <a className="btn btn-primary btn-lg" style={{width: '100%'}} role="button">ATI Code of Professional Ethics – 1 hour course</a>
+                                            <a className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
+                                                <i className="fa fa fa-info" title="Help"></i>
+                                            </a>
+                                        </div>
                                         <div className="marginfix"></div>
                                     </div>
                                 </div>
@@ -76,7 +87,7 @@ class CPDGO extends React.Component {
                             </div>
                         </form>
                     </div>
-
+                    <KnowledgeInfoModal ref={this.MyModal} />
                 </div>
             </div>
         );
