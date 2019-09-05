@@ -1,6 +1,5 @@
 import React from "react";
 import Header from '../_components/header.js';
-import DashboardList from '../dashboard/list.js';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
 
@@ -31,7 +30,7 @@ class ApprovedCPDProviders extends React.Component {
                             </div>
                         </div>
                         <ReactTable
-                            data={DashboardList}
+                            data={[]}
                             columns={columns}
                         />
                     </div>
