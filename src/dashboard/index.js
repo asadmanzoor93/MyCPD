@@ -22,7 +22,13 @@ class Dashboard extends React.Component {
 			overdue_minutes: 0,
 			required_hours: 0,
 			total_hours: 0,
-			total_minutes: 0
+			total_minutes: 0,
+			course_name: null,
+			location_name: null,
+			host_selected: null,
+			year_selected: null,
+			date_selected: null,
+
 		}
 	};
 
@@ -203,15 +209,17 @@ class Dashboard extends React.Component {
 
 									<div className="form-group input-group" style={{width: '100%'}}>
 										<span className="has-float-label" style={{width: '50%'}}>
-											<input className="form-control ng-pristine ng-valid ng-empty ng-touched" type="text" id="courseName" placeholder="Course Name" aria-invalid="false" />
+											<input className="form-control ng-pristine ng-valid ng-empty ng-touched"
+												   type="text" id="courseName" value={this.state.course_name}
+												   placeholder="Course Name" aria-invalid="false" />
 											<label htmlFor="course_name">Course Name</label>
 										</span>
 									</div>
-
 										<div className="has-float-label form-group input-group" style={{width: '100%'}}>
-											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" aria-invalid="false" >
-												<option aria-checked="true" value="number:2018">2018</option>
-												<option aria-checked="true" value="number:2019" defaultValue>2019</option>
+											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" value={this.state.year_selected} aria-invalid="false" >
+												<option aria-checked="true" value="" selected={ (this.state.year_selected === null) ? "selected" : "" } > </option>
+												<option aria-checked="true" value="2018" selected={ (this.state.year_selected === "2018") ? "selected" : "" } >2018</option>
+												<option aria-checked="true" value="2019" selected={ (this.state.year_selected === "2018") ? "selected" : "" }>2019</option>
 											</select>
 											<label htmlFor="Year">Year</label>
 										</div>
