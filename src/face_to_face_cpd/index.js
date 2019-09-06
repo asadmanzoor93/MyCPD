@@ -204,10 +204,13 @@ class FaceToFace extends React.Component {
                         </table>
                         <div>
                             <Pagination
+                                prevPageText='Previous'
+                                nextPageText='Next'
+                                firstPageText='First'
+                                lastPageText='Last'
                                 activePage={this.state.activePage}
                                 itemsCountPerPage={this.state.per_page}
                                 totalItemsCount={this.state.totalCount}
-                                pageRangeDisplayed={5}
                                 onChange={this.handlePageChange}
                             />
                         </div>

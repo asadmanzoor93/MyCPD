@@ -142,8 +142,6 @@ class ApprovedCPDProviders extends React.Component {
                         </div>
                     </div>
 
-
-
                     <div className="row" style={{paddingBottom: '30px'}}>
                         <div className="gridTopButtons">
                             <button type="button" className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
@@ -181,12 +179,14 @@ class ApprovedCPDProviders extends React.Component {
                             </tbody>
                         </table>
                         <div>
-
                             <Pagination
+                                prevPageText='Previous'
+                                nextPageText='Next'
+                                firstPageText='First'
+                                lastPageText='Last'
                                 activePage={this.state.activePage}
                                 itemsCountPerPage={this.state.per_page}
                                 totalItemsCount={this.state.totalCount}
-                                pageRangeDisplayed={5}
                                 onChange={this.handlePageChange}
                             />
 

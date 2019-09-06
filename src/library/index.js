@@ -119,10 +119,10 @@ class Library extends React.Component {
             library_records = this.state.library_records.map((cpd_record , index) => (
                 <tr key={index}>
                     <td>{cpd_record.CourseName}</td>
-                    <td>{cpd_record.LocationName}</td>
+                    <td>{cpd_record.LocationID}</td>
                     <td>{cpd_record.DurationHours}</td>
-                    <td>{cpd_record.CPDTypeName}</td>
-                    <td>{cpd_record.HostName}</td>
+                    <td>{cpd_record.CPDTypeId}</td>
+                    <td>{cpd_record.HostID}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.Venue}</td>
                     <td>{cpd_record.StartDate}</td>
@@ -135,7 +135,6 @@ class Library extends React.Component {
 
             <div >
                 <Header />
-
                 <div className="container main-content">
                     <div className="panel panel-default">
                         <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
@@ -239,15 +238,16 @@ class Library extends React.Component {
                             </tbody>
                         </table>
                         <div>
-
                             <Pagination
+                                prevPageText='Previous'
+                                nextPageText='Next'
+                                firstPageText='First'
+                                lastPageText='Last'
                                 activePage={this.state.activePage}
                                 itemsCountPerPage={this.state.per_page}
                                 totalItemsCount={this.state.totalCount}
-                                pageRangeDisplayed={5}
                                 onChange={this.handlePageChange}
                             />
-
                         </div>
 
                     </div>
