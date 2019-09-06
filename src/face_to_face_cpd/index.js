@@ -1,9 +1,8 @@
 import React from "react";
 import Header from '../_components/header.js';
-import ReactTable from 'react-table';
 import "react-table/react-table.css";
-// import styles from './App.module.css';
 import axios from "axios";
+import Pagination from "react-js-pagination";
 
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const FaceToFace_URL = "http://34.248.242.178/CPDCompliance/api/faceToface";
@@ -13,15 +12,25 @@ class FaceToFace extends React.Component {
     constructor() {
         super();
         this.handlePaginationFilter = this.handlePaginationFilter.bind(this);
+        this.handlePageChange = this.handlePageChange.bind(this);
         this.state = {
             host_list: [],
             course_name: '',
-            cpd_records: null,
-            totalPages: null,
+            cpd_records: [],
+            totalPages: 0,
+            totalCount: 0,
             per_page: 10,
-            current_page: null
+            activePage: 0
         }
     };
+
+    handlePageChange(pageNumber) {
+        console.log(`active page is ${pageNumber}`);
+        this.setState({
+            activePage: pageNumber
+        });
+        this.makeHttpRequestWithPage(pageNumber);
+    }
 
     componentDidMount() {
         this.makeHttpRequestWithPage(1);
@@ -69,7 +78,8 @@ class FaceToFace extends React.Component {
                 this.setState({
                     cpd_records: data.Items,
                     totalPages: data.TotalPages,
-                    current_page: data.Page,
+                    totalCount: data.TotalCount,
+                    activePage: data.Page,
                 });
 
             }).catch(console.log);
@@ -85,7 +95,7 @@ class FaceToFace extends React.Component {
 
     render () {
 
-        let cpd_records, renderPageNumbers;
+        let cpd_records;
         if (this.state.cpd_records !== null) {
             cpd_records = this.state.cpd_records.map((cpd_record , index) => (
                 <tr key={index}>
@@ -100,25 +110,10 @@ class FaceToFace extends React.Component {
             ));
         }
 
-        const pageNumbers = [];
-        if (this.state.totalPages !== null) {
-            for (let i = 1; i <= this.state.totalPages; i++) {
-                pageNumbers.push(i);
-            }
-            renderPageNumbers = pageNumbers.map(number => {
-                let classes = this.state.current_page === number ? 'active' : '';
-                return (
-                    <li key={number} className={classes}><span onClick={() => this.makeHttpRequestWithPage(number)}>{number}</span></li>
-                );
-            });
-
-        }
-
         return (
 
             <div >
                 <Header />
-                
                 <div className="container main-content">
                     <div className="panel panel-default">
                         <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
@@ -208,11 +203,13 @@ class FaceToFace extends React.Component {
                             </tbody>
                         </table>
                         <div>
-                            <ul className="pagination">
-                                <li><span onClick={() => this.makeHttpRequestWithPage(1)}>&laquo;</span></li>
-                                {renderPageNumbers}
-                                <li><span onClick={() => this.makeHttpRequestWithPage(1)}>&raquo;</span></li>
-                            </ul>
+                            <Pagination
+                                activePage={this.state.activePage}
+                                itemsCountPerPage={this.state.per_page}
+                                totalItemsCount={this.state.totalCount}
+                                pageRangeDisplayed={5}
+                                onChange={this.handlePageChange}
+                            />
                         </div>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ class Library extends React.Component {
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
-            activePage: null
+            activePage: 0
         }
     };
 
@@ -134,7 +134,7 @@ class Library extends React.Component {
         return (
 
             <div >
-                {/*<Header />*/}
+                <Header />
 
                 <div className="container main-content">
                     <div className="panel panel-default">
@@ -243,7 +243,7 @@ class Library extends React.Component {
                             <Pagination
                                 activePage={this.state.activePage}
                                 itemsCountPerPage={this.state.per_page}
-                                totalItemsCount={450}
+                                totalItemsCount={this.state.totalCount}
                                 pageRangeDisplayed={5}
                                 onChange={this.handlePageChange}
                             />
