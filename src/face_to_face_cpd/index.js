@@ -69,7 +69,6 @@ class FaceToFace extends React.Component {
                 this.setState({
                     cpd_records: data.Items,
                     totalPages: data.TotalPages,
-                    per_page: data.Count,
                     current_page: data.Page,
                 });
 
@@ -191,7 +190,7 @@ class FaceToFace extends React.Component {
                             entries
                         </div>
                     </div>
-                    <div class="col">
+                    <div className="col">
                         <table className='table table-striped table-bordered table-hover table-condensed'>
                             <thead>
                                 <tr className="header">
