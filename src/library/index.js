@@ -2,6 +2,7 @@ import React from "react";
 import Header from '../_components/header.js';
 import "react-table/react-table.css";
 import axios from "axios";
+import Pagination from "react-js-pagination";
 
 const Types_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypes";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
@@ -12,19 +13,29 @@ class Library extends React.Component {
     constructor() {
         super();
         this.handlePaginationFilter = this.handlePaginationFilter.bind(this);
+        this.handlePageChange = this.handlePageChange.bind(this);
         this.state = {
             host_list: [],
             types_list: [],
             course_name: '',
-            cpd_records: null,
-            totalPages: null,
+            library_records: [],
+            totalPages: 0,
+            totalCount: 0,
             per_page: 10,
-            current_page: null
+            activePage: null
         }
     };
 
+    handlePageChange(pageNumber) {
+        console.log(`active page is ${pageNumber}`);
+        this.setState({
+            activePage: pageNumber
+        });
+        this.makeHttpRequestWithPage(pageNumber);
+    }
+
     componentDidMount() {
-        // this.makeHttpRequestWithPage(1);
+        this.makeHttpRequestWithPage(1);
 
         // Types List
         axios.get(Types_URL, {
@@ -85,14 +96,14 @@ class Library extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 this.setState({
-                    cpd_records: data.Items,
+                    library_records: data.Items,
                     totalPages: data.TotalPages,
-                    current_page: data.Page,
+                    activePage: data.Page,
+                    totalCount: data.TotalCount,
                 });
 
             }).catch(console.log);
     };
-
 
     handlePaginationFilter(event){
         let value = event.target.value;
@@ -103,33 +114,21 @@ class Library extends React.Component {
 
     render () {
 
-        let cpd_records, renderPageNumbers;
-        if (this.state.cpd_records !== null) {
-            cpd_records = this.state.cpd_records.map((cpd_record , index) => (
+        let library_records;
+        if (this.state.library_records !== null) {
+            library_records = this.state.library_records.map((cpd_record , index) => (
                 <tr key={index}>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationName}</td>
-                    <td>{cpd_record.Duration}</td>
-                    <td>{cpd_record.HostName}</td>
+                    <td>{cpd_record.DurationHours}</td>
                     <td>{cpd_record.CPDTypeName}</td>
+                    <td>{cpd_record.HostName}</td>
                     <td>{cpd_record.Trainer}</td>
+                    <td>{cpd_record.Venue}</td>
                     <td>{cpd_record.StartDate}</td>
+                    <td> </td>
                 </tr>
             ));
-        }
-
-        const pageNumbers = [];
-        if (this.state.totalPages !== null) {
-            for (let i = 1; i <= this.state.totalPages; i++) {
-                pageNumbers.push(i);
-            }
-            renderPageNumbers = pageNumbers.map(number => {
-                let classes = this.state.current_page === number ? 'active' : '';
-                return (
-                    <li key={number} className={classes}><span onClick={() => this.makeHttpRequestWithPage(number)}>{number}</span></li>
-                );
-            });
-
         }
 
         return (
@@ -177,7 +176,7 @@ class Library extends React.Component {
                                             <label htmlFor="Venue">Venue</label>
                                         </span>
                                     </div>
-                                    
+
                                     <div className="form-group input-group" style={{width: '45.5%'}}>
                                         <div className="has-float-label" >
                                             <select className="form-control ng-pristine ng-valid ng-empty ng-touched">
@@ -227,23 +226,30 @@ class Library extends React.Component {
                                 <th>Course Name </th>
                                 <th>Location</th>
                                 <th>CPD Hours</th>
-                                <th>Host</th>
                                 <th>Type</th>
+                                <th>Host</th>
                                 <th>Trainer</th>
+                                <th>Venue</th>
                                 <th>Start Date</th>
+                                <th>View</th>
                             </tr>
                             </thead>
                             <tbody>
-                            { cpd_records }
+                            { library_records }
                             </tbody>
                         </table>
                         <div>
-                            <ul className="pagination">
-                                <li><span onClick={() => this.makeHttpRequestWithPage(1)}>&laquo;</span></li>
-                                {renderPageNumbers}
-                                <li><span onClick={() => this.makeHttpRequestWithPage(1)}>&raquo;</span></li>
-                            </ul>
+
+                            <Pagination
+                                activePage={this.state.activePage}
+                                itemsCountPerPage={this.state.per_page}
+                                totalItemsCount={450}
+                                pageRangeDisplayed={5}
+                                onChange={this.handlePageChange}
+                            />
+
                         </div>
+
                     </div>
                 </div>
             </div>
