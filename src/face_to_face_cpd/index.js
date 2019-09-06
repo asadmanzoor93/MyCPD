@@ -167,7 +167,7 @@ class FaceToFace extends React.Component {
                         </div>
                     </div>
 
-                    <div class="row" style={{paddingBottom: '30px'}}>
+                    <div className="row" style={{paddingBottom: '30px'}}>
                         <div className="gridTopButtons">
                             <button type="button" className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
                                 <i className="fa fa-print"> </i>
