@@ -7,14 +7,14 @@ class CPDGO extends React.Component {
         super();
         this.state = {
             knowledgeInfoModalShown: false
-        }
+        };
         this.MyModal = React.createRef();
     };
     toggleModal = () => {
         this.setState({
           knowledgeInfoModalShown: !this.state.knowledgeInfoModalShown
         });
-    }
+    };
     render () {
         return (
             <div>

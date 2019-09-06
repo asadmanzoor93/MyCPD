@@ -1,11 +1,8 @@
 import React from "react";
 import Header from '../_components/header.js';
 import axios from 'axios';
-import qs from'querystring';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import _ from "lodash";
-import API from '../utils/API';
 
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";

@@ -14,15 +14,15 @@ class RecordCPD extends React.Component {
                         <ul className="steps-indicator steps-3">
 
                             <li className="ng-scope current">
-                                <a href="#" className="ng-binding">Submitter Details</a>
+                                <span className="ng-binding">Submitter Details</span>
                             </li>
 
                             <li className="ng-scope default">
-                                <a href="#" className="ng-binding">Confirm CPD Activity Details</a>
+                                <span className="ng-binding">Confirm CPD Activity Details</span>
                             </li>
 
                             <li className="ng-scope default">
-                                <a href="#" className="ng-binding">CPD Details</a>
+                                <span className="ng-binding">CPD Details</span>
                             </li>
 
                         </ul>

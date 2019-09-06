@@ -1,9 +1,6 @@
 import React from "react";
 import Header from '../_components/header.js';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-
-import CPDGO from '../cpdgo/index.js';
-
+import { Link } from 'react-router-dom';
 
 class Home extends React.Component {
   render () {

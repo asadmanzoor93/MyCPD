@@ -1,18 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class Header extends React.Component {
 
   constructor(props) {
       super(props);
-
       this.state = {
           quickNavShown: false,
           password: '',
           submitted: false,
           login: false
       };
-
   }
   
   render () {
@@ -25,9 +23,9 @@ class Header extends React.Component {
                 <div className="navbar-header">
                   <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span className="sr-only">Toggle navigation</span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
+                    <span className="icon-bar"> </span>
+                    <span className="icon-bar"> </span>
+                    <span className="icon-bar"> </span>
                   </button>
                   <a className="navbar-brand" href="#">
                     <img src={'images\/MyCPDLogoImg.png'} alt="" />
@@ -36,15 +34,15 @@ class Header extends React.Component {
                 <div id="bs-example-navbar-collapse-1" className="collapse navbar-collapse animated fadeIn">
                   <ul className="nav navbar-nav animated fadeIn text16">
                     <li>
-                      <Link to={'/home'}><i className="fa fa-home"></i> Home </Link>
+                      <Link to={'/home'}><i className="fa fa-home"> </i> Home </Link>
                     </li>
                     <li className="active">
                       <a href="#" onClick={e => { e.preventDefault(); this.setState({quickNavShown: !this.state.quickNavShown }) }} >
-                        <i className={this.state.quickNavShown ? "fa fa-toggle-on" : "fa fa-toggle-off"}></i> Quick Navigation
+                        <i className={this.state.quickNavShown ? "fa fa-toggle-on" : "fa fa-toggle-off"}> </i> Quick Navigation
                       </a>
                     </li>
                     <li role="button" tabIndex="0" aria-hidden="false" className="">
-                      <a href="#"><i className="fa fa-paper-plane"></i> Feedback!</a>
+                      <a href="#"><i className="fa fa-paper-plane"> </i> Feedback!</a>
                     </li>
                   </ul>
                   <ul className="nav navbar-nav navbar-right animated fadeIn text16">

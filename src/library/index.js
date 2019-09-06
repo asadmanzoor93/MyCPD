@@ -14,17 +14,36 @@ class Library extends React.Component {
         super();
         this.handlePaginationFilter = this.handlePaginationFilter.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+
         this.state = {
             host_list: [],
             types_list: [],
-            course_name: '',
             library_records: [],
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
-            activePage: 0
+            activePage: 0,
+
+            cpd_type_id: '',
+            course_name: '',
+            host_id: '',
+            location_name: '',
+            venue: '',
+            reverse: false,
+            sortBy: 'StartDate',
         }
     };
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
 
     handlePageChange(pageNumber) {
         console.log(`active page is ${pageNumber}`);
@@ -76,13 +95,17 @@ class Library extends React.Component {
     }
 
     makeHttpRequestWithPage(pageNumber) {
-
         axios.get(Library_URL, {
             params: {
+                CPDTypeId: this.state.cpd_type_id,
+                CourseName: this.state.course_name,
+                HostId: this.state.host_id,
+                LocationName: this.state.location_name,
+                Venue: this.state.venue,
+                reverse: this.state.reverse,
+                sortBy: this.state.sortBy,
                 page: pageNumber,
                 pageSize: this.state.per_page,
-                reverse: false,
-                sortBy: 'StartDate'
             },
             method: 'GET',
             withCredentials: true,
@@ -138,7 +161,7 @@ class Library extends React.Component {
                 <div className="container main-content">
                     <div className="panel panel-default">
                         <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
-                            <i className="fa fa-filter " title="" tooltip="" data-original-title="Search"> Search</i>
+                            <i className="fa fa-filter " title="" data-original-title="Search"> Search</i>
                         </div>
                         <div className="shadow">
                             <div className="layout-gt-sm-row">
@@ -146,20 +169,33 @@ class Library extends React.Component {
                                     <div className="form-group input-group">
                                         <span className="has-float-label" style={{width: '590px'}}>
                                             <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   type="text" placeholder="Course Name" id="courseName" aria-invalid="false" />
+                                                   placeholder="Course Name" id="courseName"
+                                                   type="text"
+                                                   value={this.state.course_name}
+                                                   name="course_name"
+                                                   onChange={this.handleInputChange}
+                                                   aria-invalid="false"
+                                            />
                                             <label htmlFor="courseName">Course Name</label>
                                         </span>
                                         <span className="has-float-label" style={{width: '590px'}}>
                                             <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   type="text" id="LocationName"
-                                                   placeholder="Location Name" aria-invalid="false" />
+                                                   id="LocationName"
+                                                   placeholder="Location Name"
+                                                   type="text"
+                                                   value={this.state.location_name}
+                                                   name="location_name"
+                                                   onChange={this.handleInputChange}
+                                                   aria-invalid="false"
+                                            />
                                             <label htmlFor="LocationName">Location Name</label>
                                         </span>
                                     </div>
 
                                     <div className="form-group input-group">
                                         <div className="has-float-label" style={{width: '560px'}}>
-                                            <select className="form-control ng-pristine ng-untouched ng-valid ng-empty" id="courseType" aria-invalid="false">
+                                            <select id="cpd_type_id" name="cpd_type_id" value={this.state.cpd_type_id} onChange={this.handleInputChange}
+                                                    className="form-control ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
                                                 <option value="" defaultValue> </option>
                                                 {this.state.types_list.map((item, key) =>
                                                     <option key={key} label={item.Description} value={item.CPDTypeId} >{item.Description}</option>
@@ -170,15 +206,22 @@ class Library extends React.Component {
 
                                         <span className="has-float-label" style={{width: '560px'}}>
                                             <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   id="Venue" type="text" placeholder="Venue"
-                                                   aria-invalid="false" />
+                                                   id="Venue"
+                                                   placeholder="Venue"
+                                                   type="text"
+                                                   value={this.state.venue}
+                                                   name="location_name"
+                                                   onChange={this.handleInputChange}
+                                                   aria-invalid="false"
+                                            />
                                             <label htmlFor="Venue">Venue</label>
                                         </span>
                                     </div>
 
                                     <div className="form-group input-group" style={{width: '45.5%'}}>
                                         <div className="has-float-label" >
-                                            <select className="form-control ng-pristine ng-valid ng-empty ng-touched">
+                                            <select id="host_id" name="host_id" value={this.state.host_id} onChange={this.handleInputChange}
+                                                    className="form-control ng-pristine ng-valid ng-empty ng-touched">
                                                 <option value="" defaultValue> </option>
                                                 {this.state.host_list.map((item, key) =>
                                                     <option key={key} value={item.ID} >{item.Name}</option>
@@ -202,10 +245,10 @@ class Library extends React.Component {
 
                     <div className="row" style={{paddingBottom: '30px'}}>
                         <div className="gridTopButtons">
-                            <button type="button" className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
+                            <button type="button" className="btn btn-danger btn-circle btn-lg ng-scope">
                                 <i className="fa fa-print"> </i>
                             </button>
-                            <button type="button" className="btn btn-success btn-circle btn-lg ng-scope" tooltip="">
+                            <button type="button" className="btn btn-success btn-circle btn-lg ng-scope">
                                 <i className="fa fa-file-excel-o"> </i>
                             </button>
                         </div>
