@@ -15,6 +15,7 @@ class Library extends React.Component {
         this.handlePaginationFilter = this.handlePaginationFilter.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.clearSearchFilters = this.clearSearchFilters.bind(this);
 
         this.state = {
             host_list: [],
@@ -24,7 +25,6 @@ class Library extends React.Component {
             totalCount: 0,
             per_page: 10,
             activePage: 0,
-
             cpd_type_id: '',
             course_name: '',
             host_id: '',
@@ -135,6 +135,25 @@ class Library extends React.Component {
         });
     }
 
+    clearSearchFilters(){
+        this.setState({
+            host_list: [],
+            types_list: [],
+            library_records: [],
+            totalPages: 0,
+            totalCount: 0,
+            per_page: 10,
+            activePage: 0,
+            cpd_type_id: '',
+            course_name: '',
+            host_id: '',
+            location_name: '',
+            venue: '',
+            reverse: false,
+            sortBy: 'StartDate',
+        });
+    }
+
     render () {
 
         let library_records;
@@ -236,7 +255,10 @@ class Library extends React.Component {
                                             <span className="glyphicon glyphicon-search"> </span>
                                             Search
                                         </button>
-                                        <button className="btn btn-primary"><span className="glyphicon glyphicon-remove-sign"> </span> Clear</button>
+                                        <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
+                                            <span className="glyphicon glyphicon-remove-sign"> </span>
+                                            Clear
+                                        </button>
                                     </div>
                                 </div>
                             </div>
