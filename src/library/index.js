@@ -227,7 +227,7 @@ class Library extends React.Component {
                                         </span>
                                         <span className="has-float-label" style={{width: '590px'}}>
                                             <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   id="LocationName"
+                                                   id="location_name"
                                                    placeholder="Location Name"
                                                    type="text"
                                                    value={this.state.location_name}
