@@ -1,19 +1,48 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
+
+import axios from "axios";
+
+const SignOut_URL = 'http://34.248.242.178/CPDCompliance/api/account/LogOff';
 
 class Header extends React.Component {
 
   constructor(props) {
       super(props);
+    this.makeSignOutRequest = this.makeSignOutRequest.bind(this);
       this.state = {
           quickNavShown: false,
           password: '',
           submitted: false,
-          login: false
+          logout: false
       };
   }
 
+  makeSignOutRequest() {
+    axios.get(SignOut_URL, {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      }
+    })
+        .then(response => response)
+        .then((response) => {
+          this.setState({
+            logout: true,
+          });
+
+        }).catch(console.log);
+  };
+
   render () {
+
+    if (this.state.logout) {
+      return <Redirect to="/" />;
+    }
 
     return (
       <div>
@@ -56,7 +85,7 @@ class Header extends React.Component {
                     <li aria-hidden="false" className="">
                       <a href="#"><i className="fa fa-info-circle"></i> About Us</a>
                     </li>
-                    <li><a href="#" ><i className="fa fa-sign-out"></i> Sign Out</a></li>
+                    <li><a href="#" onClick={()=> this.makeSignOutRequest()}><i className="fa fa-sign-out"></i> Sign Out</a></li>
                   </ul>
                 </div>
                 <h4 className="headerdashboard" >
