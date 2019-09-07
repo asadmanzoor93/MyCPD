@@ -1,61 +1,64 @@
 import React from "react";
 import Header from '../_components/header.js';
 import "react-table/react-table.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class RecordCPD extends React.Component {
+    state = {
+        startDate: new Date()
+    }
+    handleChange = date => {
+        this.setState({
+          startDate: date
+        });
+    }
     render () {
         return (
             <div>
                 <Header />
                 <div className="container main-content">
-                    <div className="ng-isolate-scope">
+                    <div>
                         <h2 className="ng-binding" aria-hidden="false"> </h2>
-
                         <ul className="steps-indicator steps-3">
-
-                            <li className="ng-scope current">
-                                <span className="ng-binding">Submitter Details</span>
+                            <li className="current">
+                                <a>Submitter Details</a>
                             </li>
-
-                            <li className="ng-scope default">
-                                <span className="ng-binding">Confirm CPD Activity Details</span>
+                            <li className="default">
+                                <a>Confirm CPD Activity Details</a>
                             </li>
-
-                            <li className="ng-scope default">
-                                <span className="ng-binding">CPD Details</span>
+                            <li className="default">
+                                <a>CPD Details</a>
                             </li>
-
                         </ul>
-
-                        <div className="steps ng-scope">
-                            <section className="step ng-scope ng-isolate-scope current" aria-hidden="false">
-                                <div className="ng-scope"> </div>
-                                <div className="panel panel-primary ng-scope">
+                        <div className="steps ">
+                            <section className="step   current">
+                                <div className=""> </div>
+                                <div className="panel panel-primary ">
                                     <div className="panel-heading">Submitter Details</div>
-
                                     <div className="container container-table">
                                         <div className="row vertical-center-row" id="step-1">
-                                            <div> </div>
+                                            <div style={{marginTop:'40px'}}></div>
                                             <div className="col-md-6 col-md-offset-3">
                                                 <div className="form-group">
                                                     <label className="control-label">First Name</label>
-                                                    <input maxLength="100" type="text" className="form-control ng-pristine ng-untouched ng-valid ng-valid-maxlength ng-not-empty" placeholder="Enter First Name" disabled="" aria-invalid="false" />
+                                                    <input maxLength="100" type="text" className="form-control " placeholder="Enter First Name" disabled="" aria-invalid="false" />
                                                 </div>
                                                 <div className="form-group">
                                                     <label className="control-label">Last Name</label>
-                                                    <input maxLength="100" type="text" className="form-control ng-pristine ng-untouched ng-valid ng-valid-maxlength ng-not-empty" placeholder="Enter Last Name" disabled="" aria-invalid="false" />
+                                                    <input maxLength="100" type="text" className="form-control " placeholder="Enter Last Name" disabled="" aria-invalid="false" />
                                                 </div>
                                                 <div className="form-group">
                                                     <label className="control-label">Membership Number</label>
-                                                    <input maxLength="100" type="text" className="form-control ng-pristine ng-untouched ng-valid ng-valid-maxlength ng-not-empty" placeholder="Enter MembershipNumber" disabled="" aria-invalid="false"  />
+                                                    <input maxLength="100" type="text" className="form-control " placeholder="Enter MembershipNumber" disabled="" aria-invalid="false"  />
                                                 </div>
                                                 <div className="form-group">
                                                     <label className="control-label">Email</label>
-                                                    <input maxLength="100" type="text" className="form-control ng-pristine ng-untouched ng-valid ng-valid-maxlength ng-not-empty" placeholder="Enter Email" disabled="" aria-invalid="false"  />
+                                                    <input maxLength="100" type="text" className="form-control " placeholder="Enter Email" disabled="" aria-invalid="false"  />
                                                 </div>
                                                 <div className="form-group">
                                                     <label className="control-label">Address</label>
-                                                    <textarea required="required" className="form-control ng-pristine ng-untouched ng-not-empty ng-valid ng-valid-required" disabled="" placeholder="Enter your address" rows="4" aria-invalid="false" > </textarea>
+                                                    <textarea required="required" className="form-control" disabled="" placeholder="Enter your address" rows="4" aria-invalid="false" > </textarea>
                                                 </div>
                                                 <div >
                                                     <button className="btn btn-primary pull-right" >Next step <i className="fa fa-arrow-right"> </i></button>
@@ -68,20 +71,20 @@ class RecordCPD extends React.Component {
 
                             </section>
 
-                            <section className="step ng-scope ng-isolate-scope ng-hide" aria-hidden="true">
+                            <section className="step   ng-hide">
 
-                                <div className="ng-scope"> </div>
-                                <div className="panel panel-primary ng-scope">
+                                <div className=""> </div>
+                                <div className="panel panel-primary ">
                                     <div className="panel-heading">Confirm CPD Activity Details</div>
 
                                     <div className="container container-table">
 
-                                        <div className="row vertical-center-row ng-invalid ng-invalid-required ng-valid-maxlength ng-valid-min ng-valid-max ng-valid-step ng-dirty ng-invalid-parse" id="step-2" name="editForm" role="form">
-                                            <div > </div>
+                                        <div className="row vertical-center-row ng-invalid ng-invalid-required " id="step-2" name="editForm" role="form">
+                                            <div style={{marginTop:'40px'}}></div>
                                             <div className="col-md-6 col-md-offset-3">
                                                 <div className="form-group required">
                                                     <label className="control-label" htmlFor="cbdtype">CPD Type</label>
-                                                    <select className="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" name="cbdtype" required="" aria-invalid="true">
+                                                    <select className="form-control  ng-empty ng-invalid ng-invalid-required" name="cbdtype" required="" aria-invalid="true">
                                                         <option value="?" defaultValue> </option>
                                                         <option label="Approved CPD Provider" value="number:2">Approved CPD Provider
                                                         </option>
@@ -97,12 +100,12 @@ class RecordCPD extends React.Component {
                                                     <label className="control-label" htmlFor="course">Course Title
                                                     </label>
                                                     <div id="custom-search-input">
-                                                        <div className="ui-select-container ui-select-bootstrap dropdown ng-pristine ng-untouched ng-scope ng-empty ng-invalid ng-invalid-required" aria-required="true" aria-disabled="false" aria-invalid="true">
-                                                            <div className="ui-select-match ng-scope" aria-hidden="false" aria-disabled="false">
+                                                        <div className="ui-select-container ui-select-bootstrap dropdown   ng-empty ng-invalid ng-invalid-required" aria-required="true" aria-disabled="false" aria-invalid="true">
+                                                            <div className="ui-select-match " aria-hidden="false" aria-disabled="false">
                                                                 <span tabIndex="-1" className="btn btn-default form-control ui-select-toggle" aria-label="Select box activate" role="button" aria-disabled="false">
                                                                     <span className="ui-select-placeholder text-muted ng-binding" aria-hidden="false"> </span>
                                                                     <span className="ui-select-match-text pull-left ng-hide" aria-hidden="true">
-                                                                        <span className="ng-binding ng-scope"> </span>
+                                                                        <span className="ng-binding "> </span>
                                                                     </span>
                                                                     <i className="caret pull-right" role="button" tabIndex="0"> </i>
                                                                     <a href="#" aria-label="Select box clear" className="btn btn-xs btn-link pull-right ng-hide" aria-hidden="true">
@@ -112,10 +115,10 @@ class RecordCPD extends React.Component {
                                                             </div>
 
                                                             <span className="ui-select-refreshing glyphicon glyphicon-refresh ui-select-spin ng-hide" aria-hidden="true"> </span>
-                                                            <input type="search" autoComplete="off" className="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-empty ng-hide"
+                                                            <input type="search" autoComplete="off" className="form-control ui-select-search  ng-empty ng-hide"
                                                                    placeholder="" />
 
-                                                            <ul className="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-scope ng-hide" aria-hidden="true">
+                                                            <ul className="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu  ng-hide" aria-hidden="true">
                                                                 <li className="ui-select-choices-group" id="ui-select-choices-0">
                                                                     <div className="divider ng-hide" aria-hidden="true"> </div>
                                                                     <div className="ui-select-choices-group-label dropdown-header ng-binding ng-hide" aria-hidden="true"> </div>
@@ -123,7 +126,7 @@ class RecordCPD extends React.Component {
                                                             </ul>
                                                             <div className="ui-select-no-choice"> </div>
                                                             <ui-select-single> </ui-select-single>
-                                                            <input className="ui-select-focusser ui-select-offscreen ng-scope" type="text" id="focusser-0" aria-label="Select box focus" aria-haspopup="true" role="button" />
+                                                            <input className="ui-select-focusser ui-select-offscreen " type="text" id="focusser-0" aria-label="Select box focus" aria-haspopup="true" role="button" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -131,12 +134,12 @@ class RecordCPD extends React.Component {
                                                 <div className="form-group required ng-hide" aria-hidden="true">
                                                     <label htmlFor="courseTitle" className="control-label">Course Title
                                                     </label>
-                                                    <input type="text" className="form-control ng-pristine ng-untouched ng-empty ng-valid-maxlength ng-valid ng-valid-required" name="courseTitle" id="courseTitle" placeholder="Course Title" aria-invalid="false" />
+                                                    <input type="text" className="form-control  ng-empty-required" name="courseTitle" id="courseTitle" placeholder="Course Title" aria-invalid="false" />
                                                 </div>
 
                                                 <div className="form-group required">
                                                     <label htmlFor="cmbformat" className="control-label">Format</label>
-                                                    <select className="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" name="cmbformat" required="" disabled="disabled" aria-invalid="true">
+                                                    <select className="form-control  ng-empty ng-invalid ng-invalid-required" name="cmbformat" required="" disabled="disabled" aria-invalid="true">
                                                         <option value="?" defaultValue> </option>
                                                         <option label="Conference" value="4">Conference</option>
                                                         <option label="Exam" value="3">Exam</option>
@@ -147,52 +150,54 @@ class RecordCPD extends React.Component {
 
                                                 <div className="form-group required">
                                                     <label className="control-label" htmlFor="txtDescription">Description</label>
-                                                    <textarea className="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" name="txtDescription" id="txtDescription" rows="4" required="" aria-invalid="true"> </textarea>
+                                                    <textarea className="form-control  ng-empty ng-invalid ng-invalid-required" name="txtDescription" id="txtDescription" rows="4" required="" aria-invalid="true"> </textarea>
                                                     <span id="helpText" className="small ng-hide" aria-hidden="true"><em>Please include a full course description/outline/agenda. Submission will be rejected if not enough detail to approve is provided.</em></span>
                                                 </div>
                                                 <div className="form-group required">
                                                     <label htmlFor="intputVenue" className="control-label">Venue</label>
-                                                    <input type="text" className="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required ng-valid-maxlength" name="intputVenue" id="intputVenue" placeholder="Venue" required="" aria-invalid="true" />
+                                                    <input type="text" className="form-control  ng-empty ng-invalid ng-invalid-required-maxlength" name="intputVenue" id="intputVenue" placeholder="Venue" required="" aria-invalid="true" />
+                                                </div>
+                                                <div className="row">
+                                                    <div className="form-group col-xs-4 col-md-4 required">
+                                                        <label className="control-label" htmlFor="InputHour">CPD Hours
+                                                        </label>
+                                                        <input type="number" className="form-control  ng-empty ng-invalid ng-invalid-required" id="InputHour" name="InputHour" placeholder="Hour" step="1" max="100" min="0" required="" aria-invalid="true" />
+                                                    </div>
+                                                    <div className="form-group col-xs-4 col-md-4">
+                                                        <label className="control-label" htmlFor="InputMin">Minutes</label>
+                                                        <input type="number" className="form-control  ng-empty-step"
+                                                               id="InputMin" placeholder="Minute" step="15" max="45" min="0" aria-invalid="false" />
+                                                    </div>
+                                                    <div className="form-group col-xs-4 col-md-4">
+                                                        <label htmlFor="year" className="control-label">CPD Year</label>
+                                                        <select className="form-control " name="year" aria-invalid="false">
+                                                            <option label="2017" value="2017">2017</option>
+                                                            <option label="2018" value="2018">2018</option>
+                                                            <option label="2019" value="2019" defaultValue>2019
+                                                            </option>
+                                                            <option label="2020" value="2020">2020</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
 
-                                                <div className="form-group col-xs-4 col-md-4 required">
-                                                    <label className="control-label" htmlFor="InputHour">CPD Hours
-                                                    </label>
-                                                    <input type="number" className="form-control ng-pristine ng-untouched ng-empty ng-valid-min ng-valid-max ng-valid-step ng-invalid ng-invalid-required" id="InputHour" name="InputHour" placeholder="Hour" step="1" max="100" min="0" required="" aria-invalid="true" />
-                                                </div>
-                                                <div className="form-group col-xs-4 col-md-4">
-                                                    <label className="control-label" htmlFor="InputMin">Minutes</label>
-                                                    <input type="number" className="form-control ng-pristine ng-untouched ng-valid ng-empty ng-valid-min ng-valid-max ng-valid-step"
-                                                           id="InputMin" placeholder="Minute" step="15" max="45" min="0" aria-invalid="false" />
-                                                </div>
-                                                <div className="form-group col-xs-4 col-md-4">
-                                                    <label htmlFor="year" className="control-label">CPD Year</label>
-                                                    <select className="form-control ng-pristine ng-untouched ng-valid ng-not-empty" name="year" aria-invalid="false">
-                                                        <option label="2017" value="2017">2017</option>
-                                                        <option label="2018" value="2018">2018</option>
-                                                        <option label="2019" value="2019" defaultValue>2019
-                                                        </option>
-                                                        <option label="2020" value="2020">2020</option>
-                                                    </select>
-                                                </div>
 
                                                 <div className="form-group required">
                                                     <label htmlFor="courseDate" className="control-label">Date Completed
                                                     </label>
                                                     <div className="input-group">
-                                                        <input type="text" className="form-control ng-untouched ng-empty ng-dirty ng-invalid ng-invalid-parse" name="courseDate" my-date-picker="" end-date="+1d" required="" aria-invalid="true" />
-                                                        <span className="input-group-addon" data-toggle="datepicker">
-                                    <span className="glyphicon glyphicon-calendar ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false"> </span>
-                                        </span>
+                                                    <DatePicker className="form-control"
+                                                        selected={this.state.startDate}
+                                                        onChange={this.handleChange}
+                                                    />
                                                     </div>
                                                 </div>
 
                                                 <div className="form-group required">
                                                     <label className="control-label">Upload Evidence of Attendance
                                                     </label>
-                                                    <div className="upload-field ng-binding ng-scope">
+                                                    <div className="upload-field ng-binding ">
                                                         Choose a file please
-                                                        <input id="uploadFileInput" type="file" valid-file="" className="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" data-show-preview="false" required="required" aria-invalid="true" />
+                                                        <input id="uploadFileInput" type="file" valid-file="" className="form-control  ng-empty ng-invalid ng-invalid-required" data-show-preview="false" required="required" aria-invalid="true" />
                                                         <button className="icon-folder"> </button>
                                                     </div>
                                                 </div>
@@ -208,19 +213,19 @@ class RecordCPD extends React.Component {
                                 </div>
                             </section>
 
-                            <section className="step ng-scope ng-isolate-scope ng-hide" aria-hidden="true">
-                                <div  className="ng-scope"> </div>
-                                <div className="panel panel-primary ng-scope">
+                            <section className="step   ng-hide">
+                                <div  className=""> </div>
+                                <div className="panel panel-primary ">
                                     <div className="panel-heading">CPD Details</div>
 
                                     <div className="container container-table">
                                         <div className="row vertical-center-row" id="step-3">
-                                            <div > </div>
+                                            <div style={{marginTop:'40px'}}></div>
                                             <div className="col-md-6 col-md-offset-3">
 
                                                 <div className="form-group required">
                                                     <label htmlFor="host" className="control-label">Host</label>
-                                                    <select name="host" className="form-control ng-pristine ng-untouched ng-valid ng-empty" disabled="disabled" aria-invalid="false">
+                                                    <select name="host" className="form-control  ng-empty" disabled="disabled" aria-invalid="false">
                                                         <option value="?" defaultValue> </option>
                                                         <option label="N/r: Nxp saspxt" value="number:8">N/r: Nxp saspxt
                                                         </option>
@@ -342,12 +347,12 @@ class RecordCPD extends React.Component {
 
                                                 <div className="form-group">
                                                     <label className="control-label">Trainer</label>
-                                                    <input maxLength="200" type="text" required="required" className="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required ng-valid-maxlength" placeholder="Trainer" disabled="disabled" aria-invalid="true" />
+                                                    <input maxLength="200" type="text" required="required" className="form-control  ng-empty ng-invalid ng-invalid-required-maxlength" placeholder="Trainer" disabled="disabled" aria-invalid="true" />
                                                 </div>
 
                                                 <div className="form-group required">
                                                     <label htmlFor="location" className="control-label">Location</label>
-                                                    <select name="location" className="form-control ng-pristine ng-untouched ng-valid ng-empty" disabled="disabled" aria-invalid="false">
+                                                    <select name="location" className="form-control  ng-empty" disabled="disabled" aria-invalid="false">
                                                         <option value="?" defaultValue> </option>
                                                         <option label="Antrim" value="number:2">Antrim</option>
                                                         <option label="Armagh" value="number:14">Armagh</option>
@@ -401,20 +406,14 @@ class RecordCPD extends React.Component {
                                                 </div>
 
                                                 <div className="form-group required">
-                                                    <input type="checkbox" name="declare" id="declare" className="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false" />
-                                                    <label htmlFor="declare">I declare this CPD is relevant to my
-                                                        <div className="row">
-                                                            <h2 className="page-header">Record CPD</h2>
-                                                        </div> role and in accordance with the ATI CPD </label>
+                                                    <input type="checkbox" name="declare" id="declare" className=" ng-empty" aria-invalid="false" />
+                                                    <label htmlFor="declare">   I declare this CPD is relevant to my role and in accordance with the ATI CPD </label>
                                                     <label htmlFor="declare">Guidelines and Rules.</label>
                                                 </div>
 
                                                 <div >
                                                     <button className="btn btn-default" name="previous" type="button" ><i className="fa fa-arrow-left"> </i> Previous step
                                                     </button>
-                                                    <div className="row">
-                                                        <h2 className="page-header">Record CPD</h2>
-                                                    </div>
                                                     <button className="btn btn-success pull-right" type="button" disabled="disabled"><i className="fa fa-floppy-o"> </i> Save
                                                     </button>
                                                 </div>

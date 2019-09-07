@@ -8,14 +8,10 @@ class CPDGO extends React.Component {
         this.state = {
             knowledgeInfoModalShown: false
         };
-        this.MyModal = React.createRef();
-    };
-    toggleModal = () => {
-        this.setState({
-          knowledgeInfoModalShown: !this.state.knowledgeInfoModalShown
-        });
-    };
+    }
+
     render () {
+        let knowledgeInfoModalClose = () => this.setState({ knowledgeInfoModalShown: false })
         return (
             <div>
                 <Header />
@@ -56,7 +52,7 @@ class CPDGO extends React.Component {
                                         <div className="marginfix"></div>
                                         <div className="input-group">
                                             <a href="#" className="btn btn-success btn-lg" style={{width: '100%'}} target="_blank">KnowledgePoint</a>
-                                            <a className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}} data-toggle="modal" data-target="#exampleModal">
+                                            <a onClick={() => this.setState({ knowledgeInfoModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
                                                 <i className="fa fa fa-info" title="Help"></i>
                                             </a>
                                         </div>
@@ -87,7 +83,7 @@ class CPDGO extends React.Component {
                             </div>
                         </form>
                     </div>
-                    <KnowledgeInfoModal ref={this.MyModal} />
+                    <KnowledgeInfoModal show={this.state.knowledgeInfoModalShown} onHide={knowledgeInfoModalClose} />
                 </div>
             </div>
         );

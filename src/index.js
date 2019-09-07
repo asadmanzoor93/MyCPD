@@ -4,6 +4,7 @@ import './index.css';
 import './css/bootstrap/bootstrap.min.css';
 import './css/bootstrap/bootstrap-theme.css';
 import './css/common/default.css';
+import './css/common/react-wizard.css';
 import './css/custom.css';
 import './css/common/bootstrap-float-label.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css';

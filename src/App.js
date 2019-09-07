@@ -8,8 +8,11 @@ import RecordCPD from "./record_cpd";
 import FaceToFace from "./face_to_face_cpd";
 import ApprovedCPDProviders from "./approved_cpd_providers";
 import Library from "./library";
+import FeedbackModal from './feedback/_modals/modal';
 
 function App() {
+  // localStorage.feedBackModalShown = false;
+  let feedbackModalClose = () => { localStorage.feedBackModalShown = false; }
   return (
       <div>
           <Switch>
@@ -22,6 +25,7 @@ function App() {
             <Route exact path="/cpdaccredt" component={withRouter(ApprovedCPDProviders)} />
             <Route exact path="/library" component={withRouter(Library)} />
           </Switch>
+          <FeedbackModal />
       </div>
   );
 }

@@ -12,8 +12,9 @@ class Header extends React.Component {
           login: false
       };
   }
-  
+
   render () {
+
     return (
       <div>
         <header css="headerdashboard" text="Home Page" homeicon="NO" quicknav="NO" usermodel="usermodel" contactus="" aboutus="" className="ng-scope ng-isolate-scope">
@@ -41,8 +42,8 @@ class Header extends React.Component {
                         <i className={this.state.quickNavShown ? "fa fa-toggle-on" : "fa fa-toggle-off"}> </i> Quick Navigation
                       </a>
                     </li>
-                    <li role="button" tabIndex="0" aria-hidden="false" className="">
-                      <a href="#"><i className="fa fa-paper-plane"> </i> Feedback!</a>
+                    <li>
+                      <a onClick={() => localStorage.feedBackModalShown = true } href="#"><i className="fa fa-paper-plane"> </i> Feedback!</a>
                     </li>
                   </ul>
                   <ul className="nav navbar-nav navbar-right animated fadeIn text16">
