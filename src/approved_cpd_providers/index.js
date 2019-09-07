@@ -144,7 +144,8 @@ class ApprovedCPDProviders extends React.Component {
 
                     <div className="row" style={{paddingBottom: '30px'}}>
                         <div className="gridTopButtons">
-                            <button type="button" className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
+                            <button type="button" onClick={() => window.print()}
+                                    className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
                                 <i className="fa fa-print"> </i>
                             </button>
                             <button type="button" className="btn btn-success btn-circle btn-lg ng-scope" tooltip="">
