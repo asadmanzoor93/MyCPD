@@ -7,6 +7,7 @@ import Pagination from "react-js-pagination";
 const Types_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypes";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const Library_URL = "http://34.248.242.178/CPDCompliance/api/Library";
+const Excel_Report_URL = "http://34.248.242.178/CPDCompliance/api/Library/Excel";
 
 class Library extends React.Component {
 
@@ -16,6 +17,7 @@ class Library extends React.Component {
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.clearSearchFilters = this.clearSearchFilters.bind(this);
+        this.exportExcelReport = this.exportExcelReport.bind(this);
 
         this.state = {
             host_list: [],
@@ -91,7 +93,6 @@ class Library extends React.Component {
                     this.setState({ host_list: data });
                 }
             }).catch(console.log);
-
     }
 
     makeHttpRequestWithPage(pageNumber) {
@@ -154,12 +155,39 @@ class Library extends React.Component {
         });
     }
 
+    exportExcelReport(event){
+        axios.get(
+            Excel_Report_URL, {
+            method: 'GET',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/xlsx'
+            }
+        }
+        ).then(response => {
+
+            console.log(response);
+            var fileName='Library.xlsx';
+            var blob = new Blob([response.data], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+            const blobURL = window.URL.createObjectURL(blob);
+            const tempLink = document.createElement('a');
+            tempLink.style.display = 'none';
+            tempLink.href = blobURL;
+            tempLink.setAttribute('download', fileName);
+            tempLink.click();
+        })
+    }
+
     render () {
 
         let library_records;
         if (this.state.library_records !== null) {
             library_records = this.state.library_records.map((cpd_record , index) => (
                 <tr key={index}>
+                    <td> </td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationID}</td>
                     <td>{cpd_record.DurationHours}</td>
@@ -271,7 +299,8 @@ class Library extends React.Component {
                                     className="btn btn-danger btn-circle btn-lg ng-scope">
                                 <i className="fa fa-print"> </i>
                             </button>
-                            <button type="button" className="btn btn-success btn-circle btn-lg ng-scope">
+                            <button type="button" onClick={(e)=> this.exportExcelReport(e)}
+                                    className="btn btn-success btn-circle btn-lg ng-scope">
                                 <i className="fa fa-file-excel-o"> </i>
                             </button>
                         </div>
@@ -288,6 +317,7 @@ class Library extends React.Component {
                         <table className='table table-striped table-bordered table-hover table-condensed'>
                             <thead>
                             <tr className="header">
+                                <td> </td>
                                 <th>Course Name </th>
                                 <th>Location</th>
                                 <th>CPD Hours</th>
