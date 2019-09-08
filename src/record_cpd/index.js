@@ -8,15 +8,19 @@ import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 class RecordCPD extends React.Component {
     state = {
         startDate: new Date()
-    }
+    };
+
+
     handleChange = date => {
         this.setState({
           startDate: date
         });
-    }
+    };
+
     componentDidMount() {
         $('.datepicker').datepicker();
     }
+    
     render () {
         return (
             <div>
@@ -73,7 +77,7 @@ class RecordCPD extends React.Component {
 
                         </section>
 
-                        <section className="step   ng-hide">
+                        <section className="step">
 
                             <div className=""> </div>
                             <div className="panel panel-primary ">
@@ -216,7 +220,7 @@ class RecordCPD extends React.Component {
                             </div>
                         </section>
 
-                        <section className="step   ng-hide">
+                        <section className="step">
                             <div  className=""> </div>
                             <div className="panel panel-primary ">
                                 <div className="panel-heading">CPD Details</div>
@@ -232,117 +236,6 @@ class RecordCPD extends React.Component {
                                                     <option value="?" defaultValue> </option>
                                                     <option label="N/r: Nxp saspxt" value="number:8">N/r: Nxp saspxt
                                                     </option>
-                                                    <option label="rnnr" value="number:15">rnnr</option>
-                                                    <option label="rnnxinpang pxnpnanarns arxsrnt" value="number:5">rnnxinpang pxnpnanarns arxsrnt
-                                                    </option>
-                                                    <option label="rnnxinpangnpt.nxp" value="number:6">rnnxinpangnpt.nxp
-                                                    </option>
-                                                    <option label="rppsxnx anspapipx xf pxnpnxsxgy" value="number:68">rppsxnx anspapipx xf pxnpnxsxgy
-                                                    </option>
-                                                    <option label="raB" value="number:47">raB</option>
-                                                    <option label="rpa stS" value="number:1">rpa stS</option>
-                                                    <option label="rpa MtS" value="number:4">rpa MtS</option>
-                                                    <option label="rpa itS" value="number:3">rpa itS</option>
-                                                    <option label="rpa WtS" value="number:2">rpa WtS</option>
-                                                    <option label="rssxnarpaxn xf rnnxinpang pxnpnanarns (rrp)" value="number:66">rssxnarpaxn xf rnnxinpang pxnpnanarns (rrp)
-                                                    </option>
-                                                    <option label="rvavr" value="number:70">rvavr</option>
-                                                    <option label="Brsnrs" value="number:29">Brsnrs</option>
-                                                    <option label="Brnn xf arxsrnt" value="number:38">Brnn xf arxsrnt
-                                                    </option>
-                                                    <option label="Btx" value="number:58">Btx</option>
-                                                    <option label="Bxsfrsp napy nxinnas" value="number:40">Bxsfrsp napy nxinnas
-                                                    </option>
-                                                    <option label="Bag Rxt Bxxn" value="number:14">Bag Rxt Bxxn
-                                                    </option>
-                                                    <option label="nra" value="number:11">nra</option>
-                                                    <option label="nprrpxrxt anspapipx xf Pryrxss Prxfxssaxnrss" value="number:72">nprrpxrxt anspapipx xf Pryrxss Prxfxssaxnrss
-                                                    </option>
-                                                    <option label="nprrpxrxt anspapipx xf anpxrnrs ritapxrs" value="number:64">nprrpxrxt anspapipx xf anpxrnrs ritapxrs
-                                                    </option>
-                                                    <option label="nprrpxrxt anspapipx xf prxrpaxn" value="number:50">nprrpxrxt anspapipx xf prxrpaxn
-                                                    </option>
-                                                    <option label="naMr" value="number:17">naMr</option>
-                                                    <option label="nMG Prxfxssaxnrs prranang" value="number:54">nMG Prxfxssaxnrs prranang
-                                                    </option>
-                                                    <option label="nPr" value="number:13">nPr</option>
-                                                    <option label="nPs" value="number:57">nPs</option>
-                                                    <option label="nrxnxr-a" value="number:46">nrxnxr-a</option>
-                                                    <option label="tnn Grxip" value="number:22">tnn Grxip</option>
-                                                    <option label="txsxappx arxsrnt ssP" value="number:63">txsxappx arxsrnt ssP
-                                                    </option>
-                                                    <option label="xtinrpaxn rnt prranang Fxintrpaxn" value="number:48">xtinrpaxn rnt prranang Fxintrpaxn
-                                                    </option>
-                                                    <option label="xnpxrprasx arxsrnt" value="number:28">xnpxrprasx arxsrnt
-                                                    </option>
-                                                    <option label="Fraxnts Farsp" value="number:23">Fraxnts Farsp
-                                                    </option>
-                                                    <option label="Grrnp ppxrnpxn" value="number:16">Grrnp ppxrnpxn
-                                                    </option>
-                                                    <option label="Graffapp nxssxgx tibsan" value="number:55">Graffapp nxssxgx tibsan
-                                                    </option>
-                                                    <option label="pM Rxvxnix rnt nispxms" value="number:19">pM Rxvxnix rnt nispxms
-                                                    </option>
-                                                    <option label="pSx" value="number:43">pSx</option>
-                                                    <option label="arnp nxmpipxr prranang" value="number:56">arnp nxmpipxr prranang
-                                                    </option>
-                                                    <option label="aBrp" value="number:42">aBrp</option>
-                                                    <option label="aBxn" value="number:27">aBxn</option>
-                                                    <option label="aFrn" value="number:75">aFrn</option>
-                                                    <option label="aFr" value="number:24">aFr</option>
-                                                    <option label="anPt" value="number:60">anPt</option>
-                                                    <option label="aprSnx" value="number:61">aprSnx</option>
-                                                    <option label="anspapipx xf Pibsan rtmanasprrpaxn" value="number:65">anspapipx xf Pibsan rtmanasprrpaxn
-                                                    </option>
-                                                    <option label="aPrSS" value="number:12">aPrSS</option>
-                                                    <option label="arasp sxrgix xf nrxtap inaxns" value="number:18">arasp sxrgix xf nrxtap inaxns
-                                                    </option>
-                                                    <option label="arasp Mrnrgxmxnp anspapipx" value="number:35">arasp Mrnrgxmxnp anspapipx
-                                                    </option>
-                                                    <option label="arasp prx anspapipx" value="number:32">arasp prx anspapipx
-                                                    </option>
-                                                    <option label="ap prssrgpp" value="number:34">ap prssrgpp
-                                                    </option>
-                                                    <option label="Jxpn Mnnrrppy nxnsispang" value="number:71">Jxpn Mnnrrppy nxnsispang
-                                                    </option>
-                                                    <option label="nPMG" value="number:67">nPMG</option>
-                                                    <option label="sar" value="number:20">sar</option>
-                                                    <option label="Mxrnar" value="number:41">Mxrnar</option>
-                                                    <option label="Mxy Prrn" value="number:36">Mxy Prrn</option>
-                                                    <option label="Missrn prranang" value="number:73">Missrn prranang
-                                                    </option>
-                                                    <option label="Nxrppxrn arxsrnt navas Sxrvanx" value="number:74">Nxrppxrn arxsrnt navas Sxrvanx
-                                                    </option>
-                                                    <option label="xffanx xf ppx Rxvxnix nxmmassaxnxrs" value="number:53">xffanx xf ppx Rxvxnix nxmmassaxnxrs
-                                                    </option>
-                                                    <option label="xmnaPrx" value="number:49">xmnaPrx</option>
-                                                    <option label="PtP prranang" value="number:62">PtP prranang
-                                                    </option>
-                                                    <option label="Prrmxranr Syspxms arxsrnt" value="number:51">Prrmxranr Syspxms arxsrnt
-                                                    </option>
-                                                    <option label="Prxfxssaxnrs xtinrpaxn Sxmanrrs samapxt" value="number:59">Prxfxssaxnrs xtinrpaxn Sxmanrrs samapxt
-                                                    </option>
-                                                    <option label="PWn" value="number:10">PWn</option>
-                                                    <option label="Rxsrpx" value="number:26">Rxsrpx</option>
-                                                    <option label="SrGx" value="number:21">SrGx</option>
-                                                    <option label="Snassnxp arxsrnt" value="number:52">Snassnxp arxsrnt
-                                                    </option>
-                                                    <option label="Sirxsnasss" value="number:9">Sirxsnasss</option>
-                                                    <option label="ppx xxnxs nsib" value="number:7">ppx xxnxs nsib
-                                                    </option>
-                                                    <option label="ppx anSr" value="number:39">ppx anSr</option>
-                                                    <option label="ppx anspapipx xf Brnnang" value="number:33">ppx anspapipx xf Brnnang
-                                                    </option>
-                                                    <option label="ppxsriris" value="number:25">ppxsriris</option>
-                                                    <option label="pamxnxy sxrtxrspap anspapipx" value="number:44">pamxnxy sxrtxrspap anspapipx
-                                                    </option>
-                                                    <option label="prranang xn Rxnxrt" value="number:37">prranang xn Rxnxrt
-                                                    </option>
-                                                    <option label="inavxrsapy xf samxrann" value="number:45">inavxrsapy xf samxrann
-                                                    </option>
-                                                    <option label="Wxsss Frrgx Brnn anpxrnrpaxnrs:" value="number:69">Wxsss Frrgx Brnn anpxrnrpaxnrs:
-                                                    </option>
-                                                    <option label="Xxrx" value="number:30">Xxrx</option>
                                                     <option label="61/61 Grxip" value="number:31">61/61 Grxip
                                                     </option>
                                                 </select>
@@ -358,52 +251,6 @@ class RecordCPD extends React.Component {
                                                 <select name="location" className="form-control  ng-empty" disabled="disabled" aria-invalid="false">
                                                     <option value="?" defaultValue> </option>
                                                     <option label="Antrim" value="number:2">Antrim</option>
-                                                    <option label="Armagh" value="number:14">Armagh</option>
-                                                    <option label="Belfast" value="number:39">Belfast</option>
-                                                    <option label="Carlow" value="number:35">Carlow</option>
-                                                    <option label="Cavan" value="number:29">Cavan</option>
-                                                    <option label="Clare" value="number:22">Clare</option>
-                                                    <option label="Cork" value="number:4">Cork</option>
-                                                    <option label="Donegal" value="number:15">Donegal</option>
-                                                    <option label="Down" value="number:3">Down</option>
-                                                    <option label="Dublin" value="number:1">Dublin</option>
-                                                    <option label="Dun Laoghaire-Rathdown" value="number:10">Dun Laoghaire-Rathdown
-                                                    </option>
-                                                    <option label="Fermanagh" value="number:33">Fermanagh</option>
-                                                    <option label="Fingal" value="number:5">Fingal</option>
-                                                    <option label="Galway" value="number:7">Galway</option>
-                                                    <option label="Kerry" value="number:17">Kerry</option>
-                                                    <option label="Kildare" value="number:9">Kildare</option>
-                                                    <option label="Kilkenny" value="number:24">Kilkenny</option>
-                                                    <option label="Laois" value="number:27">Laois</option>
-                                                    <option label="Leitrim" value="number:37">Leitrim</option>
-                                                    <option label="Limerick" value="number:11">Limerick</option>
-                                                    <option label="Londonderry" value="number:8">Londonderry
-                                                    </option>
-                                                    <option label="Longford" value="number:36">Longford</option>
-                                                    <option label="Louth" value="number:21">Louth</option>
-                                                    <option label="Mayo" value="number:20">Mayo</option>
-                                                    <option label="Meath" value="number:12">Meath</option>
-                                                    <option label="Monaghan" value="number:34">Monaghan</option>
-                                                    <option label="na" value="number:38">na</option>
-                                                    <option label="North Tipperary" value="number:30">North Tipperary
-                                                    </option>
-                                                    <option label="Offaly" value="number:28">Offaly</option>
-                                                    <option label="Online" value="number:41">Online</option>
-                                                    <option label="Outside Ireland" value="number:40">Outside Ireland
-                                                    </option>
-                                                    <option label="Roscommon" value="number:32">Roscommon</option>
-                                                    <option label="Sligo" value="number:31">Sligo</option>
-                                                    <option label="South Dublin" value="number:6">South Dublin
-                                                    </option>
-                                                    <option label="South Tipperary" value="number:25">South Tipperary
-                                                    </option>
-                                                    <option label="Tipperary" value="number:16">Tipperary</option>
-                                                    <option label="Tyrone" value="number:13">Tyrone</option>
-                                                    <option label="Various" value="number:42">Various</option>
-                                                    <option label="Waterford" value="number:23">Waterford</option>
-                                                    <option label="Westmeath" value="number:26">Westmeath</option>
-                                                    <option label="Wexford" value="number:18">Wexford</option>
                                                     <option label="Wicklow" value="number:19">Wicklow</option>
                                                 </select>
                                             </div>
