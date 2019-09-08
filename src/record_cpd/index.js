@@ -20,7 +20,7 @@ class RecordCPD extends React.Component {
     componentDidMount() {
         $('.datepicker').datepicker();
     }
-    
+
     render () {
         return (
             <div>
