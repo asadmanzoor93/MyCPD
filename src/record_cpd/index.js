@@ -1,23 +1,173 @@
 import React from "react";
 import "react-table/react-table.css";
 import $ from "jquery";
+import axios from "axios";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
 
+const Member_Info_URL = 'http://34.248.242.178/CPDCompliance/api/account/GetMember?memID=';
+const Types_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypesForMyCPD';
+const Formats_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/CPDFormat';
+const Hosts_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost';
+const Locations_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/Location';
+const Courses_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/GetCourses';
+
+
+//On view load: Call member info, types, formats, hosts, locations api. Fill data for first step automatically
 class RecordCPD extends React.Component {
     constructor() {
         super();
         this.state = {
             currentStep: 1,
+            host_list: [],
+            member_info: [],
+            types: [],
+            formats: [],
+            locations: [],
+            courses: [],
+            cpd_type_id: 2
         };
-
 
         this.handlePrevStep = this.handlePrevStep.bind(this);
         this.handleNextStep = this.handleNextStep.bind(this);
         this.handleSaveRecord = this.handleSaveRecord.bind(this);
+        this.fetchMemberInfo = this.fetchMemberInfo.bind(this);
+        this.fetchTypes = this.fetchTypes.bind(this);
+        this.fetchFormats = this.fetchFormats.bind(this);
+        this.fetchHosts = this.fetchHosts.bind(this);
+        this.fetchLocations = this.fetchLocations.bind(this);
+        this.fetchCourses = this.fetchCourses.bind(this);
 
     };
+
+    componentDidMount() {
+        $('.datepicker').datepicker();
+        this.fetchTypes();
+        this.fetchMemberInfo();
+        this.fetchFormats();
+        this.fetchHosts();
+        this.fetchLocations();
+        this.fetchCourses();
+    }
+
+    fetchTypes () {
+        axios.get(Types_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data){
+                    this.setState({ types: data });
+                }
+            }).catch(console.log);
+    }
+
+    fetchMemberInfo () {
+        axios.get(Member_Info_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data){
+                    this.setState({ member_info: data });
+                }
+            }).catch(console.log);
+    }
+
+    fetchFormats () {
+        axios.get(Formats_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data){
+                    this.setState({ formats: data });
+                }
+            }).catch(console.log);
+    }
+
+    fetchHosts () {
+        // Hosts List
+        axios.get(Hosts_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data){
+                    this.setState({ host_list: data });
+                }
+            }).catch(console.log);
+    }
+
+    fetchLocations () {
+        axios.get(Locations_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data){
+                    this.setState({ locations: data });
+                }
+            }).catch(console.log);
+    }
+
+    fetchCourses () {
+        axios.get(Courses_URL, {
+            params: {
+                CPDTypeId: this.state.cpd_type_id,
+            },
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data.Items){
+                    this.setState({ courses: data.Items });
+                }
+            }).catch(console.log);
+    }
 
     handlePrevStep(){
         this.setState({
@@ -35,14 +185,14 @@ class RecordCPD extends React.Component {
 
     }
 
-    handleChange = date => {
-        this.setState({
-          startDate: date
-        });
-    };
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
 
-    componentDidMount() {
-        $('.datepicker').datepicker();
+        this.setState({
+            [name]: value
+        });
     }
 
     render () {
@@ -81,23 +231,40 @@ class RecordCPD extends React.Component {
                                         <div className="col-md-6 col-md-offset-3">
                                             <div className="form-group">
                                                 <label className="control-label">First Name</label>
-                                                <input maxLength="100" type="text" className="form-control " placeholder="Enter First Name" disabled="" aria-invalid="false" />
+                                                <input maxLength="100" type="text" className="form-control "
+                                                       placeholder="Enter First Name"
+                                                       disabled="disabled"
+                                                       value={this.state.member_info['FirstName']}
+                                                       aria-invalid="false" />
                                             </div>
                                             <div className="form-group">
                                                 <label className="control-label">Last Name</label>
-                                                <input maxLength="100" type="text" className="form-control " placeholder="Enter Last Name" disabled="" aria-invalid="false" />
+                                                <input maxLength="100" type="text" className="form-control " placeholder="Enter Last Name"
+                                                       disabled="disabled"
+                                                       value={this.state.member_info['LastName']}
+                                                       aria-invalid="false" />
                                             </div>
                                             <div className="form-group">
                                                 <label className="control-label">Membership Number</label>
-                                                <input maxLength="100" type="text" className="form-control " placeholder="Enter MembershipNumber" disabled="" aria-invalid="false"  />
+                                                <input maxLength="100" type="text" className="form-control " placeholder="Enter MembershipNumber"
+                                                       disabled="disabled"
+                                                       value={this.state.member_info['MemberNumber']}
+                                                       aria-invalid="false"  />
                                             </div>
                                             <div className="form-group">
                                                 <label className="control-label">Email</label>
-                                                <input maxLength="100" type="text" className="form-control " placeholder="Enter Email" disabled="" aria-invalid="false"  />
+                                                <input maxLength="100" type="text" className="form-control " placeholder="Enter Email"
+                                                       disabled="disabled"
+                                                       value={this.state.member_info['Email']}
+                                                       aria-invalid="false"  />
                                             </div>
                                             <div className="form-group">
                                                 <label className="control-label">Address</label>
-                                                <textarea required="required" className="form-control" value='' onChange='' disabled="" placeholder="Enter your address" rows="4" aria-invalid="false" > </textarea>
+                                                <textarea required="required" className="form-control"
+                                                          disabled="disabled"
+                                                          value={this.state.member_info['Address']}
+                                                          placeholder="Enter your address" rows="4"
+                                                          aria-invalid="false" > </textarea>
                                             </div>
                                             <div >
                                                 <button className="btn btn-primary pull-right" onClick={this.handleNextStep} >Next step <i className="fa fa-arrow-right"> </i></button>
@@ -117,16 +284,18 @@ class RecordCPD extends React.Component {
                                         <div style={{marginTop:'40px'}}> </div>
                                         <div className="col-md-6 col-md-offset-3">
                                             <div className="form-group required">
-                                                <label className="control-label" htmlFor="cbdtype">CPD Type</label>
-                                                <select className="form-control  ng-empty ng-invalid ng-invalid-required" name="cbdtype" required="" aria-invalid="true">
-                                                    <option value="?" defaultValue> </option>
-                                                    <option label="Approved CPD Provider" value="number:2">Approved CPD Provider
-                                                    </option>
-                                                    <option label="CPDgo" value="number:3">CPDgo</option>
-                                                    <option label="Face to Face" value="number:1">Face to Face
-                                                    </option>
-                                                    <option label="Submit a New Course" value="number:4">Submit a New Course
-                                                    </option>
+                                                <label className="control-label" htmlFor="cpd_type_id">CPD Type</label>
+                                                <select className="form-control  ng-empty ng-invalid ng-invalid-required"
+                                                        name="cpd_type_id"
+                                                        id="cpd_type_id"
+                                                        value={this.state.cpd_type_id}
+                                                        onChange={this.handleInputChange}
+                                                        required=""
+                                                        aria-invalid="true">
+                                                    <option value="" defaultValue> </option>
+                                                    {this.state.types.map((item, key) =>
+                                                        <option key={key} value={item.CPDTypeId} label={item.Description} >{item.Description}</option>
+                                                    )}
                                                 </select>
                                             </div>
 
@@ -214,7 +383,6 @@ class RecordCPD extends React.Component {
                                                 </div>
                                             </div>
 
-
                                             <div className="form-group required">
                                                 <label htmlFor="courseDate" className="control-label">Date Completed
                                                 </label>
@@ -224,7 +392,6 @@ class RecordCPD extends React.Component {
                                                         <span className="glyphicon glyphicon-calendar"> </span>
                                                     </label>
                                                 </div>
-
                                             </div>
 
                                             <div className="form-group required">
@@ -311,8 +478,6 @@ class RecordCPD extends React.Component {
                                                 </button>
                                                 <button className="btn btn-primary pull-right" type="submit" onClick={this.handleSaveRecord}> Save <i className="fa fa-arrow-right"> </i></button>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>

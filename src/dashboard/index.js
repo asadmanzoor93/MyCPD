@@ -351,6 +351,11 @@ class Dashboard extends React.Component {
 						<button type="button" className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px'}}>
 							<i className="fa fa-file-excel-o"> </i>
 						</button>
+						<button type="button"
+								style={{marginLeft: '10px'}}
+								className="btn btn-primary btn-circle btn-lg ng-scope" tooltip=""
+								data-original-title="" title=""><i className="fa fa-plus"> </i>
+						</button>
 					</div>
 				</div>
 
