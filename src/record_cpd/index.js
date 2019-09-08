@@ -5,13 +5,13 @@ import axios from "axios";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
-
 const Member_Info_URL = 'http://34.248.242.178/CPDCompliance/api/account/GetMember?memID=';
 const Types_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypesForMyCPD';
 const Formats_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/CPDFormat';
 const Hosts_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost';
 const Locations_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/Location';
 const Courses_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/GetCourses';
+const Course_Detail_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/GetCourse';
 
 
 //On view load: Call member info, types, formats, hosts, locations api. Fill data for first step automatically
@@ -26,10 +26,21 @@ class RecordCPD extends React.Component {
             formats: [],
             locations: [],
             courses: [],
-            cpd_type_id: 2
+            courses_options: [],
+            cpd_type_id: null,
+            course_format: null,
+            course_id: null,
+            course_detail: [],
+            course_description: null,
+            venue: null,
+            cpd_hours: null,
+            cpd_mins: null,
+            cpd_year: null,
+            date_completed: null,
         };
 
         this.handlePrevStep = this.handlePrevStep.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleNextStep = this.handleNextStep.bind(this);
         this.handleSaveRecord = this.handleSaveRecord.bind(this);
         this.fetchMemberInfo = this.fetchMemberInfo.bind(this);
@@ -38,6 +49,7 @@ class RecordCPD extends React.Component {
         this.fetchHosts = this.fetchHosts.bind(this);
         this.fetchLocations = this.fetchLocations.bind(this);
         this.fetchCourses = this.fetchCourses.bind(this);
+        this.fetchCourseDetail = this.fetchCourseDetail.bind(this);
 
     };
 
@@ -147,10 +159,14 @@ class RecordCPD extends React.Component {
             }).catch(console.log);
     }
 
-    fetchCourses () {
+    fetchCourses (TypeId) {
+        let cpd_type_id = this.state.cpd_type_id;
+        if(TypeId){
+            cpd_type_id = TypeId;
+        }
         axios.get(Courses_URL, {
             params: {
-                CPDTypeId: this.state.cpd_type_id,
+                CPDTypeId: cpd_type_id,
             },
             method: 'GET',
             withCredentials: true,
@@ -164,7 +180,55 @@ class RecordCPD extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data.Items){
-                    this.setState({ courses: data.Items });
+
+                    let courses_option = [];
+                    data.Items.map((item, key) =>
+                        courses_option.push({
+                            key: item.CourseId, value: item.CourseName, text: item.CourseName
+                        })
+                    );
+
+                    this.setState({
+                        courses: data.Items,
+                        courses_option: courses_option
+                    });
+                }
+            }).catch(console.log);
+    }
+
+    fetchCourseDetail (CourseId) {
+        let course_id = this.state.course_id;
+        if(CourseId){
+            course_id = CourseId;
+        }
+
+        axios.get(Course_Detail_URL, {
+            params: {
+                CourseId: course_id,
+            },
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data){
+
+                    this.setState({
+                        course_detail: data,
+                        course_format: data.CPDFormatId,
+                        course_description: data.CourseDescription,
+                        venue: data.Venue,
+                        cpd_hours: data.DurationHours,
+                        cpd_mins: data.Minutes,
+                        cpd_year: null,
+                        date_completed: null,
+                    });
                 }
             }).catch(console.log);
     }
@@ -193,6 +257,14 @@ class RecordCPD extends React.Component {
         this.setState({
             [name]: value
         });
+
+        if (name === 'cpd_type_id'){
+            this.fetchCourses(value);
+        }
+
+        if (name === 'course_id'){
+            this.fetchCourseDetail(value);
+        }
     }
 
     render () {
@@ -299,81 +371,92 @@ class RecordCPD extends React.Component {
                                                 </select>
                                             </div>
 
-                                            <div className="form-group required" aria-hidden="false">
-                                                <label className="control-label" htmlFor="course">Course Title
+                                            <div className="form-group required" aria-hidden="true">
+                                                <label className="control-label" htmlFor="course_id">Course Title
                                                 </label>
                                                 <div id="custom-search-input">
-                                                    <div className="ui-select-container ui-select-bootstrap dropdown   ng-empty ng-invalid ng-invalid-required" aria-required="true" aria-disabled="false" aria-invalid="true">
-                                                        <div className="ui-select-match " aria-hidden="false" aria-disabled="false">
-                                                            <span tabIndex="-1" className="btn btn-default form-control ui-select-toggle" aria-label="Select box activate" role="button" aria-disabled="false">
-                                                                <span className="ui-select-placeholder text-muted ng-binding" aria-hidden="false"> </span>
-                                                                <span className="ui-select-match-text pull-left ng-hide" aria-hidden="true">
-                                                                    <span className="ng-binding "> </span>
-                                                                </span>
-                                                                <i className="caret pull-right" role="button" tabIndex="0"> </i>
-                                                                <a href="#" aria-label="Select box clear" className="btn btn-xs btn-link pull-right ng-hide" aria-hidden="true">
-                                                                    <i className="glyphicon glyphicon-remove" aria-hidden="true"> </i>
-                                                                </a>
-                                                            </span>
-                                                        </div>
-
-                                                        <span className="ui-select-refreshing glyphicon glyphicon-refresh ui-select-spin ng-hide" aria-hidden="true"> </span>
-                                                        <input type="search" autoComplete="off" className="form-control ui-select-search  ng-empty ng-hide"
-                                                               placeholder="" />
-
-                                                        <ul className="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu  ng-hide" aria-hidden="true">
-                                                            <li className="ui-select-choices-group" id="ui-select-choices-0">
-                                                                <div className="divider ng-hide" aria-hidden="true"> </div>
-                                                                <div className="ui-select-choices-group-label dropdown-header ng-binding ng-hide" aria-hidden="true"> </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div className="ui-select-no-choice"> </div>
-                                                        <ui-select-single> </ui-select-single>
-                                                        <input className="ui-select-focusser ui-select-offscreen " type="text" id="focusser-0" aria-label="Select box focus" aria-haspopup="true" role="button" />
-                                                    </div>
+                                                    <select className="form-control  ng-empty ng-invalid ng-invalid-required"
+                                                            name="course_id"
+                                                            id="course_id"
+                                                            value={this.state.course_id}
+                                                            onChange={this.handleInputChange}
+                                                            required=""
+                                                            aria-invalid="true">
+                                                        <option value="" defaultValue> </option>
+                                                        {this.state.courses.map((item, key) =>
+                                                            <option key={key} value={item.CourseId} label={item.CourseName} >{item.CourseName}</option>
+                                                        )}
+                                                    </select>
                                                 </div>
-                                            </div>
-
-                                            <div className="form-group required ng-hide" aria-hidden="true">
-                                                <label htmlFor="courseTitle" className="control-label">Course Title
-                                                </label>
-                                                <input type="text" className="form-control  ng-empty-required" name="courseTitle" id="courseTitle" placeholder="Course Title" aria-invalid="false" />
                                             </div>
 
                                             <div className="form-group required">
                                                 <label htmlFor="cmbformat" className="control-label">Format</label>
-                                                <select className="form-control  ng-empty ng-invalid ng-invalid-required" name="cmbformat" required="" disabled="disabled" aria-invalid="true">
-                                                    <option value="?" defaultValue> </option>
-                                                    <option label="Conference" value="4">Conference</option>
-                                                    <option label="Exam" value="3">Exam</option>
-                                                    <option label="In class" value="2">In class</option>
-                                                    <option label="Online" value="1">Online</option>
+                                                <select className="form-control ng-empty ng-invalid ng-invalid-required"
+                                                        name="course_format"
+                                                        id="course_format"
+                                                        value={this.state.course_format}
+                                                        onChange={this.handleInputChange}
+                                                        required=""
+                                                        aria-invalid="true">
+                                                    <option value="" defaultValue> </option>
+                                                    {this.state.formats.map((item, key) =>
+                                                        <option key={key} value={item.ID} label={item.Name} >{item.Name}</option>
+                                                    )}
                                                 </select>
                                             </div>
 
                                             <div className="form-group required">
                                                 <label className="control-label" htmlFor="txtDescription">Description</label>
-                                                <textarea className="form-control  ng-empty ng-invalid ng-invalid-required" name="txtDescription" id="txtDescription" rows="4" required="" aria-invalid="true"> </textarea>
-                                                <span id="helpText" className="small ng-hide" aria-hidden="true"><em>Please include a full course description/outline/agenda. Submission will be rejected if not enough detail to approve is provided.</em></span>
+                                                <textarea className="form-control  ng-empty ng-invalid ng-invalid-required"
+                                                          name="course_description"
+                                                          id="course_description"
+                                                          value={this.state.course_description}
+                                                          onChange={this.handleInputChange}
+                                                          rows="4" required="" aria-invalid="true">
+                                                </textarea>
+                                                <span id="helpText" className="small ng-hide" aria-hidden="true">
+                                                    <em>Please include a full course description/outline/agenda. Submission will be rejected if not enough detail to approve is provided.</em>
+                                                </span>
                                             </div>
                                             <div className="form-group required">
                                                 <label htmlFor="intputVenue" className="control-label">Venue</label>
-                                                <input type="text" className="form-control  ng-empty ng-invalid ng-invalid-required-maxlength" name="intputVenue" id="intputVenue" placeholder="Venue" required="" aria-invalid="true" />
+                                                <input type="text" className="form-control ng-empty ng-invalid ng-invalid-required-maxlength"
+                                                       name="venue" id="venue"
+                                                       value={this.state.venue}
+                                                       onChange={this.handleInputChange}
+                                                       placeholder="Venue" required=""
+                                                       aria-invalid="true" />
                                             </div>
                                             <div className="row">
                                                 <div className="form-group col-xs-4 col-md-4 required">
                                                     <label className="control-label" htmlFor="InputHour">CPD Hours
                                                     </label>
-                                                    <input type="number" className="form-control  ng-empty ng-invalid ng-invalid-required" id="InputHour" name="InputHour" placeholder="Hour" step="1" max="100" min="0" required="" aria-invalid="true" />
+                                                    <input type="number" className="form-control ng-empty ng-invalid ng-invalid-required"
+                                                           id="cpd_hours" name="cpd_hours"
+                                                           value={this.state.cpd_hours}
+                                                           onChange={this.handleInputChange}
+                                                           placeholder="Hour" step="1" max="100" min="0" required=""
+                                                           aria-invalid="true" />
                                                 </div>
                                                 <div className="form-group col-xs-4 col-md-4">
                                                     <label className="control-label" htmlFor="InputMin">Minutes</label>
-                                                    <input type="number" className="form-control  ng-empty-step"
-                                                           id="InputMin" placeholder="Minute" step="15" max="45" min="0" aria-invalid="false" />
+                                                    <input type="number" className="form-control ng-empty-step"
+                                                           id="cpd_mins"
+                                                           name="cpd_mins"
+                                                           value={this.state.cpd_mins}
+                                                           onChange={this.handleInputChange}
+                                                           placeholder="Minute" step="15" max="45" min="0"
+                                                           aria-invalid="false" />
                                                 </div>
                                                 <div className="form-group col-xs-4 col-md-4">
                                                     <label htmlFor="year" className="control-label">CPD Year</label>
-                                                    <select className="form-control " name="year" aria-invalid="false">
+                                                    <select className="form-control "
+                                                            id="cpd_year"
+                                                            name="cpd_year"
+                                                            value={this.state.cpd_year}
+                                                            onChange={this.handleInputChange}
+                                                            aria-invalid="false">
                                                         <option label="2017" value="2017">2017</option>
                                                         <option label="2018" value="2018">2018</option>
                                                         <option label="2019" value="2019" defaultValue>2019
@@ -387,7 +470,12 @@ class RecordCPD extends React.Component {
                                                 <label htmlFor="courseDate" className="control-label">Date Completed
                                                 </label>
                                                 <div className="input-group">
-                                                    <input id="dateCompleted" type="text" className="form-control datepicker" />
+                                                    <input id="date_completed" type="text"
+                                                           name="date_completed"
+                                                           value={this.state.date_completed}
+                                                           onChange={this.handleInputChange}
+                                                           className="form-control datepicker"
+                                                    />
                                                     <label htmlFor="dateCompleted" className="input-group-addon">
                                                         <span className="glyphicon glyphicon-calendar"> </span>
                                                     </label>
@@ -399,7 +487,9 @@ class RecordCPD extends React.Component {
                                                 </label>
                                                 <div className="upload-field ng-binding ">
                                                     Choose a file please
-                                                    <input id="uploadFileInput" type="file" valid-file="" className="form-control  ng-empty ng-invalid ng-invalid-required" data-show-preview="false" required="required" aria-invalid="true" />
+                                                    <input id="uploadFileInput" type="file"
+                                                           className="form-control  ng-empty ng-invalid ng-invalid-required"
+                                                           required="required" aria-invalid="true" />
                                                     <button className="icon-folder"> </button>
                                                 </div>
                                             </div>
