@@ -100,7 +100,7 @@ class FaceToFace extends React.Component {
                 <tr key={index}>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationName}</td>
-                    <td>{cpd_record.Duration}</td>
+                    <td>{cpd_record.Duration}h</td>
                     <td>{cpd_record.HostName}</td>
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>

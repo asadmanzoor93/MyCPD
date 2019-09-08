@@ -2,6 +2,9 @@ import React from "react";
 import "react-table/react-table.css";
 import axios from "axios";
 import Pagination from "react-js-pagination";
+import $ from "jquery";
+import "bootstrap-datepicker/js/bootstrap-datepicker.js";
+import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
 const Approved_CPD_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd";
 
@@ -10,8 +13,17 @@ class ApprovedCPDProviders extends React.Component {
         super();
         this.handlePaginationFilter = this.handlePaginationFilter.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.clearSearchFilters = this.clearSearchFilters.bind(this);
+        this.onSort = this.onSort.bind(this)
+
         this.state = {
             course_name: '',
+            location_name: '',
+            host: '',
+            start_date: '',
+            reverse: false,
+            sortBy: 'StartDate',
             approved_cpd_records: [],
             totalPages: 0,
             totalCount: 0,
@@ -38,6 +50,7 @@ class ApprovedCPDProviders extends React.Component {
     }
 
     componentDidMount() {
+        $('.datepicker').datepicker();
         this.makeHttpRequestWithPage(1);
     }
 
@@ -45,10 +58,14 @@ class ApprovedCPDProviders extends React.Component {
 
         axios.get(Approved_CPD_URL, {
             params: {
+                CourseName: this.state.course_name,
+                HostName: this.state.host,
+                LocationName: this.state.location_name,
+                StartDate: this.state.start_date,
+                reverse: this.state.reverse,
+                sortBy: this.state.sortBy,
                 page: pageNumber,
                 pageSize: this.state.per_page,
-                reverse: false,
-                sortBy: 'StartDate'
             },
             method: 'GET',
             withCredentials: true,
@@ -79,6 +96,28 @@ class ApprovedCPDProviders extends React.Component {
         this.makeHttpRequestWithPage(1);
     }
 
+    clearSearchFilters(){
+        this.setState({
+            course_name: '',
+            location_name: '',
+            host: '',
+            start_date: '',
+            reverse: false,
+            sortBy: 'StartDate',
+            totalPages: 0,
+            totalCount: 0,
+            per_page: 10,
+            activePage: 0
+        });
+        $('.datepicker').datepicker();
+    }
+
+    onSort(event, sortKey){
+        const data = this.state.sortBy;
+        data.sort((a,b) => a[sortKey].localeCompare(b[sortKey]))
+        this.setState({data})
+    }
+
     render () {
 
         let approved_cpd_records;
@@ -88,7 +127,7 @@ class ApprovedCPDProviders extends React.Component {
                     <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationName}</td>
-                    <td>{cpd_record.DurationHours}</td>
+                    <td>{cpd_record.Duration}h</td>
                     <td>{cpd_record.HostName}</td>
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
@@ -110,40 +149,69 @@ class ApprovedCPDProviders extends React.Component {
                             <div style={{padding: '1rem'}}>
                                 <div className="form-group input-group" style={{width: '100%'}}>
                                     <span className="has-float-label" style={{width: '50%'}}>
-                                        <input className="form-control ng-pristine ng-valid ng-empty ng-touched" type="text" id="courseName" value="" placeholder="Course Name" aria-invalid="false" />
+                                        <input className="form-control ng-pristine ng-valid ng-empty ng-touched"
+                                               id="courseName"
+                                               placeholder="Course Name"
+                                               type="text"
+                                               value={this.state.course_name}
+                                               name="course_name"
+                                               onChange={this.handleInputChange}
+                                               aria-invalid="false" />
                                         <label htmlFor="course_name">Course Name</label>
                                     </span>
 
                                     <span className="has-float-label" style={{width: '50%'}}>
-                                        <input className="form-control ng-pristine ng-valid ng-empty ng-touched" type="text" id="host" value="" placeholder="Host" aria-invalid="false" />
+                                        <input className="form-control ng-pristine ng-valid ng-empty ng-touched"
+                                               id="host"
+                                               placeholder="Host"
+                                               type="text"
+                                               value={this.state.host}
+                                               name="host"
+                                               onChange={this.handleInputChange}
+                                               aria-invalid="false" />
                                         <label htmlFor="host">Host</label>
                                     </span>
                                 </div>
 
                                 <div className="form-group input-group" style={{width: '100%'}}>
                                     <span className="has-float-label">
-                                        <input className="form-control" type="text" name="location_name" id="location_name" placeholder="Location Name" />
+                                        <input className="form-control"
+                                               id="location_name"
+                                               placeholder="Location Name"
+                                               type="text"
+                                               value={this.state.location_name}
+                                               name="location_name"
+                                               onChange={this.handleInputChange}
+                                        />
                                         <label htmlFor="location_name">Location Name</label>
                                     </span>
 
                                     <div className="has-float-label" >
-                                        <p className="input-group">
-                                            <input type="text" className="form-control ng-untouched ng-empty ng-dirty ng-invalid ng-invalid-parse" name="courseDate" placeholder="Enter Start Date" />
-                                            <span className="input-group-addon" data-toggle="datepicker">
-                                                <span className="glyphicon glyphicon-calendar"> </span>
-                                            </span>
+                                        <p className="input-group datepicker" style={{ padding: '0' }}>
+                                            <input type="text" className="form-control"
+                                                   placeholder="Enter Start Date"
+                                                   name="start_date"
+                                                   value={this.state.start_date}
+                                                   onChange={this.handleInputChange}
+                                                   aria-invalid="true" />
+                                            <span className="input-group-addon">
+													<span className="glyphicon glyphicon-calendar"> </span>
+												</span>
                                         </p>
-                                        <label htmlFor="courseDate">Enter Start Date</label>
+                                        <label htmlFor="start_date">Enter Start Date</label>
                                     </div>
                                 </div>
 
                                 <div className="clearfix"> </div>
                                 <div>
-                                    <button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
+                                    <button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
                                         <span className="glyphicon glyphicon-search"> </span>
                                         Search
                                     </button>
-                                    <button className="btn btn-primary"><span className="glyphicon glyphicon-remove-sign"> </span> Clear</button>
+                                    <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
+                                        <span className="glyphicon glyphicon-remove-sign"> </span>
+                                        Clear
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -174,13 +242,13 @@ class ApprovedCPDProviders extends React.Component {
                         <thead>
                         <tr className="header">
                             <th> </th>
-                            <th>Course Name</th>
-                            <th>Location</th>
-                            <th>CPD Hours</th>
-                            <th>Host</th>
-                            <th>Type</th>
-                            <th>Trainer</th>
-                            <th>Start Date</th>
+                            <th>Course Name <i className="fa fa-fw fa-sort" onClick={ this.onSort}> </i></th>
+                            <th>Location <i className="fa fa-fw fa-sort"> </i></th>
+                            <th>CPD Hours <i className="fa fa-fw fa-sort"> </i></th>
+                            <th>Host <i className="fa fa-fw fa-sort"> </i></th>
+                            <th>Type <i className="fa fa-fw fa-sort"> </i></th>
+                            <th>Trainer <i className="fa fa-fw fa-sort"> </i></th>
+                            <th>Start Date <i className="fa fa-fw fa-sort"> </i></th>
                             <th>View</th>
                         </tr>
                         </thead>

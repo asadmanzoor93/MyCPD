@@ -31,11 +31,11 @@ class Dashboard extends React.Component {
 			course_name: '',
 			location_name: '',
 			host_id: '',
-			year_selected: '',
+			year: '',
 			date_selected: '',
 			reverse: false,
 			sortBy: 'StartDate',
-			totaldate_selectedPages: 0,
+			totalPages: 0,
 			totalCount: 0,
 			per_page: 10,
 			activePage: 0,
@@ -159,7 +159,7 @@ class Dashboard extends React.Component {
 			course_name: '',
 			location_name: '',
 			host_id: '',
-			year_selected: '',
+			year: '',
 			date_selected: '',
 			reverse: false,
 			sortBy: 'StartDate',
@@ -179,7 +179,7 @@ class Dashboard extends React.Component {
 					<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>
 					<td>{dashboard_record.CPDTypeName}</td>
 					<td>{dashboard_record.CourseName}</td>
-					<td>{dashboard_record.Hours}</td>
+					<td>{dashboard_record.Hours}h</td>
 					<td>{dashboard_record.CompletionDate}</td>
 					<td>{dashboard_record.Venue}</td>
 					<td>{dashboard_record.Trainer}</td>
@@ -271,7 +271,10 @@ class Dashboard extends React.Component {
 											<label htmlFor="course_name">Course Name</label>
 										</span>
 										<div className="has-float-label form-group input-group" style={{width: '50%'}}>
-											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" value={this.state.year_selected} aria-invalid="false" >
+											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched"
+													id="year" name="year"
+													onChange={this.handleInputChange}
+													value={this.state.year} aria-invalid="false" >
 												<option value="" > </option>
 												<option aria-checked="true" value="2018">2018</option>
 												<option aria-checked="true" value="2019">2019</option>
@@ -350,16 +353,16 @@ class Dashboard extends React.Component {
 					<table className='table table-striped table-bordered table-hover table-condensed'>
 						<thead>
 						<tr className="header">
-							<th role="button"> </th>
-							<th role="button">Course Type <i class="fa fa-fw fa-sort-down"></i></th>
-							<th role="button">Course<i class="fa fa-fw fa-sort-up"></i></th>
-							<th role="button">Completed Hours<i class="fa fa-fw fa-sort"></i></th>
-							<th role="button">Completion Date<i class="fa fa-fw fa-sort"></i></th>
-							<th role="button">Venue<i class="fa fa-fw fa-sort"></i></th>
-							<th role="button">Trainer<i class="fa fa-fw fa-sort"></i></th>
-							<th role="button">Host<i class="fa fa-fw fa-sort"></i></th>
-							<th role="button">Start Date<i class="fa fa-fw fa-sort"></i></th>
-							<th role="button">Actions<i class="fa fa-fw fa-sort"></i></th>
+							<th className="button"> </th>
+							<th className="button">Course Type <i className="fa fa-fw fa-sort-down"></i></th>
+							<th className="button">Course<i className="fa fa-fw fa-sort-up"></i></th>
+							<th className="button">Completed Hours<i className="fa fa-fw fa-sort"></i></th>
+							<th className="button">Completion Date<i className="fa fa-fw fa-sort"></i></th>
+							<th className="button">Venue<i className="fa fa-fw fa-sort"></i></th>
+							<th className="button">Trainer<i className="fa fa-fw fa-sort"></i></th>
+							<th className="button">Host<i className="fa fa-fw fa-sort"></i></th>
+							<th className="button">Start Date<i className="fa fa-fw fa-sort"></i></th>
+							<th className="button">Actions<i className="fa fa-fw fa-sort"></i></th>
 						</tr>
 						</thead>
 						<tbody>

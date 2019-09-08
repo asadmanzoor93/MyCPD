@@ -189,7 +189,7 @@ class Library extends React.Component {
                     <td> </td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationID}</td>
-                    <td>{cpd_record.DurationHours}</td>
+                    <td>{cpd_record.DurationHours}h</td>
                     <td>{cpd_record.CPDTypeId}</td>
                     <td>{cpd_record.HostID}</td>
                     <td>{cpd_record.Trainer}</td>
