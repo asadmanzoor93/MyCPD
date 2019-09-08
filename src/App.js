@@ -23,6 +23,7 @@ class App extends React.Component {
           quickNavShown: false,
           password: '',
           submitted: false,
+          feedBackModalShown: false,
           logout: false
       };
 
@@ -50,6 +51,7 @@ class App extends React.Component {
   };
 
   render () {
+    let feedBackModalShownClose = () => this.setState({ feedBackModalShown: false })
     if (this.state.logout) {
       return <Redirect to="/" />;
     }
@@ -63,7 +65,7 @@ class App extends React.Component {
                   <div className="navbar-header">
                     <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                       <span className="sr-only">Toggle navigation</span>
-                      <span className="icon-bar"> </span>
+                      <span className="icon-bar"> </span>Route
                       <span className="icon-bar"> </span>
                       <span className="icon-bar"> </span>
                     </button>
@@ -82,7 +84,7 @@ class App extends React.Component {
                         </a>
                       </li>
                       <li>
-                        <a onClick={() => localStorage.feedBackModalShown = true } href="#"><i className="fa fa-paper-plane"> </i> Feedback!</a>
+                        <a onClick={() => this.setState({ feedBackModalShown : true }) } href="#"><i className="fa fa-paper-plane"> </i> Feedback!</a>
                       </li>
                     </ul>
                     <ul className="nav navbar-nav navbar-right animated fadeIn text16">
@@ -133,7 +135,7 @@ class App extends React.Component {
           </nav>
           <div className="container main-content">
             <Switch>
-              <Route exact path="/" component={withRouter(Login)} />
+              <Route exact path="\/" component={withRouter(Login)} />
               <Route exact path="/login" component={withRouter(Login)}  />
               <Route exact path="/home" component={withRouter(Home)} />
               <Route exact path="/dashboard" component={withRouter(Dashboard)} />
@@ -144,7 +146,7 @@ class App extends React.Component {
               <Route exact path="/library" component={withRouter(Library)} />
             </Switch>
           </div>
-          <FeedbackModal />
+          <FeedbackModal show={ this.state.feedBackModalShown } onHide={feedBackModalShownClose} />
         </div>
     );
   }
