@@ -18,7 +18,7 @@ class RecordCPD extends React.Component {
                 step2 : {
                     shown: true
                 },
-                step2 : {
+                step3 : {
                     shown: true
                 }
             }
@@ -53,7 +53,7 @@ class RecordCPD extends React.Component {
             currentStep: currentStep
         })
     }
-    
+
     render () {
         return (
             <div>
