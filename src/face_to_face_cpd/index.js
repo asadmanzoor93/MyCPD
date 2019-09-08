@@ -2,6 +2,9 @@ import React from "react";
 import "react-table/react-table.css";
 import axios from "axios";
 import Pagination from "react-js-pagination";
+import $ from "jquery";
+import "bootstrap-datepicker/js/bootstrap-datepicker.js";
+import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const FaceToFace_URL = "http://34.248.242.178/CPDCompliance/api/faceToface";
@@ -12,10 +15,16 @@ class FaceToFace extends React.Component {
         super();
         this.handlePaginationFilter = this.handlePaginationFilter.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.clearSearchFilters = this.clearSearchFilters.bind(this);
+
         this.state = {
-            host_list: [],
             course_name: '',
+            location_name: '',
+            host_id: '',
+            start_date: '',
             cpd_records: [],
+            host_list: [],
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
@@ -23,8 +32,17 @@ class FaceToFace extends React.Component {
         }
     };
 
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
     handlePageChange(pageNumber) {
-        console.log(`active page is ${pageNumber}`);
         this.setState({
             activePage: pageNumber
         });
@@ -33,6 +51,7 @@ class FaceToFace extends React.Component {
 
     componentDidMount() {
         this.makeHttpRequestWithPage(1);
+        $('.datepicker').datepicker();
 
         // Hosts List
         axios.get(Hosts_URL, {
@@ -92,12 +111,29 @@ class FaceToFace extends React.Component {
         });
     }
 
+    clearSearchFilters(){
+        this.setState({
+            course_name: '',
+            location_name: '',
+            host_id: '',
+            start_date: '',
+            reverse: false,
+            sortBy: 'StartDate',
+            totalPages: 0,
+            totalCount: 0,
+            per_page: 10,
+            activePage: 0,
+        });
+        $('.datepicker').datepicker();
+    }
+
     render () {
 
         let cpd_records;
         if (this.state.cpd_records !== null) {
             cpd_records = this.state.cpd_records.map((cpd_record , index) => (
                 <tr key={index}>
+                    <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationName}</td>
                     <td>{cpd_record.Duration}h</td>
@@ -105,6 +141,7 @@ class FaceToFace extends React.Component {
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.StartDate}</td>
+                    <td> </td>
                 </tr>
             ));
         }
@@ -121,28 +158,46 @@ class FaceToFace extends React.Component {
                             <div style={{padding: '1rem'}}>
                                 <div className="form-group input-group" style={{width: '100%'}}>
                                         <span className="has-float-label" style={{width: '50%'}}>
-                                            <input className="form-control ng-pristine ng-valid ng-empty ng-touched" type="text" id="courseName" value="" placeholder="Course Name" aria-invalid="false" />
+                                            <input className="form-control ng-pristine ng-valid ng-empty ng-touched"
+                                                   type="text"
+                                                   id="course_name" placeholder="Course Name"
+                                                   value={this.state.course_name}
+                                                   name="course_name"
+                                                   onChange={this.handleInputChange}
+                                                   aria-invalid="false" />
                                             <label htmlFor="course_name">Course Name</label>
                                         </span>
                                 </div>
                                 <div className="form-group input-group" style={{width: '100%'}}>
                                             <span className="has-float-label">
-                                                <input className="form-control" type="text" name="location_name" id="location_name" placeholder="Location Name" />
+                                                <input className="form-control" type="text" id="location_name"
+                                                       value={this.state.location_name}
+                                                       name="location_name"
+                                                       onChange={this.handleInputChange}
+                                                       placeholder="Location Name" />
                                                 <label htmlFor="location_name">Location Name</label>
                                             </span>
                                     <div className="has-float-label" >
-                                        <p className="input-group">
-                                            <input type="text" className="form-control ng-untouched ng-empty ng-dirty ng-invalid ng-invalid-parse" name="courseDate" placeholder="Enter Start Date" />
-                                            <span className="input-group-addon" data-toggle="datepicker">
-                                                        <span className="glyphicon glyphicon-calendar"> </span>
-                                                    </span>
+                                        <p className="input-group datepicker" style={{ padding: '0' }}>
+                                            <input type="text" className="form-control" placeholder="Enter Start Date"
+                                                   value={this.state.start_date}
+                                                   name="start_date"
+                                                   onChange={this.handleInputChange}
+                                                   my-date-picker="" end-date="+3y" aria-invalid="true" />
+                                            <span className="input-group-addon">
+													<span className="glyphicon glyphicon-calendar"> </span>
+												</span>
                                         </p>
+
                                         <label htmlFor="courseDate">Enter Start Date</label>
                                     </div>
                                 </div>
                                 <div className="form-group input-group" style={{width: '45.5%'}}>
                                     <div className="has-float-label" >
-                                        <select className="form-control ng-pristine ng-valid ng-empty ng-touched">
+                                        <select className="form-control ng-pristine ng-valid ng-empty ng-touched"
+                                                name="host_id" value={this.state.host_id}
+                                                onChange={this.handleInputChange}
+                                        >
                                             <option value="" defaultValue> </option>
                                             {this.state.host_list.map((item, key) =>
                                                 <option key={key} value={item.ID} >{item.Name}</option>
@@ -153,11 +208,14 @@ class FaceToFace extends React.Component {
                                 </div>
                                 <div className="clearfix"> </div>
                                 <div>
-                                    <button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
+                                    <button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
                                         <span className="glyphicon glyphicon-search"> </span>
                                         Search
                                     </button>
-                                    <button className="btn btn-primary"><span className="glyphicon glyphicon-remove-sign"> </span> Clear</button>
+                                    <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
+                                        <span className="glyphicon glyphicon-remove-sign"> </span>
+                                        Clear
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -167,10 +225,10 @@ class FaceToFace extends React.Component {
                 <div className="row" style={{paddingBottom: '30px'}}>
                     <div className="gridTopButtons">
                         <button type="button" onClick={() => window.print()}
-                                className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
+                                className="btn btn-danger btn-circle btn-lg ">
                             <i className="fa fa-print"> </i>
                         </button>
-                        <button type="button" className="btn btn-success btn-circle btn-lg ng-scope" tooltip="">
+                        <button type="button" className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px'}}>
                             <i className="fa fa-file-excel-o"> </i>
                         </button>
                     </div>
@@ -187,6 +245,7 @@ class FaceToFace extends React.Component {
                     <table className='table table-striped table-bordered table-hover table-condensed'>
                         <thead>
                             <tr className="header">
+                                <th> </th>
                                 <th>Course Name </th>
                                 <th>Location</th>
                                 <th>CPD Hours</th>
@@ -194,6 +253,7 @@ class FaceToFace extends React.Component {
                                 <th>Type</th>
                                 <th>Trainer</th>
                                 <th>Start Date</th>
+                                <th> </th>
                             </tr>
                         </thead>
                         <tbody>

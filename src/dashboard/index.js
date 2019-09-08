@@ -32,7 +32,7 @@ class Dashboard extends React.Component {
 			location_name: '',
 			host_id: '',
 			year: '',
-			date_selected: '',
+			start_date: '',
 			reverse: false,
 			sortBy: 'StartDate',
 			totalPages: 0,
@@ -160,7 +160,7 @@ class Dashboard extends React.Component {
 			location_name: '',
 			host_id: '',
 			year: '',
-			date_selected: '',
+			start_date: '',
 			reverse: false,
 			sortBy: 'StartDate',
 			totalPages: 0,
@@ -168,6 +168,7 @@ class Dashboard extends React.Component {
 			per_page: 10,
 			activePage: 0,
 		});
+		$('.datepicker').datepicker();
 	}
 
 	render () {
@@ -297,7 +298,11 @@ class Dashboard extends React.Component {
 										</span>
 										<div className="has-float-label" >
 											<p className="input-group datepicker" style={{ padding: '0' }}>
-												<input type="text" className="form-control" placeholder="Enter Start Date" my-date-picker="" end-date="+3y" aria-invalid="true" />
+												<input type="text" className="form-control" placeholder="Enter Start Date"
+													   value={this.state.start_date}
+													   name="start_date"
+													   onChange={this.handleInputChange}
+													   my-date-picker="" end-date="+3y" aria-invalid="true" />
 												<span className="input-group-addon">
 													<span className="glyphicon glyphicon-calendar"> </span>
 												</span>
