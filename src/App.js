@@ -11,6 +11,7 @@ import FaceToFace from "./face_to_face_cpd";
 import ApprovedCPDProviders from "./approved_cpd_providers";
 import Library from "./library";
 import FeedbackModal from './feedback/_modals/modal';
+import AboutUsModal from './about-us/_modals/about-us';
 
 const SignOut_URL = 'http://34.248.242.178/CPDCompliance/api/account/LogOff';
 
@@ -24,6 +25,7 @@ class App extends React.Component {
           password: '',
           submitted: false,
           feedBackModalShown: false,
+          aboutUsModalShown: false,
           logout: false
       };
 
@@ -52,6 +54,7 @@ class App extends React.Component {
 
   render () {
     let feedBackModalShownClose = () => this.setState({ feedBackModalShown: false })
+    let aboutUsModalShownClose = () => this.setState({ aboutUsModalShown: false })
     if (this.state.logout) {
       return <Redirect to="/" />;
     }
@@ -95,7 +98,7 @@ class App extends React.Component {
                         <img src={"images\/if_user_1902268.png"} />
                       </li>
                       <li aria-hidden="false" className="">
-                        <a href="#"><i className="fa fa-info-circle"></i> About Us</a>
+                        <a onClick={() => this.setState({ aboutUsModalShown : true }) } href="#"><i className="fa fa-info-circle"></i> About Us</a>
                       </li>
                       <li><a href="#" onClick={()=> this.makeSignOutRequest()}><i className="fa fa-sign-out"></i> Sign Out</a></li>
                     </ul>
@@ -129,7 +132,7 @@ class App extends React.Component {
                 <Link to={'\/library'} className="nav-link">Library <i className="fa fa-unsorted"></i></Link>
               </li>
               <li>
-                <a href="#" onClick={e => { e.preventDefault(); this.setState({quickNavShown: false }) }} className="nav-link">Close <i className="fa fa-close"></i></a>
+                <a href="#" onClick={e => { this.setState({quickNavShown: false }) }} className="nav-link">Close <i className="fa fa-close"></i></a>
               </li>
             </ul>
           </nav>
@@ -147,6 +150,7 @@ class App extends React.Component {
             </Switch>
           </div>
           <FeedbackModal show={ this.state.feedBackModalShown } onHide={feedBackModalShownClose} />
+          <AboutUsModal show={ this.state.aboutUsModalShown } onHide={aboutUsModalShownClose} />
         </div>
     );
   }

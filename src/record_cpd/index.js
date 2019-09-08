@@ -8,20 +8,8 @@ import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 class RecordCPD extends React.Component {
     constructor() {
         super();
-
         this.state = {
             currentStep: 1,
-            tabs: {
-                step1 : {
-                    shown: true
-                },
-                step2 : {
-                    shown: true
-                },
-                step2 : {
-                    shown: true
-                }
-            }
         }
     // Bind new functions for next and previous
     this._next = this._next.bind(this)
@@ -54,16 +42,26 @@ class RecordCPD extends React.Component {
         })
     }
     render () {
+        let ListItemOne,
+            ListItemTwo
+            if(this.state.currentStep > 1) {
+                ListItemOne = <li className="done"><a>Submitter Details</a></li>
+            } else {
+                ListItemOne = <li className="current"><a>Submitter Details</a></li>
+            }
+            if(this.state.currentStep > 2) {
+                ListItemTwo = <li className="default"><a>Confirm CPD Activity Details</a></li>
+            } else {
+                ListItemTwo = <li className="current"><a>Submitter Details</a></li>
+            }
+
+
         return (
             <div>
                 <div>
                     <ul className="steps-indicator steps-3">
-                        <li className="current">
-                            <a>Submitter Details</a>
-                        </li>
-                        <li className="default">
-                            <a>Confirm CPD Activity Details</a>
-                        </li>
+                        { ListItemOne }
+                        { ListItemTwo }
                         <li className="default">
                             <a>CPD Details</a>
                         </li>
