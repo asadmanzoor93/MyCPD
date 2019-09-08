@@ -20,6 +20,16 @@ class ApprovedCPDProviders extends React.Component {
         }
     };
 
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
     handlePageChange(pageNumber) {
         this.setState({
             activePage: pageNumber
@@ -75,6 +85,7 @@ class ApprovedCPDProviders extends React.Component {
         if (this.state.approved_cpd_records !== null) {
             approved_cpd_records = this.state.approved_cpd_records.map((cpd_record , index) => (
                 <tr key={index}>
+                    <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationName}</td>
                     <td>{cpd_record.DurationHours}</td>
@@ -162,7 +173,8 @@ class ApprovedCPDProviders extends React.Component {
                     <table className='table table-striped table-bordered table-hover table-condensed'>
                         <thead>
                         <tr className="header">
-                            <th>Course Name </th>
+                            <th> </th>
+                            <th>Course Name</th>
                             <th>Location</th>
                             <th>CPD Hours</th>
                             <th>Host</th>

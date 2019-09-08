@@ -41,6 +41,7 @@ class RecordCPD extends React.Component {
             currentStep: currentStep
         })
     }
+
     render () {
         let ListItemOne,
             ListItemTwo

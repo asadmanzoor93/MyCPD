@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
 			date_selected: '',
 			reverse: false,
 			sortBy: 'StartDate',
-			totalPages: 0,
+			totaldate_selectedPages: 0,
 			totalCount: 0,
 			per_page: 10,
 			activePage: 0,
