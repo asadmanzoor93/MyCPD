@@ -31,6 +31,9 @@ class App extends React.Component {
   }
 
   makeSignOutRequest() {
+    this.setState({
+      logout: true,
+    });
     axios.get(SignOut_URL, {
       method: 'GET',
       withCredentials: true,
@@ -43,9 +46,6 @@ class App extends React.Component {
     })
     .then(response => response)
     .then((response) => {
-      this.setState({
-        logout: true,
-      });
 
     }).catch(console.log);
   };
@@ -136,13 +136,14 @@ class App extends React.Component {
           <div className="container main-content">
             <Switch>
               <Route exact path="\/" component={withRouter(Login)} />
-              <Route path="/home" component={withRouter(Home)} />
-              <Route path="/dashboard" component={withRouter(Dashboard)} />
-              <Route path="/cpdgo" component={withRouter(CPDGO)} />
-              <Route path="/mycpd" component={withRouter(RecordCPD)} />
-              <Route path="/cpdclassroom" component={withRouter(FaceToFace)} />
-              <Route path="/cpdaccredt" component={withRouter(ApprovedCPDProviders)} />
-              <Route path="/library" component={withRouter(Library)} />
+              <Route exact path="/login" component={withRouter(Login)}  />
+              <Route exact path="/home" component={withRouter(Home)} />
+              <Route exact path="/dashboard" component={withRouter(Dashboard)} />
+              <Route exact path="/cpdgo" component={withRouter(CPDGO)} />
+              <Route exact path="/mycpd" component={withRouter(RecordCPD)} />
+              <Route exact path="/cpdclassroom" component={withRouter(FaceToFace)} />
+              <Route exact path="/cpdaccredt" component={withRouter(ApprovedCPDProviders)} />
+              <Route exact path="/library" component={withRouter(Library)} />
             </Switch>
           </div>
           <FeedbackModal show={ this.state.feedBackModalShown } onHide={feedBackModalShownClose} />

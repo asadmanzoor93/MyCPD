@@ -32,10 +32,7 @@ class RecordCPD extends React.Component {
         this.setState({
           startDate: date
         });
-    }
-    componentDidMount() {
-        $('.datepicker').datepicker();
-    }
+    };
 
         // Test current step with ternary
         // _next and _previous functions will be called on button click
@@ -56,7 +53,6 @@ class RecordCPD extends React.Component {
             currentStep: currentStep
         })
     }
-
     render () {
         return (
             <div>
@@ -130,6 +126,9 @@ class Step1 extends React.Component{
 }
 
 class Step2 extends React.Component{
+    componentDidMount() {
+        $('.datepicker').datepicker();
+    }
   render(){
     if (this.props.currentStep !== 2) {
       return null
@@ -279,6 +278,9 @@ class Step2 extends React.Component{
 
 
 class Step3 extends React.Component{
+    componentDidMount() {
+        $('.datepicker').datepicker();
+    }
   render(){
     if (this.props.currentStep !== 3) {
       return null

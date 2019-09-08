@@ -290,7 +290,6 @@ class Dashboard extends React.Component {
 												   onChange={this.handleInputChange}
 												   aria-invalid="false"
 											/>
-
 											<label htmlFor="location_name">Location Name</label>
 										</span>
 										<div className="has-float-label" >
