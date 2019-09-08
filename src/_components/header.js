@@ -10,12 +10,21 @@ class Header extends React.Component {
   constructor(props) {
       super(props);
     this.makeSignOutRequest = this.makeSignOutRequest.bind(this);
-      this.state = {
-          quickNavShown: false,
-          password: '',
-          submitted: false,
-          logout: false
-      };
+    this.state = {
+        quickNavShown: false,
+        password: '',
+        submitted: false,
+        logout: false,
+        successMessage: localStorage.getItem('successMessage')
+    };
+
+    setTimeout(() => {
+      this.setState({
+        successMessage: null,
+      });
+      localStorage.removeItem('successMessage');
+    }, 3000);
+
   }
 
   makeSignOutRequest() {
@@ -123,6 +132,11 @@ class Header extends React.Component {
             </li>
           </ul>
         </nav>
+
+        <div className="alert alert-success success-message"  style={{display: this.state.successMessage ? 'block' : 'none'}}>
+          <strong>You are successfully logged in!</strong>
+        </div>
+
       </div>
     );
   }

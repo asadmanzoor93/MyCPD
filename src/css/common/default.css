@@ -1448,6 +1448,16 @@ html.md-default-theme, html, body.md-default-theme, body {
     opacity: 0;
 }
 
-
-
-
+.success-message {
+    color: white;
+    border-radius: 10px;
+    position: absolute;
+    top: 50px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 1111;
+}
+.alert-success {
+    background: #53d669;
+}
