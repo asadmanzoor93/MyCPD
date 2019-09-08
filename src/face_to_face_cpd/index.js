@@ -21,7 +21,7 @@ class FaceToFace extends React.Component {
         this.state = {
             course_name: '',
             location_name: '',
-            host_id: '',
+            host_name: '',
             start_date: '',
             cpd_records: [],
             host_list: [],
@@ -77,10 +77,16 @@ class FaceToFace extends React.Component {
 
         axios.get(FaceToFace_URL, {
             params: {
+
+                CourseName: this.state.course_name,
+                HostName: this.state.host_name,
+                LocationName: this.state.location_name,
+                StartDate: this.state.start_date,
+                reverse: this.state.reverse,
+                sortBy: this.state.sortBy,
+
                 page: pageNumber,
                 pageSize: this.state.per_page,
-                reverse: false,
-                sortBy: 'StartDate'
             },
             method: 'GET',
             withCredentials: true,
@@ -115,7 +121,7 @@ class FaceToFace extends React.Component {
         this.setState({
             course_name: '',
             location_name: '',
-            host_id: '',
+            host_name: '',
             start_date: '',
             reverse: false,
             sortBy: 'StartDate',
@@ -195,12 +201,12 @@ class FaceToFace extends React.Component {
                                 <div className="form-group input-group" style={{width: '45.5%'}}>
                                     <div className="has-float-label" >
                                         <select className="form-control ng-pristine ng-valid ng-empty ng-touched"
-                                                name="host_id" value={this.state.host_id}
+                                                name="host_name" value={this.state.host_name}
                                                 onChange={this.handleInputChange}
                                         >
                                             <option value="" defaultValue> </option>
                                             {this.state.host_list.map((item, key) =>
-                                                <option key={key} value={item.ID} >{item.Name}</option>
+                                                <option key={key} value={item.Name} >{item.Name}</option>
                                             )}
                                         </select>
                                         <label htmlFor="host">Host</label>

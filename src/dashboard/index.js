@@ -115,11 +115,11 @@ class Dashboard extends React.Component {
 	makeHttpRequestWithPage(pageNumber) {
 		axios.get(Listing_URL, {
 			params: {
-				CPDTypeId: this.state.cpd_type_id,
 				CourseName: this.state.course_name,
 				HostId: this.state.host_id,
 				LocationName: this.state.location_name,
-				Venue: this.state.venue,
+				StartDate: this.state.start_date,
+				Year: this.state.year,
 				reverse: this.state.reverse,
 				sortBy: this.state.sortBy,
 				page: pageNumber,

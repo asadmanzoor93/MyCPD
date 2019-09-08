@@ -53,7 +53,7 @@ class ApprovedCPDProviders extends React.Component {
         $('.datepicker').datepicker();
         this.makeHttpRequestWithPage(1);
     }
-
+    
     makeHttpRequestWithPage(pageNumber) {
 
         axios.get(Approved_CPD_URL, {
