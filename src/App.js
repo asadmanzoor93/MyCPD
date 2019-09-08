@@ -16,7 +16,8 @@ function App() {
   return (
       <div>
           <Switch>
-            <Route exact path="/" component={withRouter(Login)} />
+            <Route exact path="/" component={withRouter(Login)}  />
+            <Route exact path="/login" component={withRouter(Login)}  />
             <Route exact path="/home" component={withRouter(Home)} />
             <Route exact path="/dashboard" component={withRouter(Dashboard)} />
             <Route exact path="/cpdgo" component={withRouter(CPDGO)} />

@@ -269,7 +269,7 @@ class Dashboard extends React.Component {
 										</div>
 										<div className="has-float-label form-group input-group" style={{width: '100%'}}>
 											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" value={this.state.year_selected} aria-invalid="false" >
-												<option value="" > </option>
+												<option value="" defaultValue> </option>
 												<option aria-checked="true" value="2018">2018</option>
 												<option aria-checked="true" value="2019">2019</option>
 											</select>
