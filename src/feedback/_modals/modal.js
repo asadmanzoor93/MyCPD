@@ -1,6 +1,9 @@
 import React from "react";
+import axios from 'axios';
 import $ from 'jquery';
 import {Modal, Button} from 'react-bootstrap';
+
+const Feedback_URL = 'http://34.248.242.178/CPDCompliance/api/contact/SendInfo';
 
 class FeedbackModal extends React.Component {
 
@@ -9,7 +12,8 @@ class FeedbackModal extends React.Component {
 
         this.state = {
             fields: {},
-            errors: {}
+            errors: {},
+            props_state: props
         }
     }
 
@@ -21,46 +25,77 @@ class FeedbackModal extends React.Component {
         //Name
         if(!fields["Name"]){
             formIsValid = false;
-            errors["Name"] = "Cannot be empty";
+            errors["Name"] = "Name is required.";
         }
 
         //MembershipNumber
         if(!fields["MembershipNumber"]){
             formIsValid = false;
-            errors["MembershipNumber"] = "Cannot be empty";
+            errors["MembershipNumber"] = "MembershipNumber is required.";
         }
 
         //Email
         if(!fields["Email"]){
             formIsValid = false;
-            errors["Email"] = "Cannot be empty";
+            errors["Email"] = "Email is required.";
+        }
+
+        if(typeof fields["Email"] !== "undefined"){
+            let lastAtPos = fields["Email"].lastIndexOf('@');
+            let lastDotPos = fields["Email"].lastIndexOf('.');
+
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["Email"].indexOf('@@') == -1 && lastDotPos > 2
+                && (fields["Email"].length - lastDotPos) > 2)) {
+                formIsValid = false;
+                errors["Email"] = "Email is not valid";
+            }
         }
 
         //Phone
         if(!fields["Phone"]){
             formIsValid = false;
-            errors["Phone"] = "Cannot be empty";
+            errors["Phone"] = "Phone is required.";
         }
 
         //Query
         if(!fields["Query"]){
             formIsValid = false;
-            errors["Query"] = "Cannot be empty";
+            errors["Query"] = "Query is required.";
         }
 
         this.setState({errors: errors});
         return formIsValid;
     }
 
-    contactSubmit(e){
+    feedbackSubmit(e){
         e.preventDefault();
 
         if(this.handleValidation()){
-            alert("Form submitted");
-        }else{
-            alert("Form has errors.")
+            // Hours Data
+            axios.post(Feedback_URL,
+                {
+                    Name: this.state.fields['Name'],
+                    MembershipNumber: this.state.fields['MembershipNumber'],
+                    Phone: this.state.fields['Phone'],
+                    Email: this.state.fields['Email'],
+                    Query: this.state.fields['Query']
+                },
+                {
+                headers: {
+                    'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then((response) => {
+                this.setState({
+                    fields: {},
+                    errors: {}
+                });
+                this.state.props_state.onHide();
+                alert('Feedback Submitted Successfully');
+            }).catch(console.log);
         }
-
     }
 
     handleChange(field, e){
@@ -76,7 +111,7 @@ class FeedbackModal extends React.Component {
             <Modal.Header className="modal-header-primary">
               <Modal.Title id="contained-modal-title-lg">
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"  onClick={this.props.onHide}>
-                  <i class="fa fa-close"> </i>
+                  <i className="fa fa-close"> </i>
                 </button>
               Feedback Modal
               </Modal.Title>
@@ -114,7 +149,7 @@ class FeedbackModal extends React.Component {
               </div>
               <div className="form-group required">
                   <label className="control-label" htmlFor="Phone">Phone</label>
-                  <input type="text" className="form-control"
+                  <input type="phone" className="form-control"
                          id="Phone" name="Phone"
                          placeholder="Your Phone" required
                          onChange={this.handleChange.bind(this, "Phone")}
@@ -128,13 +163,12 @@ class FeedbackModal extends React.Component {
                             placeholder="Your Query here" required
                             onChange={this.handleChange.bind(this, "Query")}
                             value={this.state.fields["Query"]}
-                            defaultValue
                   > </textarea>
                   <span style={{color: "red"}}>{this.state.errors["Query"]}</span>
               </div>
               <div className="modal-footer">
                   <button className="btn btn-warning" onClick={this.props.onHide}>Cancel</button>
-                  <button className="btn btn-primary" onClick={this.contactSubmit.bind(this)} >Submit</button>
+                  <button className="btn btn-primary" onClick={this.feedbackSubmit.bind(this)} >Submit</button>
               </div>
             </Modal.Body>
           </Modal>
