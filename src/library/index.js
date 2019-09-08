@@ -1,5 +1,4 @@
 import React from "react";
-import Header from '../_components/header.js';
 import "react-table/react-table.css";
 import axios from "axios";
 import Pagination from "react-js-pagination";
@@ -204,149 +203,146 @@ class Library extends React.Component {
         return (
 
             <div >
-                <Header />
-                <div className="container main-content">
-                    <div className="panel panel-default">
-                        <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
-                            <i className="fa fa-filter " title="" data-original-title="Search"> Search</i>
-                        </div>
-                        <div className="shadow">
-                            <div className="layout-gt-sm-row">
-                                <div style={{padding: '1rem'}}>
-                                    <div className="form-group input-group">
-                                        <span className="has-float-label" style={{width: '590px'}}>
-                                            <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   placeholder="Course Name" id="courseName"
-                                                   type="text"
-                                                   value={this.state.course_name}
-                                                   name="course_name"
-                                                   onChange={this.handleInputChange}
-                                                   aria-invalid="false"
-                                            />
-                                            <label htmlFor="courseName">Course Name</label>
-                                        </span>
-                                        <span className="has-float-label" style={{width: '590px'}}>
-                                            <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   id="location_name"
-                                                   placeholder="Location Name"
-                                                   type="text"
-                                                   value={this.state.location_name}
-                                                   name="location_name"
-                                                   onChange={this.handleInputChange}
-                                                   aria-invalid="false"
-                                            />
-                                            <label htmlFor="LocationName">Location Name</label>
-                                        </span>
+                <div className="panel panel-default">
+                    <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
+                        <i className="fa fa-filter " title="" data-original-title="Search"> Search</i>
+                    </div>
+                    <div className="shadow">
+                        <div className="layout-gt-sm-row">
+                            <div style={{padding: '1rem'}}>
+                                <div className="form-group input-group">
+                                    <span className="has-float-label" style={{width: '590px'}}>
+                                        <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                               placeholder="Course Name" id="courseName"
+                                               type="text"
+                                               value={this.state.course_name}
+                                               name="course_name"
+                                               onChange={this.handleInputChange}
+                                               aria-invalid="false"
+                                        />
+                                        <label htmlFor="courseName">Course Name</label>
+                                    </span>
+                                    <span className="has-float-label" style={{width: '590px'}}>
+                                        <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                               id="location_name"
+                                               placeholder="Location Name"
+                                               type="text"
+                                               value={this.state.location_name}
+                                               name="location_name"
+                                               onChange={this.handleInputChange}
+                                               aria-invalid="false"
+                                        />
+                                        <label htmlFor="LocationName">Location Name</label>
+                                    </span>
+                                </div>
+
+                                <div className="form-group input-group">
+                                    <div className="has-float-label" style={{width: '560px'}}>
+                                        <select id="cpd_type_id" name="cpd_type_id" value={this.state.cpd_type_id} onChange={this.handleInputChange}
+                                                className="form-control ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+                                            <option value="" defaultValue> </option>
+                                            {this.state.types_list.map((item, key) =>
+                                                <option key={key} label={item.Description} value={item.CPDTypeId} >{item.Description}</option>
+                                            )}
+                                        </select>
+                                        <label htmlFor="courseType">CPD Type</label>
                                     </div>
 
-                                    <div className="form-group input-group">
-                                        <div className="has-float-label" style={{width: '560px'}}>
-                                            <select id="cpd_type_id" name="cpd_type_id" value={this.state.cpd_type_id} onChange={this.handleInputChange}
-                                                    className="form-control ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
-                                                <option value="" defaultValue> </option>
-                                                {this.state.types_list.map((item, key) =>
-                                                    <option key={key} label={item.Description} value={item.CPDTypeId} >{item.Description}</option>
-                                                )}
-                                            </select>
-                                            <label htmlFor="courseType">CPD Type</label>
-                                        </div>
+                                    <span className="has-float-label" style={{width: '560px'}}>
+                                        <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                               id="Venue"
+                                               placeholder="Venue"
+                                               type="text"
+                                               value={this.state.venue}
+                                               name="location_name"
+                                               onChange={this.handleInputChange}
+                                               aria-invalid="false"
+                                        />
+                                        <label htmlFor="Venue">Venue</label>
+                                    </span>
+                                </div>
 
-                                        <span className="has-float-label" style={{width: '560px'}}>
-                                            <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   id="Venue"
-                                                   placeholder="Venue"
-                                                   type="text"
-                                                   value={this.state.venue}
-                                                   name="location_name"
-                                                   onChange={this.handleInputChange}
-                                                   aria-invalid="false"
-                                            />
-                                            <label htmlFor="Venue">Venue</label>
-                                        </span>
+                                <div className="form-group input-group" style={{width: '45.5%'}}>
+                                    <div className="has-float-label" >
+                                        <select id="host_id" name="host_id" value={this.state.host_id} onChange={this.handleInputChange}
+                                                className="form-control ng-pristine ng-valid ng-empty ng-touched">
+                                            <option value="" defaultValue> </option>
+                                            {this.state.host_list.map((item, key) =>
+                                                <option key={key} value={item.ID} >{item.Name}</option>
+                                            )}
+                                        </select>
+                                        <label htmlFor="host">Host</label>
                                     </div>
-
-                                    <div className="form-group input-group" style={{width: '45.5%'}}>
-                                        <div className="has-float-label" >
-                                            <select id="host_id" name="host_id" value={this.state.host_id} onChange={this.handleInputChange}
-                                                    className="form-control ng-pristine ng-valid ng-empty ng-touched">
-                                                <option value="" defaultValue> </option>
-                                                {this.state.host_list.map((item, key) =>
-                                                    <option key={key} value={item.ID} >{item.Name}</option>
-                                                )}
-                                            </select>
-                                            <label htmlFor="host">Host</label>
-                                        </div>
-                                    </div>
-                                    <div className="clearfix"> </div>
-                                    <div>
-                                        <button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
-                                            <span className="glyphicon glyphicon-search"> </span>
-                                            Search
-                                        </button>
-                                        <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
-                                            <span className="glyphicon glyphicon-remove-sign"> </span>
-                                            Clear
-                                        </button>
-                                    </div>
+                                </div>
+                                <div className="clearfix"> </div>
+                                <div>
+                                    <button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
+                                        <span className="glyphicon glyphicon-search"> </span>
+                                        Search
+                                    </button>
+                                    <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
+                                        <span className="glyphicon glyphicon-remove-sign"> </span>
+                                        Clear
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="row" style={{paddingBottom: '30px'}}>
-                        <div className="gridTopButtons">
-                            <button type="button" onClick={() => window.print()}
-                                    className="btn btn-danger btn-circle btn-lg ng-scope">
-                                <i className="fa fa-print"> </i>
-                            </button>
-                            <button type="button" onClick={(e)=> this.exportExcelReport(e)}
-                                    className="btn btn-success btn-circle btn-lg ng-scope">
-                                <i className="fa fa-file-excel-o"> </i>
-                            </button>
-                        </div>
-                        <div className="gridTopDropdown"> Show
-                            <select className="input-sm ng-pristine ng-untouched ng-valid ng-not-empty" onChange={(e) => this.handlePaginationFilter(e)}>
-                                <option label="10" value="10" defaultValue >10</option>
-                                <option label="20" value="20">20</option>
-                                <option label="30" value="30">30</option>
-                            </select>
-                            entries
-                        </div>
+                <div className="row" style={{paddingBottom: '30px'}}>
+                    <div className="gridTopButtons">
+                        <button type="button" onClick={() => window.print()}
+                                className="btn btn-danger btn-circle btn-lg ng-scope">
+                            <i className="fa fa-print"> </i>
+                        </button>
+                        <button type="button" onClick={(e)=> this.exportExcelReport(e)}
+                                className="btn btn-success btn-circle btn-lg ng-scope">
+                            <i className="fa fa-file-excel-o"> </i>
+                        </button>
                     </div>
-                    <div className="col">
-                        <table className='table table-striped table-bordered table-hover table-condensed'>
-                            <thead>
-                            <tr className="header">
-                                <td> </td>
-                                <th>Course Name </th>
-                                <th>Location</th>
-                                <th>CPD Hours</th>
-                                <th>Type</th>
-                                <th>Host</th>
-                                <th>Trainer</th>
-                                <th>Venue</th>
-                                <th>Start Date</th>
-                                <th>View</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            { library_records }
-                            </tbody>
-                        </table>
-                        <div>
-                            <Pagination
-                                prevPageText='Previous'
-                                nextPageText='Next'
-                                firstPageText='First'
-                                lastPageText='Last'
-                                activePage={this.state.activePage}
-                                itemsCountPerPage={this.state.per_page}
-                                totalItemsCount={this.state.totalCount}
-                                onChange={this.handlePageChange}
-                            />
-                        </div>
+                    <div className="gridTopDropdown"> Show
+                        <select className="input-sm ng-pristine ng-untouched ng-valid ng-not-empty" onChange={(e) => this.handlePaginationFilter(e)}>
+                            <option label="10" value="10" defaultValue >10</option>
+                            <option label="20" value="20">20</option>
+                            <option label="30" value="30">30</option>
+                        </select>
+                        entries
+                    </div>
+                </div>
+                <div className="col">
+                    <table className='table table-striped table-bordered table-hover table-condensed'>
+                        <thead>
+                        <tr className="header">
+                            <td> </td>
+                            <th>Course Name </th>
+                            <th>Location</th>
+                            <th>CPD Hours</th>
+                            <th>Type</th>
+                            <th>Host</th>
+                            <th>Trainer</th>
+                            <th>Venue</th>
+                            <th>Start Date</th>
+                            <th>View</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        { library_records }
+                        </tbody>
+                    </table>
+                    <div>
+                        <Pagination
+                            prevPageText='Previous'
+                            nextPageText='Next'
+                            firstPageText='First'
+                            lastPageText='Last'
+                            activePage={this.state.activePage}
+                            itemsCountPerPage={this.state.per_page}
+                            totalItemsCount={this.state.totalCount}
+                            onChange={this.handlePageChange}
+                        />
+                    </div>
 
-                    </div>
                 </div>
             </div>
         );
