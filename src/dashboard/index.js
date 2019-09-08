@@ -1,8 +1,11 @@
 import React from "react";
-import Header from '../_components/header.js';
 import axios from 'axios';
 import "react-table/react-table.css";
 import Pagination from "react-js-pagination";
+import $ from "jquery";
+import "bootstrap-datepicker/js/bootstrap-datepicker.js";
+import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
+
 
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
@@ -58,6 +61,9 @@ class Dashboard extends React.Component {
 
 	componentDidMount() {
 		this.makeHttpRequestWithPage(1);
+
+
+        $('.datepicker').datepicker();
 
 		// Hosts List
 		axios.get(Hosts_URL, {
@@ -186,197 +192,193 @@ class Dashboard extends React.Component {
 
 		return (
 			<div>
-				<Header />
-				<div className="container main-content">
-					<div>
-						<h2 className="page-header">Dashboard</h2>
-						<div className="row" style={{ marginBottom: '3rem' }}>
-							<div className="col-md-4">
-								<div className="dashboard_box">
-									<div className="pull-right green_icon">
-										<i className="fa fa-graduation-cap"> </i>
-									</div>
-									{this.state.required_hours} <span className="mediumfont">Hour</span>
-									<div className="white_progress">
-										<div className="white_progress_inner" style={{width:'100%'}}> </div>
-									</div>
-									<div className="dashboard-box-footer" id="dashBox1">
-										<div id="courseToDo">
-											<span>Required</span>
-											<span style={{float:'right'}}>2019</span>
-										</div>
-									</div>
+				<div>
+					<h2 className="page-header">Dashboard</h2>
+					<div className="row" style={{ marginBottom: '3rem' }}>
+						<div className="col-md-4">
+							<div className="dashboard_box">
+								<div className="pull-right green_icon">
+									<i className="fa fa-graduation-cap"> </i>
 								</div>
-							</div>
-							<div className="col-md-4">
-								<div className="dashboard_box">
-									<div className="pull-right green_icon">
-										<i className="fa fa-clock-o"> </i>
-									</div>
-									{this.state.overdue_hours} <span className="mediumfont">Hour {this.state.overdue_minutes} Mins</span>
-									<div className="white_progress">
-										<div className="white_progress_inner" style={{width:'100%'}}> </div>
-									</div>
-									<div className="dashboard-box-footer" id="remainingdashBox">
-										<div id="courseToDo">
-											<span>Remaining</span>
-											<span style={{float:'right'}}>2019</span>
-										</div>
-									</div>
+								{this.state.required_hours} <span className="mediumfont">Hour</span>
+								<div className="white_progress">
+									<div className="white_progress_inner" style={{width:'100%'}}> </div>
 								</div>
-							</div>
-							<div className="col-md-4">
-								<div className="dashboard_box">
-									<div className="pull-right green_icon">
-										<i className="fa fa-trophy"> </i>
-									</div>
-									{this.state.total_hours}
-									<span className="mediumfont">Hour {this.state.total_minutes}  Mins</span>
-									<div className="white_progress">
-										<div className="white_progress_inner" style={{width:'100%'}}> </div>
-									</div>
-									<div className="dashboard-box-footer" id="completedDashBox">
-										<div id="courseToDo">
-											<span>COMPLETED</span>
-											<span style={{float:'right'}}>2019</span>
-										</div>
+								<div className="dashboard-box-footer" id="dashBox1">
+									<div id="courseToDo">
+										<span>Required</span>
+										<span style={{float:'right'}}>2019</span>
 									</div>
 								</div>
 							</div>
 						</div>
-
-
-						<div className="panel panel-default">
-							<div className="panel-heading-cpd-3" style={{padding: '10px'}}>
-								<i className="fa fa-filter " title="" tooltip="" data-original-title="Search"> Search</i>
+						<div className="col-md-4">
+							<div className="dashboard_box">
+								<div className="pull-right green_icon">
+									<i className="fa fa-clock-o"> </i>
+								</div>
+								{this.state.overdue_hours} <span className="mediumfont">Hour {this.state.overdue_minutes} Mins</span>
+								<div className="white_progress">
+									<div className="white_progress_inner" style={{width:'100%'}}> </div>
+								</div>
+								<div className="dashboard-box-footer" id="remainingdashBox">
+									<div id="courseToDo">
+										<span>Remaining</span>
+										<span style={{float:'right'}}>2019</span>
+									</div>
+								</div>
 							</div>
-							<div className="shadow">
-								<div className="layout-gt-sm-row">
-									<div style={{padding: '1rem'}}>
+						</div>
+						<div className="col-md-4">
+							<div className="dashboard_box">
+								<div className="pull-right green_icon">
+									<i className="fa fa-trophy"> </i>
+								</div>
+								{this.state.total_hours}
+								<span className="mediumfont">Hour {this.state.total_minutes}  Mins</span>
+								<div className="white_progress">
+									<div className="white_progress_inner" style={{width:'100%'}}> </div>
+								</div>
+								<div className="dashboard-box-footer" id="completedDashBox">
+									<div id="courseToDo">
+										<span>COMPLETED</span>
+										<span style={{float:'right'}}>2019</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-										<div className="form-group input-group" style={{width: '100%'}}>
-											<span className="has-float-label" style={{width: '50%'}}>
-												 <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-														placeholder="Course Name" id="courseName"
-														type="text"
-														value={this.state.course_name}
-														name="course_name"
-														onChange={this.handleInputChange}
-														aria-invalid="false"
-												 />
-												<label htmlFor="course_name">Course Name</label>
-											</span>
+
+					<div className="panel panel-default">
+						<div className="panel-heading-cpd-3" style={{padding: '10px'}}>
+							<i className="fa fa-filter " title="" tooltip="" data-original-title="Search"> Search</i>
+						</div>
+						<div className="shadow">
+							<div className="layout-gt-sm-row">
+								<div style={{padding: '1rem'}}>
+
+									<div className="form-group input-group" style={{width: '100%'}}>
+										<span className="has-float-label" style={{width: '50%'}}>
+											 <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
+													placeholder="Course Name" id="courseName"
+													type="text"
+													value={this.state.course_name}
+													name="course_name"
+													onChange={this.handleInputChange}
+													aria-invalid="false"
+											 />
+											<label htmlFor="course_name">Course Name</label>
+										</span>
+									</div>
+									<div className="has-float-label form-group input-group" style={{width: '100%'}}>
+										<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" value={this.state.year_selected} aria-invalid="false" >
+											<option value="" > </option>
+											<option aria-checked="true" value="2018">2018</option>
+											<option aria-checked="true" value="2019">2019</option>
+										</select>
+										<label htmlFor="Year">Year</label>
+									</div>
+									<div className="form-group input-group" style={{width: '100%'}}>
+										<span className="has-float-label">
+											<input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
+												   id="location_name"
+												   placeholder="Location Name"
+												   type="text"
+												   value={this.state.location_name}
+												   name="location_name"
+												   onChange={this.handleInputChange}
+												   aria-invalid="false"
+											/>
+											<label htmlFor="location_name">Location Name</label>
+										</span>
+										<div className="has-float-label" >
+											<p className="input-group datepicker" style={{ padding: '0' }}>
+												<input type="text" className="form-control" placeholder="Enter Start Date" my-date-picker="" end-date="+3y" aria-invalid="true" />
+												<span className="input-group-addon">
+													<span className="glyphicon glyphicon-calendar"> </span>
+												</span>
+											</p>
+											<label htmlFor="courseDate">Enter Start Date</label>
 										</div>
-										<div className="has-float-label form-group input-group" style={{width: '100%'}}>
-											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" value={this.state.year_selected} aria-invalid="false" >
+									</div>
+
+									<div className="form-group input-group" style={{width: '45.5%'}}>
+										<div className="has-float-label" >
+											<select id="host_id" name="host_id" value={this.state.host_id} onChange={this.handleInputChange}
+													className="form-control ng-pristine ng-valid ng-empty ng-touched">
 												<option value="" defaultValue> </option>
-												<option aria-checked="true" value="2018">2018</option>
-												<option aria-checked="true" value="2019">2019</option>
+												{this.state.host_list.map((item, key) =>
+													<option key={key} value={item.ID} >{item.Name}</option>
+												)}
 											</select>
-											<label htmlFor="Year">Year</label>
+											<label htmlFor="host">Host</label>
 										</div>
-										<div className="form-group input-group" style={{width: '100%'}}>
-											<span className="has-float-label">
-												<input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-													   id="location_name"
-													   placeholder="Location Name"
-													   type="text"
-													   value={this.state.location_name}
-													   name="location_name"
-													   onChange={this.handleInputChange}
-													   aria-invalid="false"
-												/>
-
-												<label htmlFor="location_name">Location Name</label>
-											</span>
-											<div className="has-float-label" >
-												<p className="input-group">
-													<input type="text" className="form-control ng-untouched ng-empty ng-dirty ng-invalid ng-invalid-parse" name="courseDate" placeholder="Enter Start Date" my-date-picker="" end-date="+3y" aria-invalid="true" />
-													<span className="input-group-addon" data-toggle="datepicker">
-														<span className="glyphicon glyphicon-calendar"> </span>
-													</span>
-												</p>
-												<label htmlFor="courseDate">Enter Start Date</label>
-											</div>
-										</div>
-
-										<div className="form-group input-group" style={{width: '45.5%'}}>
-											<div className="has-float-label" >
-												<select id="host_id" name="host_id" value={this.state.host_id} onChange={this.handleInputChange}
-														className="form-control ng-pristine ng-valid ng-empty ng-touched">
-													<option value="" defaultValue> </option>
-													{this.state.host_list.map((item, key) =>
-														<option key={key} value={item.ID} >{item.Name}</option>
-													)}
-												</select>
-												<label htmlFor="host">Host</label>
-											</div>
-										</div>
+									</div>
 
 
-										<div className="clearfix"> </div>
-										<div>
-											<button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
-												<span className="glyphicon glyphicon-search"> </span>
-												Search
-											</button>
-											<button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
-												<span className="glyphicon glyphicon-remove-sign"> </span>
-												Clear
-											</button>
-										</div>
+									<div className="clearfix"> </div>
+									<div>
+										<button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
+											<span className="glyphicon glyphicon-search"> </span>
+											Search
+										</button>
+										<button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
+											<span className="glyphicon glyphicon-remove-sign"> </span>
+											Clear
+										</button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+				</div>
 
-					<div className="row" style={{paddingBottom: '30px'}}>
-						<div className="gridTopButtons">
-							<button type="button" onClick={() => window.print()}
-									className="btn btn-danger btn-circle btn-lg ">
-								<i className="fa fa-print"> </i>
-							</button>
-							<button type="button" className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px'}}>
-								<i className="fa fa-file-excel-o"> </i>
-							</button>
-						</div>
+				<div className="row" style={{paddingBottom: '30px'}}>
+					<div className="gridTopButtons">
+						<button type="button" onClick={() => window.print()}
+								className="btn btn-danger btn-circle btn-lg ">
+							<i className="fa fa-print"> </i>
+						</button>
+						<button type="button" className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px'}}>
+							<i className="fa fa-file-excel-o"> </i>
+						</button>
+					</div>
+				</div>
+
+				<div className="col">
+					<table className='table table-striped table-bordered table-hover table-condensed'>
+						<thead>
+						<tr className="header">
+							<td> </td>
+							<th>Course Type</th>
+							<th>Course</th>
+							<th>Completed Hours</th>
+							<th>Completion Date</th>
+							<th>Venue</th>
+							<th>Trainer</th>
+							<th>Host</th>
+							<th>Start Date</th>
+							<th>Actions</th>
+						</tr>
+						</thead>
+						<tbody>
+						{ dashboard_records }
+						</tbody>
+					</table>
+					<div>
+						<Pagination
+							prevPageText='Previous'
+							nextPageText='Next'
+							firstPageText='First'
+							lastPageText='Last'
+							activePage={this.state.activePage}
+							itemsCountPerPage={this.state.per_page}
+							totalItemsCount={this.state.totalCount}
+							onChange={this.handlePageChange}
+						/>
 					</div>
 
-					<div className="col">
-						<table className='table table-striped table-bordered table-hover table-condensed'>
-							<thead>
-							<tr className="header">
-								<td> </td>
-								<th>Course Type</th>
-								<th>Course</th>
-								<th>Completed Hours</th>
-								<th>Completion Date</th>
-								<th>Venue</th>
-								<th>Trainer</th>
-								<th>Host</th>
-								<th>Start Date</th>
-								<th>Actions</th>
-							</tr>
-							</thead>
-							<tbody>
-							{ dashboard_records }
-							</tbody>
-						</table>
-						<div>
-							<Pagination
-								prevPageText='Previous'
-								nextPageText='Next'
-								firstPageText='First'
-								lastPageText='Last'
-								activePage={this.state.activePage}
-								itemsCountPerPage={this.state.per_page}
-								totalItemsCount={this.state.totalCount}
-								onChange={this.handlePageChange}
-							/>
-						</div>
-
-					</div>
 				</div>
 			</div>
 		);
