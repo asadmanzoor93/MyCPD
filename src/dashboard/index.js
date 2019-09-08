@@ -270,14 +270,14 @@ class Dashboard extends React.Component {
 											 />
 											<label htmlFor="course_name">Course Name</label>
 										</span>
-									</div>
-									<div className="has-float-label form-group input-group" style={{width: '100%'}}>
-										<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" value={this.state.year_selected} aria-invalid="false" >
-											<option value="" > </option>
-											<option aria-checked="true" value="2018">2018</option>
-											<option aria-checked="true" value="2019">2019</option>
-										</select>
-										<label htmlFor="Year">Year</label>
+										<div className="has-float-label form-group input-group" style={{width: '50%'}}>
+											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched" id="Year" value={this.state.year_selected} aria-invalid="false" >
+												<option value="" > </option>
+												<option aria-checked="true" value="2018">2018</option>
+												<option aria-checked="true" value="2019">2019</option>
+											</select>
+											<label htmlFor="Year">Year</label>
+										</div>
 									</div>
 									<div className="form-group input-group" style={{width: '100%'}}>
 										<span className="has-float-label">
@@ -320,7 +320,7 @@ class Dashboard extends React.Component {
 
 									<div className="clearfix"> </div>
 									<div>
-										<button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
+										<button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
 											<span className="glyphicon glyphicon-search"> </span>
 											Search
 										</button>
@@ -351,16 +351,16 @@ class Dashboard extends React.Component {
 					<table className='table table-striped table-bordered table-hover table-condensed'>
 						<thead>
 						<tr className="header">
-							<td> </td>
-							<th>Course Type</th>
-							<th>Course</th>
-							<th>Completed Hours</th>
-							<th>Completion Date</th>
-							<th>Venue</th>
-							<th>Trainer</th>
-							<th>Host</th>
-							<th>Start Date</th>
-							<th>Actions</th>
+							<th role="button"> </th>
+							<th role="button">Course Type <i class="fa fa-fw fa-sort-down"></i></th>
+							<th role="button">Course<i class="fa fa-fw fa-sort-up"></i></th>
+							<th role="button">Completed Hours<i class="fa fa-fw fa-sort"></i></th>
+							<th role="button">Completion Date<i class="fa fa-fw fa-sort"></i></th>
+							<th role="button">Venue<i class="fa fa-fw fa-sort"></i></th>
+							<th role="button">Trainer<i class="fa fa-fw fa-sort"></i></th>
+							<th role="button">Host<i class="fa fa-fw fa-sort"></i></th>
+							<th role="button">Start Date<i class="fa fa-fw fa-sort"></i></th>
+							<th role="button">Actions<i class="fa fa-fw fa-sort"></i></th>
 						</tr>
 						</thead>
 						<tbody>

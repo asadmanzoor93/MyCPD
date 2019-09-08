@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import './css/bootstrap/bootstrap.min.css';
-import './css/bootstrap/bootstrap-theme.css';
 import './css/common/default.css';
 import './css/common/react-wizard.css';
 import './css/custom.css';
