@@ -30,6 +30,9 @@ class App extends React.Component {
   }
 
   makeSignOutRequest() {
+    this.setState({
+      logout: true,
+    });
     axios.get(SignOut_URL, {
       method: 'GET',
       withCredentials: true,
@@ -42,9 +45,6 @@ class App extends React.Component {
     })
     .then(response => response)
     .then((response) => {
-      this.setState({
-        logout: true,
-      });
 
     }).catch(console.log);
   };
