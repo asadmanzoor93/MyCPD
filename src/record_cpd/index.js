@@ -109,7 +109,7 @@ class Step1 extends React.Component{
                             </div>
                             <div className="form-group">
                                 <label className="control-label">Address</label>
-                                <textarea required="required" className="form-control" value='' disabled="" placeholder="Enter your address" rows="4" aria-invalid="false" > </textarea>
+                                <textarea required="required" className="form-control" defaultValue='' disabled="" placeholder="Enter your address" rows="4" aria-invalid="false" > </textarea>
                             </div>
                             <div >
                                 <button className="btn btn-primary pull-right" onClick={this.props.nextStep} >Next step <i className="fa fa-arrow-right"> </i></button>
