@@ -12,6 +12,7 @@ const Hosts_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost';
 const Locations_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/Location';
 const Courses_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/GetCourses';
 const Course_Detail_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/GetCourse';
+const ADD_Record_URL = 'http://34.248.242.178/CPDCompliance/api/Workflow/add';
 
 
 //On view load: Call member info, types, formats, hosts, locations api. Fill data for first step automatically
@@ -27,9 +28,11 @@ class RecordCPD extends React.Component {
             locations: [],
             courses: [],
             courses_options: [],
-            cpd_type_id: null,
+            cpd_type_id: 2,
+            MemberId: null,
             course_format: null,
             course_id: null,
+            course_name: null,
             course_detail: [],
             course_description: null,
             venue: null,
@@ -37,6 +40,12 @@ class RecordCPD extends React.Component {
             cpd_mins: null,
             cpd_year: null,
             date_completed: null,
+            file_upload: null,
+            file_name: null,
+            host_id: null,
+            trainer: null,
+            location_id: null,
+            is_declared: false,
         };
 
         this.handlePrevStep = this.handlePrevStep.bind(this);
@@ -54,7 +63,7 @@ class RecordCPD extends React.Component {
     };
 
     componentDidMount() {
-        $('.datepicker').datepicker();
+        $('.datepicker').datepicker({autoclose: true});
         this.fetchTypes();
         this.fetchMemberInfo();
         this.fetchFormats();
@@ -96,7 +105,10 @@ class RecordCPD extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data){
-                    this.setState({ member_info: data });
+                    this.setState({
+                        member_info: data,
+                        MemberId: data.MemberId
+                    });
                 }
             }).catch(console.log);
     }
@@ -228,6 +240,9 @@ class RecordCPD extends React.Component {
                         cpd_mins: data.Minutes,
                         cpd_year: null,
                         date_completed: null,
+                        trainer: data.Trainer,
+                        host_id: data.HostId,
+                        location_id: data.LocationId,
                     });
                 }
             }).catch(console.log);
@@ -245,8 +260,40 @@ class RecordCPD extends React.Component {
         });
     }
 
-    handleSaveRecord(){
+    handleSaveRecord() {
 
+        axios.post(ADD_Record_URL, {
+            MemberId: this.state.MemberId,
+            CPDTypeId: this.state.cpd_type_id,
+            CourseId: this.state.course_id,
+            CourseName: this.state.course_name,
+            Description: this.state.course_description,
+            Venue: this.state.venue,
+            Trainer: this.state.trainer,
+            Hours: this.state.cpd_hours,
+            Minutes: this.state.cpd_mins,
+            Company:"rnnxinpangnpt.nxp",
+            CompletionDate: this.state.date_completed,
+            CPDYear: this.state.cpd_year,
+            CPDWorkflowId: 0,
+            FileName: this.state.file_name,
+            CPDFormatId: 1,
+            HostId: this.state.host_id,
+            LocationId: this.state.location_id,
+            CourseMode:"",
+            IsDeclared: this.state.is_declared
+        },{
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+
+
+        }).catch(console.log);
     }
 
     handleInputChange(event) {
@@ -254,9 +301,20 @@ class RecordCPD extends React.Component {
         const value = target.value;
         const name = target.name;
 
-        this.setState({
-            [name]: value
-        });
+        if(name === 'file_upload'){
+            this.setState({
+                [name]: URL.createObjectURL(event.target.files[0]),
+                file_name: event.target.files[0]['name']
+            });
+        } else if (name === 'is_declared'){
+            this.setState({
+                is_declared: target.checked
+            });
+        } else {
+            this.setState({
+                [name]: value
+            });
+        }
 
         if (name === 'cpd_type_id'){
             this.fetchCourses(value);
@@ -306,6 +364,8 @@ class RecordCPD extends React.Component {
                                                 <input maxLength="100" type="text" className="form-control "
                                                        placeholder="Enter First Name"
                                                        disabled="disabled"
+                                                       id="FirstName"
+                                                       name="FirstName"
                                                        value={this.state.member_info['FirstName']}
                                                        aria-invalid="false" />
                                             </div>
@@ -313,13 +373,17 @@ class RecordCPD extends React.Component {
                                                 <label className="control-label">Last Name</label>
                                                 <input maxLength="100" type="text" className="form-control " placeholder="Enter Last Name"
                                                        disabled="disabled"
-                                                       value={this.state.member_info['LastName']}
+                                                       id="Surname"
+                                                       name="Surname"
+                                                       value={this.state.member_info['Surname']}
                                                        aria-invalid="false" />
                                             </div>
                                             <div className="form-group">
                                                 <label className="control-label">Membership Number</label>
                                                 <input maxLength="100" type="text" className="form-control " placeholder="Enter MembershipNumber"
                                                        disabled="disabled"
+                                                       id="MemberNumber"
+                                                       name="MemberNumber"
                                                        value={this.state.member_info['MemberNumber']}
                                                        aria-invalid="false"  />
                                             </div>
@@ -327,6 +391,8 @@ class RecordCPD extends React.Component {
                                                 <label className="control-label">Email</label>
                                                 <input maxLength="100" type="text" className="form-control " placeholder="Enter Email"
                                                        disabled="disabled"
+                                                       id="Email"
+                                                       name="Email"
                                                        value={this.state.member_info['Email']}
                                                        aria-invalid="false"  />
                                             </div>
@@ -336,6 +402,8 @@ class RecordCPD extends React.Component {
                                                           disabled="disabled"
                                                           value={this.state.member_info['Address']}
                                                           placeholder="Enter your address" rows="4"
+                                                          id="Address"
+                                                          name="Address"
                                                           aria-invalid="false" > </textarea>
                                             </div>
                                             <div >
@@ -352,7 +420,7 @@ class RecordCPD extends React.Component {
                             <div className="panel panel-primary ">
                                 <div className="panel-heading">Confirm CPD Activity Details</div>
                                 <div className="container container-table">
-                                    <div className="row vertical-center-row ng-invalid ng-invalid-required " id="step-2" name="editForm" role="form">
+                                    <div className="row vertical-center-row ng-invalid ng-invalid-required " id="step-2" >
                                         <div style={{marginTop:'40px'}}> </div>
                                         <div className="col-md-6 col-md-offset-3">
                                             <div className="form-group required">
@@ -381,12 +449,21 @@ class RecordCPD extends React.Component {
                                                             value={this.state.course_id}
                                                             onChange={this.handleInputChange}
                                                             required=""
-                                                            aria-invalid="true">
+                                                            aria-invalid="true" style={{display: (this.state.cpd_type_id !== '4') ? 'block' : 'none' }}>
                                                         <option value="" defaultValue> </option>
                                                         {this.state.courses.map((item, key) =>
                                                             <option key={key} value={item.CourseId} label={item.CourseName} >{item.CourseName}</option>
                                                         )}
                                                     </select>
+
+                                                    <input type="text" className="form-control ng-empty ng-invalid ng-invalid-required-maxlength"
+                                                           name="course_name" id="course_name"
+                                                           value={this.state.course_name}
+                                                           onChange={this.handleInputChange}
+                                                           placeholder="Course Title" required=""
+                                                           aria-invalid="true"
+                                                           style={{display: (this.state.cpd_type_id === '4') ? 'block' : 'none' }}
+                                                    />
                                                 </div>
                                             </div>
 
@@ -398,6 +475,7 @@ class RecordCPD extends React.Component {
                                                         value={this.state.course_format}
                                                         onChange={this.handleInputChange}
                                                         required=""
+                                                        disabled={ (this.state.cpd_type_id === '4') ? "" : "disabled" }
                                                         aria-invalid="true">
                                                     <option value="" defaultValue> </option>
                                                     {this.state.formats.map((item, key) =>
@@ -467,37 +545,43 @@ class RecordCPD extends React.Component {
                                             </div>
 
                                             <div className="form-group required">
-                                                <label htmlFor="courseDate" className="control-label">Date Completed
+                                                <label  className="control-label">Date Completed {this.state.date_completed}
                                                 </label>
                                                 <div className="input-group">
+
                                                     <input id="date_completed" type="text"
                                                            name="date_completed"
                                                            value={this.state.date_completed}
                                                            onChange={this.handleInputChange}
                                                            className="form-control datepicker"
                                                     />
-                                                    <label htmlFor="dateCompleted" className="input-group-addon">
+                                                    <label htmlFor="date_completed" className="input-group-addon">
                                                         <span className="glyphicon glyphicon-calendar"> </span>
                                                     </label>
                                                 </div>
+
                                             </div>
 
                                             <div className="form-group required">
                                                 <label className="control-label">Upload Evidence of Attendance
                                                 </label>
                                                 <div className="upload-field ng-binding ">
-                                                    Choose a file please
-                                                    <input id="uploadFileInput" type="file"
-                                                           className="form-control  ng-empty ng-invalid ng-invalid-required"
+                                                    { this.state.file_name ? this.state.file_name : 'Choose a file please' }
+                                                    <input id="file_upload" type="file"
+                                                           name="file_upload"
+                                                           onChange={this.handleInputChange}
+                                                           className="form-control ng-empty ng-invalid ng-invalid-required"
                                                            required="required" aria-invalid="true" />
-                                                    <button className="icon-folder"> </button>
+                                                    <button className="icon-folder glyphicon glyphicon-folder-open"> </button>
                                                 </div>
                                             </div>
 
                                             <div >
                                                 <button className="btn btn-default" name="previous" onClick={this.handlePrevStep} type="button"><i className="fa fa-arrow-left"> </i> Previous step
                                                 </button>
-                                                <button className="btn btn-primary pull-right" type="submit" onClick={this.handleNextStep}>Next step <i className="fa fa-arrow-right"> </i></button>
+                                                <button className="btn btn-primary pull-right" type="button"
+                                                        onClick={this.handleNextStep}
+                                                >Next step <i className="fa fa-arrow-right"> </i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -517,56 +601,67 @@ class RecordCPD extends React.Component {
 
                                             <div className="form-group required">
                                                 <label htmlFor="host" className="control-label">Host</label>
-                                                <select name="host" className="form-control ng-pristine ng-untouched ng-valid ng-not-empty"
-                                                        disabled="disabled" aria-invalid="false">
-                                                    <option label="N/r: Nxp saspxt" value="number:8">N/r: Nxp saspxt</option>
-                                                    <option label="rnnr" value="number:15">rnnr</option>
-                                                    <option label="rnnxinpang pxnpnanarns arxsrnt" value="number:5">rnnxinpang pxnpnanarns
-                                                        arxsrnt
-                                                    </option>
-                                                    <option label="rnnxinpangnpt.nxp" value="number:6">rnnxinpangnpt.nxp</option>
-                                                    <option label="rppsxnx anspapipx xf pxnpnxsxgy" value="number:68">rppsxnx anspapipx xf
-                                                        pxnpnxsxgy
-                                                    </option>
-                                                    <option label="naMr" value="number:17">naMr</option>
-                                                    <option label="Xxrx" value="number:30">Xxrx</option>
-                                                    <option label="61/61 Grxip" value="number:31" selected="selected">61/61 Grxip</option>
+                                                <select name="host_id"
+                                                        id="host_id"
+                                                        value={this.state.host_id}
+                                                        onChange={this.handleInputChange}
+                                                        disabled={ (this.state.cpd_type_id === '4') ? "" : "disabled" }
+                                                        className="form-control ng-pristine ng-untouched ng-valid ng-not-empty"
+                                                        aria-invalid="false">
+                                                    <option value="" defaultValue> </option>
+                                                    {this.state.host_list.map((item, key) =>
+                                                        <option key={key} value={item.ID} >{item.Name}</option>
+                                                    )}
                                                 </select>
                                             </div>
 
                                             <div className="form-group">
                                                 <label className="control-label">Trainer</label>
                                                 <input maxLength="200" type="text" required="required"
+                                                       id="trainer"
+                                                       value={this.state.trainer}
+                                                       onChange={this.handleInputChange}
+                                                       disabled={ (this.state.cpd_type_id === '4') ? "" : "disabled" }
                                                        className="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required ng-valid-maxlength"
-                                                       placeholder="Trainer" disabled="disabled"
+                                                       placeholder="Trainer"
                                                        aria-invalid="true" />
                                             </div>
 
                                             <div className="form-group required">
                                                 <label htmlFor="location" className="control-label">Location</label>
-                                                <select name="location"
+                                                <select
+                                                        name="location_id"
+                                                        id="location_id"
+                                                        value={this.state.location_id}
+                                                        onChange={this.handleInputChange}
+                                                        disabled={ (this.state.cpd_type_id === '4') ? "" : "disabled" }
                                                         className="form-control ng-pristine ng-untouched ng-valid ng-not-empty"
-                                                        disabled="disabled" aria-invalid="false" >
-                                                    <option label="Antrim" value="number:2">Antrim</option>
-                                                    <option label="Armagh" value="number:14">Armagh</option>
-                                                    <option label="Belfast" value="number:39">Belfast</option>
-                                                    <option label="Wexford" value="number:18">Wexford</option>
-                                                    <option label="Wicklow" value="number:19">Wicklow</option>
+                                                        aria-invalid="false" >
+                                                    <option value="" defaultValue> </option>
+                                                    {this.state.locations.map((item, key) =>
+                                                        <option key={key} value={item.ID} >{item.Name}</option>
+                                                    )}
                                                 </select>
                                             </div>
 
                                             <div className="form-group required">
-                                                <input type="checkbox" name="declare" id="declare"
+                                                <input type="checkbox" name="is_declared" id="is_declared"
+                                                       onClick={this.handleInputChange}
+                                                       checked={this.state.is_declared}
+                                                       value={this.state.is_declared}
                                                        className="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false" />
-                                                <label htmlFor="declare">I declare this CPD is relevant to my role and in accordance
-                                                    with the ATI CPD </label>
-                                                <label htmlFor="declare">Guidelines and Rules.</label>
+                                                <label htmlFor="is_declared">
+                                                    I declare this CPD is relevant to my role and in accordance with the ATI CPD Guidelines and Rules.
+                                                </label>
                                             </div>
 
                                             <div style={{ marginBottom: '20px'}}>
                                                 <button className="btn btn-default" name="previous" onClick={this.handlePrevStep} type="button"><i className="fa fa-arrow-left"> </i> Previous step
                                                 </button>
-                                                <button className="btn btn-primary pull-right" type="submit" onClick={this.handleSaveRecord}> Save <i className="fa fa-arrow-right"> </i></button>
+                                                <button className="btn btn-primary pull-right" type="button"
+                                                        disabled={ (this.state.is_declared === true) ? "" : "disabled"}
+                                                        value={this.state.is_declared}
+                                                        onClick={this.handleSaveRecord} > Save <i className="fa fa-arrow-right"> </i></button>
                                             </div>
                                         </div>
                                     </div>

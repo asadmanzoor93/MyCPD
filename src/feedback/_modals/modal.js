@@ -71,7 +71,6 @@ class FeedbackModal extends React.Component {
         e.preventDefault();
 
         if(this.handleValidation()){
-            // Hours Data
             axios.post(Feedback_URL,
                 {
                     Name: this.state.fields['Name'],
