@@ -26,7 +26,7 @@ class App extends React.Component {
           submitted: false,
           feedBackModalShown: false,
           aboutUsModalShown: false,
-          logout: false
+          logout: false,
       };
 
       this.makeSignOutRequest = this.makeSignOutRequest.bind(this);
@@ -53,15 +53,17 @@ class App extends React.Component {
   };
 
   render () {
-    let feedBackModalShownClose = () => this.setState({ feedBackModalShown: false })
-    let aboutUsModalShownClose = () => this.setState({ aboutUsModalShown: false })
+    let feedBackModalShownClose = () => this.setState({ feedBackModalShown: false });
+    let aboutUsModalShownClose = () => this.setState({ aboutUsModalShown: false });
     if (this.state.logout) {
       return <Redirect to="/" />;
     }
 
     return (
         <div>
-          <header css="headerdashboard" text="Home Page" homeicon="NO" quicknav="NO" usermodel="usermodel" contactus="" aboutus="" className="ng-scope ng-isolate-scope">
+          <header css="headerdashboard" text="Home Page"
+                  style={{display: (this.props.location.pathname === '/login' || this.props.location.pathname === '/') ? 'none' : 'block'}}
+                  className="ng-scope ng-isolate-scope">
             <div className="row shadow">
               <nav className="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div className="container-fluid">
@@ -78,10 +80,10 @@ class App extends React.Component {
                   </div>
                   <div id="bs-example-navbar-collapse-1" className="collapse navbar-collapse animated fadeIn">
                     <ul className="nav navbar-nav animated fadeIn text16">
-                      <li>
+                      <li style={{display: this.props.location.pathname === '/home' ? 'none' : 'block' }}>
                         <Link to={'/home'}><i className="fa fa-home"> </i> Home </Link>
                       </li>
-                      <li className="active">
+                      <li className="active" style={{display: this.props.location.pathname === '/home' ? 'none' : 'block' }}>
                         <a href="#" onClick={e => { e.preventDefault(); this.setState({quickNavShown: !this.state.quickNavShown }) }} >
                           <i className={this.state.quickNavShown ? "fa fa-toggle-on" : "fa fa-toggle-off"}> </i> Quick Navigation
                         </a>
@@ -103,12 +105,30 @@ class App extends React.Component {
                       <li><a href="#" onClick={()=> this.makeSignOutRequest()}><i className="fa fa-sign-out"></i> Sign Out</a></li>
                     </ul>
                   </div>
-                  <h4 className="headerdashboard">Home Page</h4>
+
+                  <h4 className= { this.props.location.pathname === '/home' ? "headerdashboard" : "headerpages nav-page-headers" } >
+                    {(() => {
+                      switch (this.props.location.pathname) {
+                        case "/home" :   return "Home Page";
+                        case "/dashboard": return "My CPD DashBoard";
+                        case "/mycpd":  return "Record MyCPD";
+                        case "/cpdgo":  return "CPD GO";
+                        case "/cpdclassroom":  return "Face to Face CPD";
+                        case "/cpdaccredt":  return "Approved CPD Providers";
+                        case "/library":  return "Library";
+                        default:      return "Home Page";
+                      }
+                    })()}
+                  </h4>
+
+
                 </div>
               </nav>
             </div>
           </header>
-          <nav className={this.state.quickNavShown ? "side-navigation active" : "side-navigation"}>
+          <nav className={this.state.quickNavShown ? "side-navigation active" : "side-navigation"}
+               style={{display: (this.props.location.pathname === '/login' || this.props.location.pathname === '/') ? 'none' : 'block'}}
+          >
             <ul className="c-footer-list">
               <li>
                 <Link to={'\/home'} className="nav-link">Home</Link>
@@ -136,7 +156,7 @@ class App extends React.Component {
               </li>
             </ul>
           </nav>
-          <div className="container main-content">
+          <div className={(this.props.location.pathname === '/login' || this.props.location.pathname === '/') ? "container" : "container main-content"}>
             <Switch>
               <Route exact path="\/" component={withRouter(Login)} />
               <Route exact path="/login" component={withRouter(Login)}  />

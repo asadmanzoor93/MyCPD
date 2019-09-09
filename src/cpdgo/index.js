@@ -63,12 +63,12 @@ class CPDGO extends React.Component {
                         </p>
                     </div>
 
-
                     <form action="#" method="post" target="_blank" className="ng-pristine ng-valid">
-
                         <div className="container container-table">
                             <div className="row vertical-center-row">
                                 <div className="col-md-8 col-md-offset-2">
+                                    <br />
+                                    <br />
                                     <div className="input-group">
                                         <input type="submit" style={{width: '100%'}} className="btn btn-warning btn-lg"
                                                value="Online Accounting CPD and Bites (Provided by accountingcpd.net)"

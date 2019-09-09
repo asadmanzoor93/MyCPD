@@ -194,7 +194,6 @@ class Dashboard extends React.Component {
 		return (
 			<div>
 				<div>
-					<h2 className="page-header">Dashboard</h2>
 					<div className="row" style={{ marginBottom: '3rem' }}>
 						<div className="col-md-4">
 							<div className="dashboard_box">

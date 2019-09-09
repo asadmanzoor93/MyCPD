@@ -1461,3 +1461,9 @@ html.md-default-theme, html, body.md-default-theme, body {
 .alert-success {
     background: #53d669;
 }
+
+.nav-page-headers {
+    padding-top:15px;
+    padding-left:15px;
+    padding-bottom:10px;
+}

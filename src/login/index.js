@@ -77,7 +77,7 @@ class App extends React.Component {
             </div>
             <div className="container ng-scope">
                 <div id="loginbox" style={{marginTop: '50px'}}
-                     className="mainbox col-md-6 col-sm-8 col-sm-offset-2">
+                     className="mainbox col-md-6 col-sm-8">
                     <div className="panel panel-info">
                         <div className="panel-heading">
                             <div className="panel-title">Sign In</div>
