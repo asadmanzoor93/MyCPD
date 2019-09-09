@@ -2,7 +2,8 @@ import React from "react";
 import KnowledgeInfoModal from "./_modals/knowledgeInfo";
 import axios from "axios";
 import AccountingInfoModal from "./_modals/accountingInfo";
-import ATICodeModal from "./_modals/atiCodeInfo";
+import ATICodeInfoModal from "./_modals/atiCodeInfo";
+import ATICodeProfessionalEthicsModal from "./_modals/atiCodeProfessionalEthics";
 
 const Member_Info_URL = 'http://34.248.242.178/CPDCompliance/api/account/GetMember?memID=';
 const Accounting_Login_URL = 'http://34.248.242.178/CPDCompliance/api/CPDgo/CPDGOLog?action=accountingcpd&isBrowser=true';
@@ -18,7 +19,8 @@ class CPDGO extends React.Component {
         this.state = {
             knowledgeInfoModalShown: false,
             accountingInfoModalShown: false,
-            atiCodeModalShown: false,
+            atiCodeInfoModalShown: false,
+            atiCodeProfessionalEthicsModalShown: false,
             member_info: []
         };
     }
@@ -83,7 +85,8 @@ class CPDGO extends React.Component {
     render () {
         let knowledgeInfoModalClose = () => this.setState({ knowledgeInfoModalShown: false });
         let accountingInfoModalClose = () => this.setState({ accountingInfoModalShown: false });
-        let atiCodeModalClose = () => this.setState({ atiCodeModalShown: false });
+        let atiCodeInfoModalClose = () => this.setState({ atiCodeInfoModalShown: false });
+        let atiCodeProfessionalEthicsModalClose = () => this.setState({ atiCodeProfessionalEthicsModalShown: false });
         return (
             <div>
                 <div className="panel panel-primary">
@@ -132,8 +135,8 @@ class CPDGO extends React.Component {
                                     <div className="marginfix"> </div>
                                     <div className="marginfix"> </div>
                                     <div className="input-group">
-                                        <a className="btn btn-primary btn-lg" style={{width: '100%'}} role="button">ATI Code of Professional Ethics – 1 hour course</a>
-                                        <a onClick={() => this.setState({ atiCodeModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
+                                        <a onClick={() => this.setState({ atiCodeProfessionalEthicsModalShown: true })} className="btn btn-primary btn-lg" style={{width: '100%'}} role="button">ATI Code of Professional Ethics – 1 hour course</a>
+                                        <a onClick={() => this.setState({ atiCodeInfoModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
                                             <i className="fa fa fa-info" title="Help"> </i>
                                         </a>
                                     </div>
@@ -158,7 +161,8 @@ class CPDGO extends React.Component {
                 </div>
                 <KnowledgeInfoModal show={this.state.knowledgeInfoModalShown} onHide={knowledgeInfoModalClose} />
                 <AccountingInfoModal show={this.state.accountingInfoModalShown} onHide={accountingInfoModalClose} />
-                <ATICodeModal show={this.state.atiCodeModalShown} onHide={atiCodeModalClose} />
+                <ATICodeInfoModal show={this.state.atiCodeInfoModalShown} onHide={atiCodeInfoModalClose} />
+                <ATICodeProfessionalEthicsModal show={this.state.atiCodeProfessionalEthicsModalShown} onHide={atiCodeProfessionalEthicsModalClose} />
             </div>
         );
     }

@@ -1,7 +1,7 @@
 import React from "react";
 import {Modal, Button} from 'react-bootstrap';
 
-class ATICodeModal extends React.Component {
+class ATICodeInfoModal extends React.Component {
     render () {
         return (
             <Modal
@@ -30,4 +30,4 @@ class ATICodeModal extends React.Component {
     }
 }
 
-export default ATICodeModal;
+export default ATICodeInfoModal;
