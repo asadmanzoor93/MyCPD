@@ -5,16 +5,26 @@ import AccountingInfoModal from "./_modals/accountingInfo";
 import ATICodeModal from "./_modals/atiCodeInfo";
 
 const Member_Info_URL = 'http://34.248.242.178/CPDCompliance/api/account/GetMember?memID=';
+const Accounting_Login_URL = 'http://34.248.242.178/CPDCompliance/api/CPDgo/CPDGOLog?action=accountingcpd&isBrowser=true';
+const Knowledge_Login_URL = 'http://34.248.242.178/CPDCompliance/api/CPDgo/CPDGOLog?action=KnowledgePoint&isBrowser=true';
 
 class CPDGO extends React.Component {
     constructor() {
         super();
+        this.fetchMemberInfo = this.fetchMemberInfo.bind(this);
+        this.accountingLogin = this.accountingLogin.bind(this);
+        this.knowledgeLogin = this.knowledgeLogin.bind(this);
+
         this.state = {
             knowledgeInfoModalShown: false,
             accountingInfoModalShown: false,
             atiCodeModalShown: false,
             member_info: []
         };
+    }
+
+    componentDidMount() {
+        this.fetchMemberInfo();
     }
 
     fetchMemberInfo () {
@@ -35,6 +45,38 @@ class CPDGO extends React.Component {
                         member_info: data,
                     });
                 }
+            }).catch(console.log);
+    }
+
+    accountingLogin () {
+        axios.get(Accounting_Login_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+            }).catch(console.log);
+    }
+
+    knowledgeLogin () {
+        axios.get(Knowledge_Login_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
             }).catch(console.log);
     }
 
@@ -70,16 +112,19 @@ class CPDGO extends React.Component {
                                     <br />
                                     <br />
                                     <div className="input-group">
-                                        <input type="submit" style={{width: '100%'}} className="btn btn-warning btn-lg"
-                                               value="Online Accounting CPD and Bites (Provided by accountingcpd.net)"
-                                               form="onlineAccountingform" />
+                                        <a href="https://acpd.alpha.imago3.com/Welcome_ATI_Members"
+                                           onClick={this.accountingLogin} className="btn btn-warning btn-lg"
+                                           style={{width: '100%'}} target="_blank">Online Accounting CPD and Bites (Provided by accountingcpd.net)</a>
+
                                         <a onClick={() => this.setState({ accountingInfoModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
                                             <i className="fa fa fa-info" title="Help" tooltip=""> </i>
                                         </a>
                                     </div>
                                     <div className="marginfix"> </div>
                                     <div className="input-group">
-                                        <a href="#" className="btn btn-success btn-lg" style={{width: '100%'}} target="_blank">KnowledgePoint</a>
+                                        <a href="http://34.248.242.178/ATI_Portal_Test/Index.aspx"
+                                           onClick={this.knowledgeLogin} className="btn btn-success btn-lg"
+                                           style={{width: '100%'}} target="_blank">KnowledgePoint</a>
                                         <a onClick={() => this.setState({ knowledgeInfoModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
                                             <i className="fa fa fa-info" title="Help"> </i>
                                         </a>
