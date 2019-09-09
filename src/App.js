@@ -143,7 +143,7 @@ class App extends React.Component {
               <Route exact path="/home" component={withRouter(Home)} />
               <Route exact path="/dashboard" component={withRouter(Dashboard)} />
               <Route exact path="/cpdgo" component={withRouter(CPDGO)} />
-              <Route exact path="/mycpd" component={withRouter(RecordCPD)} />
+              <Route exact path="/mycpd/:mode?/:wfid?" component={withRouter(RecordCPD)} />
               <Route exact path="/cpdclassroom" component={withRouter(FaceToFace)} />
               <Route exact path="/cpdaccredt" component={withRouter(ApprovedCPDProviders)} />
               <Route exact path="/library" component={withRouter(Library)} />

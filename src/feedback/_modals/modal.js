@@ -31,7 +31,7 @@ class FeedbackModal extends React.Component {
         //MembershipNumber
         if(!fields["MembershipNumber"]){
             formIsValid = false;
-            errors["MembershipNumber"] = "MembershipNumber is required.";
+            errors["MembershipNumber"] = "Membership Number is required.";
         }
 
         //Email

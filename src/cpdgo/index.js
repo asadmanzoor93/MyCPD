@@ -1,22 +1,53 @@
 import React from "react";
 import KnowledgeInfoModal from "./_modals/knowledgeInfo";
+import axios from "axios";
+import AccountingInfoModal from "./_modals/accountingInfo";
+import ATICodeModal from "./_modals/atiCodeInfo";
+
+const Member_Info_URL = 'http://34.248.242.178/CPDCompliance/api/account/GetMember?memID=';
 
 class CPDGO extends React.Component {
     constructor() {
         super();
         this.state = {
-            knowledgeInfoModalShown: false
+            knowledgeInfoModalShown: false,
+            accountingInfoModalShown: false,
+            atiCodeModalShown: false,
+            member_info: []
         };
     }
 
+    fetchMemberInfo () {
+        axios.get(Member_Info_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data){
+                    this.setState({
+                        member_info: data,
+                    });
+                }
+            }).catch(console.log);
+    }
+
     render () {
-        let knowledgeInfoModalClose = () => this.setState({ knowledgeInfoModalShown: false })
+        let knowledgeInfoModalClose = () => this.setState({ knowledgeInfoModalShown: false });
+        let accountingInfoModalClose = () => this.setState({ accountingInfoModalShown: false });
+        let atiCodeModalClose = () => this.setState({ atiCodeModalShown: false });
         return (
             <div>
                 <div className="panel panel-primary">
                     <div className="alert alert-info alert-white rounded">
                         <button type="button" data-dismiss="alert" aria-hidden="true" className="close">×</button>
-                        <div className="icon"><i className="fa fa-info-circle"></i>
+                        <div className="icon"><i className="fa fa-info-circle"> </i>
                         </div>
                         <strong>Info!</strong> Please note it could take up to 24 hours before CPD hours are seen on your record!
                     </div>
@@ -42,26 +73,26 @@ class CPDGO extends React.Component {
                                         <input type="submit" style={{width: '100%'}} className="btn btn-warning btn-lg"
                                                value="Online Accounting CPD and Bites (Provided by accountingcpd.net)"
                                                form="onlineAccountingform" />
-                                        <a className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
-                                            <i className="fa fa fa-info" title="Help" tooltip=""></i>
+                                        <a onClick={() => this.setState({ accountingInfoModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
+                                            <i className="fa fa fa-info" title="Help" tooltip=""> </i>
                                         </a>
                                     </div>
-                                    <div className="marginfix"></div>
+                                    <div className="marginfix"> </div>
                                     <div className="input-group">
                                         <a href="#" className="btn btn-success btn-lg" style={{width: '100%'}} target="_blank">KnowledgePoint</a>
                                         <a onClick={() => this.setState({ knowledgeInfoModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
-                                            <i className="fa fa fa-info" title="Help"></i>
+                                            <i className="fa fa fa-info" title="Help"> </i>
                                         </a>
                                     </div>
-                                    <div className="marginfix"></div>
-                                    <div className="marginfix"></div>
+                                    <div className="marginfix"> </div>
+                                    <div className="marginfix"> </div>
                                     <div className="input-group">
                                         <a className="btn btn-primary btn-lg" style={{width: '100%'}} role="button">ATI Code of Professional Ethics – 1 hour course</a>
-                                        <a className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
-                                            <i className="fa fa fa-info" title="Help"></i>
+                                        <a onClick={() => this.setState({ atiCodeModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
+                                            <i className="fa fa fa-info" title="Help"> </i>
                                         </a>
                                     </div>
-                                    <div className="marginfix"></div>
+                                    <div className="marginfix"> </div>
                                 </div>
                             </div>
 
@@ -81,6 +112,8 @@ class CPDGO extends React.Component {
                     </form>
                 </div>
                 <KnowledgeInfoModal show={this.state.knowledgeInfoModalShown} onHide={knowledgeInfoModalClose} />
+                <AccountingInfoModal show={this.state.accountingInfoModalShown} onHide={accountingInfoModalClose} />
+                <ATICodeModal show={this.state.atiCodeModalShown} onHide={atiCodeModalClose} />
             </div>
         );
     }

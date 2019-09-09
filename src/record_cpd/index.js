@@ -20,6 +20,8 @@ class RecordCPD extends React.Component {
     constructor() {
         super();
         this.state = {
+            mode: null,
+            workFlowId: null,
             currentStep: 1,
             host_list: [],
             member_info: [],
@@ -63,6 +65,13 @@ class RecordCPD extends React.Component {
     };
 
     componentDidMount() {
+        const { match: { params } } = this.props;
+
+        console.log(params.wfid)
+        console.log(params.mode)
+
+
+
         $('.datepicker').datepicker({autoclose: true});
         this.fetchTypes();
         this.fetchMemberInfo();
@@ -335,9 +344,11 @@ class RecordCPD extends React.Component {
             ListItemOne = <li className="current"><a>Submitter Details</a></li>
         }
         if(this.state.currentStep > 2) {
-            ListItemTwo = <li className="default"><a>Confirm CPD Activity Details</a></li>
+            ListItemTwo = <li className="done"><a>Confirm CPD Activity Details</a></li>
+        } else if(this.state.currentStep === 2) {
+            ListItemTwo = <li className="current"><a>Confirm CPD Activity Details</a></li>
         } else {
-            ListItemTwo = <li className="current"><a>Submitter Details</a></li>
+            ListItemTwo = <li className="default"><a>Confirm CPD Activity Details</a></li>
         }
 
 
