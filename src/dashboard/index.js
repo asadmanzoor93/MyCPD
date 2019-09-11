@@ -444,7 +444,7 @@ class Dashboard extends React.Component {
 					<table className='table table-striped table-bordered table-hover table-condensed'>
 						<thead>
 						<tr className="header">
-							<th role="button"> </th>
+							<th> </th>
 							<th role="button" onClick={this.onSort('courseType')}>Course Type <i className={this.setArrow('courseType')}></i></th>
 							<th role="button" onClick={this.onSort('course')}>Course<i className={this.setArrow('course')}></i></th>
 							<th role="button" onClick={this.onSort('completedHours')}>Completed Hours<i className={this.setArrow('completedHours')}></i></th>
@@ -453,7 +453,7 @@ class Dashboard extends React.Component {
 							<th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}></i></th>
 							<th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}></i></th>
 							<th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}></i></th>
-							<th role="button">Actions</th>
+							<th>Actions</th>
 						</tr>
 						</thead>
 						<tbody>
