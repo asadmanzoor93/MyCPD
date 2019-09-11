@@ -5,6 +5,7 @@ import Pagination from "react-js-pagination";
 import $ from "jquery";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
+import ViewModal from "./_modal/view";
 
 
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
@@ -32,13 +33,26 @@ class Dashboard extends React.Component {
 			location_name: '',
 			host_id: '',
 			year: '',
-			start_date: '',
+			date_selected: '',
 			reverse: false,
 			sortBy: 'StartDate',
 			totalPages: 0,
 			totalCount: 0,
 			per_page: 10,
 			activePage: 0,
+		    sort: {
+		      column: null,
+		      direction: 'desc'
+		    },
+			listViewModalShown: false,
+	        listViewDatastartDate:          "",
+	        listViewDatacourseLocation:     "",
+	        listViewDatacourseType:         "",
+	        listViewDatahost:               "",
+	        listViewDatacpdFormat:          "",
+	        listViewDatavenue:              "",
+	        listViewDatatrainer:            "",
+	        listViewDatacourseDescription:  ""
 		}
 	};
 
@@ -115,11 +129,11 @@ class Dashboard extends React.Component {
 	makeHttpRequestWithPage(pageNumber) {
 		axios.get(Listing_URL, {
 			params: {
+				CPDTypeId: this.state.cpd_type_id,
 				CourseName: this.state.course_name,
 				HostId: this.state.host_id,
 				LocationName: this.state.location_name,
-				StartDate: this.state.start_date,
-				Year: this.state.year,
+				Venue: this.state.venue,
 				reverse: this.state.reverse,
 				sortBy: this.state.sortBy,
 				page: pageNumber,
@@ -160,7 +174,7 @@ class Dashboard extends React.Component {
 			location_name: '',
 			host_id: '',
 			year: '',
-			start_date: '',
+			date_selected: '',
 			reverse: false,
 			sortBy: 'StartDate',
 			totalPages: 0,
@@ -168,10 +182,82 @@ class Dashboard extends React.Component {
 			per_page: 10,
 			activePage: 0,
 		});
-		$('.datepicker').datepicker();
 	}
 
+    openModalWithItem(item) {
+       this.setState({
+	        listViewDatastartDate:          item.startDate,
+	        listViewDatacourseLocation:     item.courseLocation,
+	        listViewDatacourseType:         item.courseType,
+	        listViewDatahost:               item.host,
+	        listViewDatacpdFormat:          item.cpdFormat,
+	        listViewDatavenue:              item.venue,
+	        listViewDatatrainer:            item.trainer,
+	        listViewDatacourseDescription:  item.courseDescription,
+			listViewModalShown: true
+       })
+    }
+
+	onSort = (column) => (e) => {
+	    const direction = this.state.sort.column ? (this.state.sort.direction === 'asc' ? 'desc' : 'asc') : 'desc';
+	    this.setState({
+	      sort: {
+	        column,
+	        direction,
+	      }
+	    });
+	};
+
+	setArrow = (column) => {
+		let className = 'fa fa-sort';
+		if (this.state.sort.column === column) {
+			className += this.state.sort.direction === 'asc' ? '-asc' : '-desc';
+		}
+		return className;
+	};
+
 	render () {
+
+	    let dataList = [{
+	        startDate:          "Start Date 1",
+	        courseLocation:     "Course Location 1",
+	        courseType:         "Course Type 1",
+	        host:               "Host 1",
+	        cpdFormat:          "CPD Format 1",
+	        venue:              "Venue 1",
+	        trainer:            "Venue 1",
+	        courseDescription:  "Course Description 1"
+	    },
+	    {
+	        startDate:          "Start Date 2",
+	        courseLocation:     "Course Location 2",
+	        courseType:         "Course Type 2",
+	        host:               "Host 2",
+	        cpdFormat:          "CPD Format 2",
+	        venue:              "Venue 2",
+	        trainer:            "Venue 2",
+	        courseDescription:  "Course Description 2"
+	    },
+	    {
+	        startDate:          "Start Date 3",
+	        courseLocation:     "Course Location 3",
+	        courseType:         "Course Type 3",
+	        host:               "Host 3",
+	        cpdFormat:          "CPD Format 3",
+	        venue:              "Venue 3",
+	        trainer:            "Venue 3",
+	        courseDescription:  "Course Description 3"
+	    }]
+
+		   let buttonList = dataList.map( item => {
+		      return (
+		      <a onClick={() => this.openModalWithItem(item)} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"></i></a>
+
+		    )
+		    });
+
+
+		let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
 
 		let dashboard_records;
 		if (this.state.dashboard_records !== null) {
@@ -297,11 +383,7 @@ class Dashboard extends React.Component {
 										</span>
 										<div className="has-float-label" >
 											<p className="input-group datepicker" style={{ padding: '0' }}>
-												<input type="text" className="form-control" placeholder="Enter Start Date"
-													   value={this.state.start_date}
-													   name="start_date"
-													   onChange={this.handleInputChange}
-													   my-date-picker="" end-date="+3y" aria-invalid="true" />
+												<input type="text" className="form-control" placeholder="Enter Start Date" my-date-picker="" end-date="+3y" aria-invalid="true" />
 												<span className="input-group-addon">
 													<span className="glyphicon glyphicon-calendar"> </span>
 												</span>
@@ -357,21 +439,21 @@ class Dashboard extends React.Component {
 						</button>
 					</div>
 				</div>
-
+    {buttonList}
 				<div className="col">
 					<table className='table table-striped table-bordered table-hover table-condensed'>
 						<thead>
 						<tr className="header">
-							<th className="button"> </th>
-							<th className="button">Course Type <i className="fa fa-fw fa-sort-down"></i></th>
-							<th className="button">Course<i className="fa fa-fw fa-sort-up"></i></th>
-							<th className="button">Completed Hours<i className="fa fa-fw fa-sort"></i></th>
-							<th className="button">Completion Date<i className="fa fa-fw fa-sort"></i></th>
-							<th className="button">Venue<i className="fa fa-fw fa-sort"></i></th>
-							<th className="button">Trainer<i className="fa fa-fw fa-sort"></i></th>
-							<th className="button">Host<i className="fa fa-fw fa-sort"></i></th>
-							<th className="button">Start Date<i className="fa fa-fw fa-sort"></i></th>
-							<th className="button">Actions<i className="fa fa-fw fa-sort"></i></th>
+							<th> </th>
+							<th role="button" onClick={this.onSort('courseType')}>Course Type <i className={this.setArrow('courseType')}></i></th>
+							<th role="button" onClick={this.onSort('course')}>Course<i className={this.setArrow('course')}></i></th>
+							<th role="button" onClick={this.onSort('completedHours')}>Completed Hours<i className={this.setArrow('completedHours')}></i></th>
+							<th role="button" onClick={this.onSort('completionDate')}>Completion Date<i className={this.setArrow('completionDate')}></i></th>
+							<th role="button" onClick={this.onSort('venue')}>Venue<i className={this.setArrow('venue')}></i></th>
+							<th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}></i></th>
+							<th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}></i></th>
+							<th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}></i></th>
+							<th>Actions</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -392,6 +474,9 @@ class Dashboard extends React.Component {
 					</div>
 
 				</div>
+				<ViewModal show={ this.state.listViewModalShown }
+				listViewDatastartDate={ this.state.listViewDatastartDate }
+				onHide={listViewModalShownClose} />
 			</div>
 		);
 	}
