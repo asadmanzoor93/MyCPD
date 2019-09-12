@@ -41,7 +41,7 @@ class Dashboard extends React.Component {
 			per_page: 10,
 			activePage: 0,
 		    sort: {
-		      column: null,
+		      column: 'StartDate',
 		      direction: 'desc'
 		    },
 			listViewModalShown: false,
@@ -134,8 +134,8 @@ class Dashboard extends React.Component {
 				HostId: this.state.host_id,
 				LocationName: this.state.location_name,
 				Venue: this.state.venue,
-				reverse: this.state.reverse,
-				sortBy: this.state.sortBy,
+				reverse: this.state.sort.direction,
+				sortBy: this.state.sort.column,
 				page: pageNumber,
 				pageSize: this.state.per_page,
 			},
@@ -177,6 +177,10 @@ class Dashboard extends React.Component {
 			date_selected: '',
 			reverse: false,
 			sortBy: 'StartDate',
+			sort: {
+				column: 'StartDate',
+				direction: 'desc'
+			},
 			totalPages: 0,
 			totalCount: 0,
 			per_page: 10,
