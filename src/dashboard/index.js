@@ -188,16 +188,24 @@ class Dashboard extends React.Component {
 		});
 	}
 
-    openModalWithItem(item) {
+    openModalWithItem(startDate,courseLocation,courseType,host,cpdFormat,venue,trainer,courseDescription) {
+    	console.log(startDate,'startDate',
+    		courseLocation,"courseLocation",
+    		courseType,"courseType",
+    		host,"host",
+    		cpdFormat,"cpdFormat",
+    	venue,"venue",
+    	trainer,"trainer",
+    	courseDescription,"courseDescription");
        this.setState({
-	        listViewDatastartDate:          item.startDate,
-	        listViewDatacourseLocation:     item.courseLocation,
-	        listViewDatacourseType:         item.courseType,
-	        listViewDatahost:               item.host,
-	        listViewDatacpdFormat:          item.cpdFormat,
-	        listViewDatavenue:              item.venue,
-	        listViewDatatrainer:            item.trainer,
-	        listViewDatacourseDescription:  item.courseDescription,
+	        listViewDatastartDate:          startDate,
+	        listViewDatacourseLocation:     courseLocation,
+	        listViewDatacourseType:         courseType,
+	        listViewDatahost:               host,
+	        listViewDatacpdFormat:          cpdFormat,
+	        listViewDatavenue:              venue,
+	        listViewDatatrainer:            trainer,
+	        listViewDatacourseDescription:  courseDescription,
 			listViewModalShown: true
        })
     }
@@ -221,64 +229,27 @@ class Dashboard extends React.Component {
 	};
 
 	render () {
-
-	    let dataList = [{
-	        startDate:          "Start Date 1",
-	        courseLocation:     "Course Location 1",
-	        courseType:         "Course Type 1",
-	        host:               "Host 1",
-	        cpdFormat:          "CPD Format 1",
-	        venue:              "Venue 1",
-	        trainer:            "Venue 1",
-	        courseDescription:  "Course Description 1"
-	    },
-	    {
-	        startDate:          "Start Date 2",
-	        courseLocation:     "Course Location 2",
-	        courseType:         "Course Type 2",
-	        host:               "Host 2",
-	        cpdFormat:          "CPD Format 2",
-	        venue:              "Venue 2",
-	        trainer:            "Venue 2",
-	        courseDescription:  "Course Description 2"
-	    },
-	    {
-	        startDate:          "Start Date 3",
-	        courseLocation:     "Course Location 3",
-	        courseType:         "Course Type 3",
-	        host:               "Host 3",
-	        cpdFormat:          "CPD Format 3",
-	        venue:              "Venue 3",
-	        trainer:            "Venue 3",
-	        courseDescription:  "Course Description 3"
-	    }]
-
-		   let buttonList = dataList.map( item => {
-		      return (
-		      <a onClick={() => this.openModalWithItem(item)} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"></i></a>
-
-		    )
-		    });
-
-
 		let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
-
 		let dashboard_records;
+
 		if (this.state.dashboard_records !== null) {
-			dashboard_records = this.state.dashboard_records.map((dashboard_record , index) => (
-				<tr key={index}>
-					<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>
-					<td>{dashboard_record.CPDTypeName}</td>
-					<td>{dashboard_record.CourseName}</td>
-					<td>{dashboard_record.Hours}h</td>
-					<td>{dashboard_record.CompletionDate}</td>
-					<td>{dashboard_record.Venue}</td>
-					<td>{dashboard_record.Trainer}</td>
-					<td>{dashboard_record.HostId}</td>
-					<td>{dashboard_record.StartDate}</td>
-					<td> </td>
-				</tr>
-			));
+			dashboard_records = this.state.dashboard_records.map((dashboard_record , index) => {
+					return (
+					<tr key={index}>
+						<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>
+						<td>{dashboard_record.CPDTypeName}</td>
+						<td>{dashboard_record.CourseName}</td>
+						<td>{dashboard_record.Hours}h</td>
+						<td>{dashboard_record.CompletionDate}</td>
+						<td>{dashboard_record.Venue}</td>
+						<td>{dashboard_record.Trainer}</td>
+						<td>{dashboard_record.HostId}</td>
+						<td>{dashboard_record.StartDate}</td>
+						<td><a onClick={() => {this.openModalWithItem(dashboard_record.StartDate,dashboard_record.CourseLocation,dashboard_record.CourseType,dashboard_record.Host,dashboard_record.CPDFormat,dashboard_record.Venue,dashboard_record.Trainer,dashboard_record.CourseDescription)}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"></i></a></td>
+					</tr>
+				)
+			}
+			);
 		}
 
 		return (
@@ -443,7 +414,6 @@ class Dashboard extends React.Component {
 						</button>
 					</div>
 				</div>
-    {buttonList}
 				<div className="col">
 					<table className='table table-striped table-bordered table-hover table-condensed'>
 						<thead>
@@ -479,7 +449,10 @@ class Dashboard extends React.Component {
 
 				</div>
 				<ViewModal show={ this.state.listViewModalShown }
-				listViewDatastartDate={ this.state.listViewDatastartDate }
+
+	        data={this.state}
+
+
 				onHide={listViewModalShownClose} />
 			</div>
 		);

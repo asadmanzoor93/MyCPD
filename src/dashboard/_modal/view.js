@@ -4,13 +4,12 @@ import {Modal, Button} from 'react-bootstrap';
 class ViewModal extends React.Component {
     constructor(props) {
       super(props);
-      console.log(this.props);
       this.state = {
-        startDate:          this.props.listViewDatastartDate,
+        startDate:          this.props.listViewDatastartDate || "startDate",
         courseLocation:     this.props.listViewDatacourseLocation || "Course Location",
         courseType:         this.props.listViewDatacourseType || "Course Type",
         host:               this.props.listViewDatahost || "Host",
-        cpdFormat:          this.props.listViewDatacpdCPDFormat || "CPD Format",
+        cpdFormat:          this.props.listviewdatacpdcpdformat || "CPD Format",
         venue:              this.props.listViewDatavenue || "Venue",
         trainer:            this.props.listViewDatatrainer || "Venue",
         courseDescription:  this.props.listViewDatacourseDescription || "Course Description",
