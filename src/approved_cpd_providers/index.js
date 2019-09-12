@@ -3,6 +3,9 @@ import "react-table/react-table.css";
 import axios from "axios";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
+import { TextField, DatePicker } from 'react-md';
+import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
+// import "../../node_modules/react-md/dist/react-md.green-cyan.min.css";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
@@ -147,7 +150,48 @@ class ApprovedCPDProviders extends React.Component {
                     <div className="shadow">
                         <div className="layout-gt-sm-row">
                             <div style={{padding: '1rem'}}>
+
+
+
+
+
+<div className="md-grid">
+<TextField
+      id="floating-center-title"
+      label="Course Name"
+      lineDirection="center"
+      placeholder="Course Name"
+      className="md-cell md-cell--6 md-cell--bottom"
+    />
+<TextField
+      id="floating-center-title"
+      label="Host"
+      lineDirection="center"
+      placeholder="Host"
+      className="md-cell md-cell--6 md-cell--bottom"
+    />
+</div>
+
+<div className="md-grid">
+<TextField
+      id="floating-center-title"
+      label="Location Name"
+      lineDirection="center"
+      placeholder="Location Name"
+      className="md-cell md-cell--6 md-cell--bottom"
+    />
+
+<DatePicker
+    id="appointment-date-auto"
+    label="Select an appointment date"
+    className="md-cell md-cell--6 md-cell--bottom"
+/>
+
+</div>
+
                                 <div className="form-group input-group" style={{width: '100%'}}>
+
+
                                     <span className="has-float-label" style={{width: '50%'}}>
                                         <input className="form-control ng-pristine ng-valid ng-empty ng-touched"
                                                id="courseName"

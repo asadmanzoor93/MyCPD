@@ -2,6 +2,7 @@ import React from "react";
 import axios from 'axios';
 import "react-table/react-table.css";
 import Pagination from "react-js-pagination";
+import { CSVLink, CSVDownload } from "react-csv";
 import $ from "jquery";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
@@ -232,6 +233,13 @@ class Dashboard extends React.Component {
 		let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
 		let dashboard_records;
 
+		const csvData = [
+			["firstname", "lastname", "email"],
+			["Ahmed", "Tomi", "ah@smthing.co.com"],
+			["Raed", "Labes", "rl@smthing.co.com"],
+			["Yezzi", "Min l3b", "ymin@cocococo.com"]
+		];
+
 		if (this.state.dashboard_records !== null) {
 			dashboard_records = this.state.dashboard_records.map((dashboard_record , index) => {
 					return (
@@ -358,7 +366,7 @@ class Dashboard extends React.Component {
 										</span>
 										<div className="has-float-label" >
 											<p className="input-group datepicker" style={{ padding: '0' }}>
-												<input type="text" className="form-control" placeholder="Enter Start Date" my-date-picker="" end-date="+3y" aria-invalid="true" />
+												<input type="text" id="startdate" className="form-control" placeholder="Enter Start Date" my-date-picker="" end-date="+3y" aria-invalid="true" />
 												<span className="input-group-addon">
 													<span className="glyphicon glyphicon-calendar"> </span>
 												</span>
@@ -404,9 +412,9 @@ class Dashboard extends React.Component {
 								className="btn btn-danger btn-circle btn-lg ">
 							<i className="fa fa-print"> </i>
 						</button>
-						<button type="button" className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px'}}>
+						<CSVLink data={csvData} className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px',lineHeight: '28px'}}>
 							<i className="fa fa-file-excel-o"> </i>
-						</button>
+						</CSVLink>
 						<button type="button"
 								style={{marginLeft: '10px'}}
 								className="btn btn-primary btn-circle btn-lg ng-scope" tooltip=""
