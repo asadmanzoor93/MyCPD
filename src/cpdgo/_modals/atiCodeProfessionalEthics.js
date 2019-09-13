@@ -1,9 +1,9 @@
 import React from "react";
 import {Modal, Button} from 'react-bootstrap';
-import VideoPlayer from 'react-video-markers';
-
+import { findDOMNode } from 'react-dom'
+import screenfull from 'screenfull'
 import ReactPlayer from 'react-player'
-
+import axios from "axios";
 
 class ATICodeProfessionalEthicsModal extends React.Component {
     constructor() {
@@ -11,63 +11,138 @@ class ATICodeProfessionalEthicsModal extends React.Component {
 
         this.handlePlay = this.handlePlay.bind(this);
         this.handlePause = this.handlePause.bind(this);
-        this.handleVolume = this.handleVolume.bind(this);
         this.handleDuration = this.handleDuration.bind(this);
         this.handleEnablePIP = this.handleEnablePIP.bind(this);
         this.handleDisablePIP = this.handleDisablePIP.bind(this);
         this.handleProgress = this.handleProgress.bind(this);
         this.handleEnded = this.handleEnded.bind(this);
+        this.ref = this.ref.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.fetchPausedTime = this.fetchPausedTime.bind(this);
 
         this.state = {
-            isPlaying: false,
-            time: 0,
-            volume: 0.7,
-            url: null,
+            url: 'http://34.248.242.178/CPDCompliance/MyCPDMultimedia/CodeofProfessionalEthics2019.mp4',
             pip: false,
             playing: true,
             controls: true,
             light: false,
+            volume: 0.8,
             muted: false,
             played: 0,
             loaded: 0,
             duration: 0,
             playbackRate: 1.0,
-            loop: false
+            loop: false,
         };
     }
 
-    handlePlay () {
-        this.setState({isPlaying: true});
-    };
+    componentDidMount() {
+        this.fetchPausedTime();
+    }
 
-    handlePause(event){
-        console.log(event);
-        console.log(event.timeStamp);
-        console.log(event.timeStamp/3600);
-        this.setState({isPlaying: false});
-    };
+    fetchPausedTime(){
+        axios.get('http://34.248.242.178/CPDCompliance/api/CPDgo/GetPauseVideoTime', {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                this.setState({
+                    played: data.PauseTime
+                })
+            }).catch(console.log);
+    }
 
-    handleVolume(value){
-        this.setState({volume: value});
-    };
+    load( url ) {
+        console.log('loaded');
+        this.setState({
+            url,
+            played: 0,
+            loaded: 0,
+            pip: false
+        })
+    }
 
-    handleDuration(duration){
-        console.log('onDuration', duration)
-    };
+    handlePlayPause(){
+        this.setState({ playing: !this.state.playing })
+    }
 
-    handleEnablePIP () {
-        console.log('onEnablePIP')
+    handleStop(){
+        this.setState({ url: 'http://34.248.242.178/CPDCompliance/MyCPDMultimedia/CodeofProfessionalEthics2019.mp4', playing: false })
+    }
+
+    handleToggleControls(){
+        const url = this.state.url;
+        this.setState({
+            controls: !this.state.controls,
+            url: 'http://34.248.242.178/CPDCompliance/MyCPDMultimedia/CodeofProfessionalEthics2019.mp4'
+        }, () => this.load(url))
+    }
+
+    handleToggleLight(){
+        this.setState({ light: !this.state.light })
+    }
+
+    handleToggleLoop(){
+        this.setState({ loop: !this.state.loop })
+    }
+
+    handleVolumeChange(e){
+        this.setState({ volume: parseFloat(e.target.value) })
+    }
+
+    handleToggleMuted(){
+        this.setState({ muted: !this.state.muted })
+    }
+
+    handleSetPlaybackRate(e){
+        this.setState({ playbackRate: parseFloat(e.target.value) })
+    }
+
+    handleTogglePIP(){
+        this.setState({ pip: !this.state.pip })
+    }
+
+    handlePlay(){
+        console.log('onPlay');
+        this.setState({ playing: true })
+    }
+
+    handleEnablePIP(){
+        console.log('onEnablePIP');
         this.setState({ pip: true })
     }
 
-    handleDisablePIP() {
-        console.log('onDisablePIP')
+    handleDisablePIP(){
+        console.log('onDisablePIP');
         this.setState({ pip: false })
     }
 
-    handleProgress(state) {
-        console.log('onProgress', state.playedSeconds)
+    handlePause(){
+        console.log('onPause');
+        this.setState({ playing: false });
+    }
 
+    handleSeekMouseDown(e){
+        this.setState({ seeking: true })
+    }
+
+    handleSeekChange(e){
+        this.setState({ played: parseFloat(e.target.value) })
+    }
+
+    handleSeekMouseUp(e){
+        this.setState({ seeking: false })
+    }
+
+    handleProgress (state) {
+        console.log('onProgress', state);
         // We only want to update time slider if we are not currently seeking
         if (!this.state.seeking) {
             this.setState(state)
@@ -75,14 +150,48 @@ class ATICodeProfessionalEthicsModal extends React.Component {
     }
 
     handleEnded(){
-        console.log('onEnded')
+        console.log('onEnded');
         this.setState({ playing: this.state.loop })
     }
 
+    handleDuration (duration) {
+        console.log('onDuration', duration);
+        this.setState({ duration })
+    }
+
+    handleClickFullscreen(){
+        screenfull.request(findDOMNode(this.player))
+    }
+
+    handleClose(){
+        console.log('Video is closed');
+        axios.get('http://34.248.242.178/CPDCompliance/api/CPDgo/SavePauseVideoTime', {
+            params: {
+                pauseTime: this.state.duration * this.state.played,
+            },
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+            }).catch(console.log);
+    }
+
+    ref(player) {
+        this.player = player
+        if(player){
+            this.player.seekTo(this.state.played,'seconds')
+        }
+    }
 
     render () {
-
-        const { isPlaying, url, playing, controls, light, volume, muted, loop, played, loaded, duration, playbackRate, pip } = this.state;
+        const { url, playing, controls, light, volume, muted, loop, played, loaded, duration, playbackRate, pip } = this.state;
 
         return (
             <Modal
@@ -109,11 +218,16 @@ class ATICodeProfessionalEthicsModal extends React.Component {
                           className='react-player'
                           width='100%'
                           height='100%'
-                          url="http://34.248.242.178/CPDCompliance/MyCPDMultimedia/CodeofProfessionalEthics2019.mp4"
-                          pip={true}
-                          playing={isPlaying}
+                          url={url}
+                          pip={pip}
+                          playing={playing}
+                          played={played}
                           controls={controls}
+                          light={light}
+                          loop={loop}
+                          playbackRate={playbackRate}
                           volume={volume}
+                          muted={muted}
                           onReady={() => console.log('onReady')}
                           onStart={() => console.log('onStart')}
                           onPlay={this.handlePlay}
@@ -127,13 +241,11 @@ class ATICodeProfessionalEthicsModal extends React.Component {
                           onProgress={this.handleProgress}
                           onDuration={this.handleDuration}
                       />
-
                   </div>
-
 
               </Modal.Body>
               <Modal.Footer>
-                <Button className="btn btn-warning" onClick={this.props.onHide}>Close</Button>
+                <Button className="btn btn-warning" onClick={()=>{ this.handleClose(); this.props.onHide() }}>Close</Button>
               </Modal.Footer>
             </Modal>
         );

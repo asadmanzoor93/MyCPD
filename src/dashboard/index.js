@@ -1,5 +1,6 @@
 import React from "react";
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 import "react-table/react-table.css";
 import Pagination from "react-js-pagination";
 import { CSVLink, CSVDownload } from "react-csv";
@@ -45,6 +46,7 @@ class Dashboard extends React.Component {
 		      column: 'StartDate',
 		      direction: 'desc'
 		    },
+			unauthorized: false,
 			listViewModalShown: false,
 	        listViewDatastartDate:          "",
 	        listViewDatacourseLocation:     "",
@@ -76,7 +78,6 @@ class Dashboard extends React.Component {
 
 	componentDidMount() {
 		this.makeHttpRequestWithPage(1);
-
 
         $('.datepicker').datepicker();
 
@@ -128,6 +129,7 @@ class Dashboard extends React.Component {
 	}
 
 	makeHttpRequestWithPage(pageNumber) {
+		let self = this;
 		axios.get(Listing_URL, {
 			params: {
 				CPDTypeId: this.state.cpd_type_id,
@@ -158,7 +160,13 @@ class Dashboard extends React.Component {
 					totalCount: data.TotalCount,
 				});
 
-			}).catch(console.log);
+			}).catch(function (error) {
+				if (error.response.status === 401) {
+					self.setState({
+						unauthorized: true,
+					});
+				}
+			});
 	};
 
 	handlePaginationFilter(event){
@@ -186,6 +194,7 @@ class Dashboard extends React.Component {
 			totalCount: 0,
 			per_page: 10,
 			activePage: 0,
+			unauthorized: false,
 		});
 	}
 
@@ -230,6 +239,10 @@ class Dashboard extends React.Component {
 	};
 
 	render () {
+		if (this.state.unauthorized) {
+			return <Redirect to='/'/>;
+		}
+
 		let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
 		let dashboard_records;
 

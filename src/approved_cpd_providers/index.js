@@ -1,11 +1,11 @@
 import React from "react";
 import "react-table/react-table.css";
+import { Redirect } from 'react-router-dom';
 import axios from "axios";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
 import { TextField, DatePicker } from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
-// import "../../node_modules/react-md/dist/react-md.green-cyan.min.css";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
@@ -18,7 +18,7 @@ class ApprovedCPDProviders extends React.Component {
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.clearSearchFilters = this.clearSearchFilters.bind(this);
-        this.onSort = this.onSort.bind(this)
+        this.onSort = this.onSort.bind(this);
 
         this.state = {
             course_name: '',
@@ -31,7 +31,8 @@ class ApprovedCPDProviders extends React.Component {
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
-            activePage: 0
+            activePage: 0,
+            unauthorized: false
         }
     };
 
@@ -58,7 +59,7 @@ class ApprovedCPDProviders extends React.Component {
     }
     
     makeHttpRequestWithPage(pageNumber) {
-
+        let self = this;
         axios.get(Approved_CPD_URL, {
             params: {
                 CourseName: this.state.course_name,
@@ -88,7 +89,13 @@ class ApprovedCPDProviders extends React.Component {
                     totalCount: data.TotalCount,
                 });
 
-            }).catch(console.log);
+            }).catch(function (error) {
+                if (error.response.status === 401) {
+                    self.setState({
+                        unauthorized: true,
+                    });
+                }
+            });
     };
 
     handlePaginationFilter(event){
@@ -117,11 +124,14 @@ class ApprovedCPDProviders extends React.Component {
 
     onSort(event, sortKey){
         const data = this.state.sortBy;
-        data.sort((a,b) => a[sortKey].localeCompare(b[sortKey]))
+        data.sort((a,b) => a[sortKey].localeCompare(b[sortKey]));
         this.setState({data})
     }
 
     render () {
+        if (this.state.unauthorized) {
+            return <Redirect to='/'/>;
+        }
 
         let approved_cpd_records;
         if (this.state.approved_cpd_records !== null) {

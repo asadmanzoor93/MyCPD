@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from 'react-router-dom';
 import KnowledgeInfoModal from "./_modals/knowledgeInfo";
 import axios from "axios";
 import AccountingInfoModal from "./_modals/accountingInfo";
@@ -23,6 +24,7 @@ class CPDGO extends React.Component {
             accountingInfoModalShown: false,
             atiCodeInfoModalShown: false,
             atiCodeProfessionalEthicsModalShown: false,
+            unauthorized: false,
             member_info: []
         };
     }
@@ -32,6 +34,7 @@ class CPDGO extends React.Component {
     }
 
     fetchMemberInfo () {
+        let self = this;
         axios.get(Member_Info_URL, {
             method: 'GET',
             withCredentials: true,
@@ -49,7 +52,13 @@ class CPDGO extends React.Component {
                         member_info: data,
                     });
                 }
-            }).catch(console.log);
+            }).catch(function (error) {
+                if (error.response.status === 401) {
+                    self.setState({
+                        unauthorized: true,
+                    });
+                }
+            });
     }
 
     accountingLogin () {
@@ -88,7 +97,6 @@ class CPDGO extends React.Component {
         this.setState({
             atiCodeProfessionalEthicsModalShown: true
         });
-
         axios.get(Ethics_Login_URL, {
             method: 'GET',
             withCredentials: true,
@@ -105,6 +113,10 @@ class CPDGO extends React.Component {
     }
 
     render () {
+        if (this.state.unauthorized) {
+            return <Redirect to='/'/>;
+        }
+
         let knowledgeInfoModalClose = () => this.setState({ knowledgeInfoModalShown: false });
         let accountingInfoModalClose = () => this.setState({ accountingInfoModalShown: false });
         let atiCodeInfoModalClose = () => this.setState({ atiCodeInfoModalShown: false });
@@ -165,7 +177,6 @@ class CPDGO extends React.Component {
                                     <div className="marginfix"> </div>
                                 </div>
                             </div>
-
 
                             <input type="hidden" name="M" value="AR" autoComplete="off" />
                             <input type="hidden" name="GrpID" value="G20051010163243-949240147" autoComplete="off" />

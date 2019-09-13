@@ -1,5 +1,6 @@
 import React from "react";
 import "react-table/react-table.css";
+import { Redirect } from 'react-router-dom';
 import $ from "jquery";
 import axios from "axios";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
@@ -48,6 +49,7 @@ class RecordCPD extends React.Component {
             trainer: null,
             location_id: null,
             is_declared: false,
+            unauthorized: false,
         };
 
         this.handlePrevStep = this.handlePrevStep.bind(this);
@@ -101,6 +103,7 @@ class RecordCPD extends React.Component {
     }
 
     fetchMemberInfo () {
+        let self = this;
         axios.get(Member_Info_URL, {
             method: 'GET',
             withCredentials: true,
@@ -119,7 +122,13 @@ class RecordCPD extends React.Component {
                         MemberId: data.MemberId
                     });
                 }
-            }).catch(console.log);
+            }).catch(function (error) {
+                if (error.response.status === 401) {
+                    self.setState({
+                        unauthorized: true,
+                    });
+                }
+            });
     }
 
     fetchFormats () {
@@ -335,6 +344,10 @@ class RecordCPD extends React.Component {
     }
 
     render () {
+        if (this.state.unauthorized) {
+            return <Redirect to='/'/>;
+        }
+        
         let ListItemOne,
             ListItemTwo;
 

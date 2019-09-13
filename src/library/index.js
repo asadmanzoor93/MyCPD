@@ -1,5 +1,6 @@
 import React from "react";
 import "react-table/react-table.css";
+import { Redirect } from 'react-router-dom';
 import axios from "axios";
 import Pagination from "react-js-pagination";
 
@@ -31,6 +32,7 @@ class Library extends React.Component {
             host_id: '',
             location_name: '',
             venue: '',
+            unauthorized: false,
             reverse: false,
             sortBy: 'StartDate',
         }
@@ -95,6 +97,7 @@ class Library extends React.Component {
     }
 
     makeHttpRequestWithPage(pageNumber) {
+        let self = this;
         axios.get(Library_URL, {
             params: {
                 CPDTypeId: this.state.cpd_type_id,
@@ -125,7 +128,13 @@ class Library extends React.Component {
                     totalCount: data.TotalCount,
                 });
 
-            }).catch(console.log);
+            }).catch(function (error) {
+                if (error.response.status === 401) {
+                    self.setState({
+                        unauthorized: true,
+                    });
+                }
+            });
     };
 
     handlePaginationFilter(event){
@@ -149,6 +158,7 @@ class Library extends React.Component {
             host_id: '',
             location_name: '',
             venue: '',
+            unauthorized: false,
             reverse: false,
             sortBy: 'StartDate',
         });
@@ -181,6 +191,9 @@ class Library extends React.Component {
     }
 
     render () {
+        if (this.state.unauthorized) {
+            return <Redirect to='/'/>;
+        }
 
         let library_records;
         if (this.state.library_records !== null) {

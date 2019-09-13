@@ -1,5 +1,6 @@
 import React from "react";
 import "react-table/react-table.css";
+import { Redirect } from 'react-router-dom';
 import axios from "axios";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
@@ -28,7 +29,8 @@ class FaceToFace extends React.Component {
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
-            activePage: 0
+            activePage: 0,
+            unauthorized: false
         }
     };
 
@@ -74,7 +76,7 @@ class FaceToFace extends React.Component {
     }
 
     makeHttpRequestWithPage(pageNumber) {
-
+        let self = this;
         axios.get(FaceToFace_URL, {
             params: {
 
@@ -106,7 +108,13 @@ class FaceToFace extends React.Component {
                     activePage: data.Page,
                 });
 
-            }).catch(console.log);
+            }).catch(function (error) {
+                if (error.response.status === 401) {
+                    self.setState({
+                        unauthorized: true,
+                    });
+                }
+            });
     };
 
 
@@ -129,11 +137,15 @@ class FaceToFace extends React.Component {
             totalCount: 0,
             per_page: 10,
             activePage: 0,
+            unauthorized: false
         });
         $('.datepicker').datepicker();
     }
 
     render () {
+        if (this.state.unauthorized) {
+            return <Redirect to='/'/>;
+        }
 
         let cpd_records;
         if (this.state.cpd_records !== null) {
