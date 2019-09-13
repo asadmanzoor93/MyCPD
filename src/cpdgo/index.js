@@ -8,6 +8,7 @@ import ATICodeProfessionalEthicsModal from "./_modals/atiCodeProfessionalEthics"
 const Member_Info_URL = 'http://34.248.242.178/CPDCompliance/api/account/GetMember?memID=';
 const Accounting_Login_URL = 'http://34.248.242.178/CPDCompliance/api/CPDgo/CPDGOLog?action=accountingcpd&isBrowser=true';
 const Knowledge_Login_URL = 'http://34.248.242.178/CPDCompliance/api/CPDgo/CPDGOLog?action=KnowledgePoint&isBrowser=true';
+const Ethics_Login_URL = 'http://34.248.242.178/CPDCompliance/api/CPDgo/CPDGOLog?action=ProfessionalEthics&isBrowser=true';
 
 class CPDGO extends React.Component {
     constructor() {
@@ -15,6 +16,7 @@ class CPDGO extends React.Component {
         this.fetchMemberInfo = this.fetchMemberInfo.bind(this);
         this.accountingLogin = this.accountingLogin.bind(this);
         this.knowledgeLogin = this.knowledgeLogin.bind(this);
+        this.ethicsLogin = this.ethicsLogin.bind(this);
 
         this.state = {
             knowledgeInfoModalShown: false,
@@ -82,6 +84,26 @@ class CPDGO extends React.Component {
             }).catch(console.log);
     }
 
+    ethicsLogin () {
+        this.setState({
+            atiCodeProfessionalEthicsModalShown: true
+        });
+
+        axios.get(Ethics_Login_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+            }).catch(console.log);
+    }
+
     render () {
         let knowledgeInfoModalClose = () => this.setState({ knowledgeInfoModalShown: false });
         let accountingInfoModalClose = () => this.setState({ accountingInfoModalShown: false });
@@ -135,7 +157,7 @@ class CPDGO extends React.Component {
                                     <div className="marginfix"> </div>
                                     <div className="marginfix"> </div>
                                     <div className="input-group">
-                                        <a onClick={() => this.setState({ atiCodeProfessionalEthicsModalShown: true })} className="btn btn-primary btn-lg" style={{width: '100%'}} role="button">ATI Code of Professional Ethics – 1 hour course</a>
+                                        <a onClick={this.ethicsLogin} className="btn btn-primary btn-lg" style={{width: '100%'}} role="button">ATI Code of Professional Ethics – 1 hour course</a>
                                         <a onClick={() => this.setState({ atiCodeInfoModalShown: true })} className="input-group-addon btn btn-default btn-circle" style={{fontSize: '23px'}}>
                                             <i className="fa fa fa-info" title="Help"> </i>
                                         </a>
