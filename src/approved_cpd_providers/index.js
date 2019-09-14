@@ -6,6 +6,7 @@ import Pagination from "react-js-pagination";
 import $ from "jquery";
 import { TextField, DatePicker } from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
+import ViewModal from "../dashboard/_modal/view";
 
 const Approved_CPD_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd";
 
@@ -32,7 +33,17 @@ class ApprovedCPDProviders extends React.Component {
             totalCount: 0,
             per_page: 10,
             activePage: 0,
-            unauthorized: false
+            unauthorized: false,
+            listViewModalShown: false,
+            listViewDataCourseName:         "",
+            listViewDatastartDate:          "",
+            listViewDatacourseLocation:     "",
+            listViewDatacourseType:         "",
+            listViewDatahost:               "",
+            listViewDatacpdFormat:          "",
+            listViewDatavenue:              "",
+            listViewDatatrainer:            "",
+            listViewDatacourseDescription:  ""
         }
     };
 
@@ -143,12 +154,29 @@ class ApprovedCPDProviders extends React.Component {
         return className;
     };
 
+    openModalWithItem(courseName,startDate,courseLocation,courseType,host,cpdFormat,venue,trainer,courseDescription) {
+        this.setState({
+            listViewDataCourseName:         courseName,
+            listViewDatastartDate:          (startDate) ? startDate : 'na',
+            listViewDatacourseLocation:     (courseLocation) ? courseLocation : 'na',
+            listViewDatacourseType:         (courseType) ? courseType : 'na',
+            listViewDatahost:               (host) ? host : 'na',
+            listViewDatacpdFormat:          (cpdFormat) ? cpdFormat : 'na',
+            listViewDatavenue:              (venue) ? venue : 'na',
+            listViewDatatrainer:            (trainer) ? trainer : 'na',
+            listViewDatacourseDescription:  (courseDescription) ? courseDescription : 'na',
+            listViewModalShown: true
+        })
+    }
+
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
         }
 
+        let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
         let approved_cpd_records;
+
         if (this.state.approved_cpd_records !== null) {
             approved_cpd_records = this.state.approved_cpd_records.map((cpd_record , index) => (
                 <tr key={index}>
@@ -160,7 +188,19 @@ class ApprovedCPDProviders extends React.Component {
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.StartDate}</td>
-                    <td> </td>
+                    <td><a data-item={cpd_record}
+                           onClick={() => {this.openModalWithItem(
+                               cpd_record.CourseName,
+                               cpd_record.StartDate,
+                               cpd_record.LocationName,
+                               cpd_record.CPDTypeName,
+                               cpd_record.HostName,
+                               cpd_record.CPDFormatName,
+                               cpd_record.Venue,
+                               cpd_record.Trainer,
+                               cpd_record.CourseDescription
+                           )}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+                    </td>
                 </tr>
             ));
         }
@@ -175,8 +215,6 @@ class ApprovedCPDProviders extends React.Component {
                     <div className="shadow">
                         <div className="layout-gt-sm-row">
                             <div style={{padding: '1rem'}}>
-
-
                                 <div className="md-grid">
                                     <TextField
                                           id="courseName"
@@ -237,7 +275,6 @@ class ApprovedCPDProviders extends React.Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="row" style={{paddingBottom: '30px'}}>
                     <div className="gridTopButtons">
                         <button type="button" onClick={() => window.print()}
@@ -291,6 +328,19 @@ class ApprovedCPDProviders extends React.Component {
                     </div>
 
                 </div>
+                <ViewModal show={ this.state.listViewModalShown }
+                           data={this.state}
+                           onHide={listViewModalShownClose}
+                           coursename={this.state.listViewDataCourseName}
+                           startdate={this.state.listViewDatastartDate}
+                           courselocation={this.state.listViewDatacourseLocation}
+                           coursetype={this.state.listViewDatacourseType}
+                           host={this.state.listViewDatahost}
+                           cpdformat={this.state.listViewDatacpdFormat}
+                           venue={this.state.listViewDatavenue}
+                           trainer={this.state.listViewDatatrainer}
+                           description={this.state.listViewDatacourseDescription}
+                />
             </div>
         );
     }

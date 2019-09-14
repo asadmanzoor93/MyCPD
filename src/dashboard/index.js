@@ -278,8 +278,7 @@ class Dashboard extends React.Component {
 						</td>
 					</tr>
 				)
-			}
-			);
+			});
 		}
 
 		return (
@@ -421,7 +420,6 @@ class Dashboard extends React.Component {
 						</div>
 					</div>
 				</div>
-
 				<div className="row" style={{paddingBottom: '30px'}}>
 					<div className="gridTopButtons">
 						<button type="button" onClick={() => window.print()}
