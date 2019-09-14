@@ -344,8 +344,6 @@ class Dashboard extends React.Component {
 	                    <div className="shadow">
 	                        <div className="layout-gt-sm-row">
 	                            <div style={{padding: '1rem'}}>
-
-
 	                                <div className="md-grid">
 	                                    <TextField
 	                                          id="courseName"
@@ -439,14 +437,14 @@ class Dashboard extends React.Component {
 						<thead>
 						<tr className="header">
 							<th> </th>
-							<th role="button" onClick={this.onSort('courseType')}>Course Type <i className={this.setArrow('courseType')}> </i></th>
-							<th role="button" onClick={this.onSort('course')}>Course<i className={this.setArrow('course')}> </i></th>
-							<th role="button" onClick={this.onSort('completedHours')}>Completed Hours<i className={this.setArrow('completedHours')}> </i></th>
-							<th role="button" onClick={this.onSort('completionDate')}>Completion Date<i className={this.setArrow('completionDate')}> </i></th>
-							<th role="button" onClick={this.onSort('venue')}>Venue<i className={this.setArrow('venue')}> </i></th>
-							<th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}> </i></th>
-							<th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}> </i></th>
-							<th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}> </i></th>
+							<th role="button" onClick={this.onSort('CPDTypeName')}>Course Type <i className={this.setArrow('CPDTypeName')}> </i></th>
+							<th role="button" onClick={this.onSort('CourseName')}>Course<i className={this.setArrow('CourseName')}> </i></th>
+							<th role="button" onClick={this.onSort('Hours')}>Completed Hours<i className={this.setArrow('Hours')}> </i></th>
+							<th role="button" onClick={this.onSort('CompletionDate')}>Completion Date<i className={this.setArrow('CompletionDate')}> </i></th>
+							<th role="button" onClick={this.onSort('Venue')}>Venue<i className={this.setArrow('Venue')}> </i></th>
+							<th role="button" onClick={this.onSort('Trainer')}>Trainer<i className={this.setArrow('Trainer')}> </i></th>
+							<th role="button" onClick={this.onSort('HostId')}>Host<i className={this.setArrow('HostId')}> </i></th>
+							<th role="button" onClick={this.onSort('StartDate')}>Start Date<i className={this.setArrow('StartDate')}> </i></th>
 							<th>Actions</th>
 						</tr>
 						</thead>
