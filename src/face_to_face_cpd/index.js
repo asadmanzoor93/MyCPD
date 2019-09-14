@@ -230,6 +230,7 @@ class FaceToFace extends React.Component {
                                         placeholder="Host"
                                         name="host_name"
                                         menuItems={ hostList }
+                                        value={this.state.host_name}
                                         onChange={(value) => {this.handleInputChange('host_name',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />
