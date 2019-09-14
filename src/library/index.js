@@ -44,6 +44,16 @@ class Library extends React.Component {
                 column: 'StartDate',
                 direction: 'desc'
             },
+            listViewModalShown: false,
+            listViewDataCourseName:          "",
+            listViewDatastartDate:          "",
+            listViewDatacourseLocation:     "",
+            listViewDatacourseType:         "",
+            listViewDatahost:               "",
+            listViewDatacpdFormat:          "",
+            listViewDatavenue:              "",
+            listViewDatatrainer:            "",
+            listViewDatacourseDescription:  ""
         }
     };
 
@@ -264,11 +274,27 @@ class Library extends React.Component {
         return className;
     };
 
+    openModalWithItem(courseName,startDate,courseLocation,courseType,host,cpdFormat,venue,trainer,courseDescription) {
+        this.setState({
+            listViewDataCourseName:         courseName,
+            listViewDatastartDate:          (startDate) ? startDate : 'na',
+            listViewDatacourseLocation:     (courseLocation) ? courseLocation : 'na',
+            listViewDatacourseType:         (courseType) ? courseType : 'na',
+            listViewDatahost:               (host) ? host : 'na',
+            listViewDatacpdFormat:          (cpdFormat) ? cpdFormat : 'na',
+            listViewDatavenue:              (venue) ? venue : 'na',
+            listViewDatatrainer:            (trainer) ? trainer : 'na',
+            listViewDatacourseDescription:  (courseDescription) ? courseDescription : 'na',
+            listViewModalShown: true
+        })
+    }
+
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
         }
-        
+
+        let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
         let library_records;
         if (this.state.library_records !== null) {
             library_records = this.state.library_records.map((cpd_record , index) => (
@@ -282,7 +308,19 @@ class Library extends React.Component {
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.Venue}</td>
                     <td>{cpd_record.StartDate}</td>
-                    <td> </td>
+                    <td><a data-item={cpd_record}
+                           onClick={() => {this.openModalWithItem(
+                               cpd_record.CourseName,
+                               cpd_record.StartDate,
+                               this.state.locations_dict[cpd_record.LocationID],
+                               this.state.type_dict[cpd_record.CPDTypeId],
+                               this.state.host_dict[cpd_record.HostID],
+                               cpd_record.FormatName,
+                               cpd_record.Venue,
+                               cpd_record.Trainer,
+                               cpd_record.CourseDescription
+                           )}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+                    </td>
                 </tr>
             ));
         }
@@ -298,8 +336,6 @@ class Library extends React.Component {
                     <div className="shadow">
                         <div className="layout-gt-sm-row">
                             <div style={{padding: '1rem'}}>
-
-
                                 <div className="md-grid">
                                     <TextField
                                           id="courseName"
@@ -423,8 +459,20 @@ class Library extends React.Component {
                             onChange={this.handlePageChange}
                         />
                     </div>
-
                 </div>
+                <ViewModal show={ this.state.listViewModalShown }
+                           data={this.state}
+                           onHide={listViewModalShownClose}
+                           coursename={this.state.listViewDataCourseName}
+                           startdate={this.state.listViewDatastartDate}
+                           courselocation={this.state.listViewDatacourseLocation}
+                           coursetype={this.state.listViewDatacourseType}
+                           host={this.state.listViewDatahost}
+                           cpdformat={this.state.listViewDatacpdFormat}
+                           venue={this.state.listViewDatavenue}
+                           trainer={this.state.listViewDatatrainer}
+                           description={this.state.listViewDatacourseDescription}
+                />
             </div>
         );
     }

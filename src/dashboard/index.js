@@ -240,8 +240,7 @@ class Dashboard extends React.Component {
 			return <Redirect to='/'/>;
 		}
 
-		let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
-
+		let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
 		let dashboard_records;
 
 		const csvData = [
