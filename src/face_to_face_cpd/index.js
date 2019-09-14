@@ -41,8 +41,13 @@ class FaceToFace extends React.Component {
     };
 
     handleInputChange(name, value) {
+        let newValue = value;
+        if (name = 'start_date') {
+            let newDate = new Date(value);
+            newValue = newDate.toISOString();
+        }
         this.setState({
-            [name]: value
+            [name]: newValue
         });
     }
 
@@ -180,7 +185,7 @@ class FaceToFace extends React.Component {
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.StartDate}</td>
-                    <td> </td>
+                    <td></td>
                 </tr>
             ));
         }

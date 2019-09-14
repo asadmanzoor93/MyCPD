@@ -43,8 +43,13 @@ class Library extends React.Component {
     };
 
     handleInputChange(name, value) {
+        let newValue = value;
+        if (name = 'start_date') {
+            let newDate = new Date(value);
+            newValue = newDate.toISOString();
+        }
         this.setState({
-            [name]: value
+            [name]: newValue
         });
     }
 

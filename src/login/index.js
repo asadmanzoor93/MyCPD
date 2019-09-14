@@ -57,12 +57,16 @@ class App extends React.Component {
                     localStorage.setItem('successMessage', true);
 
                     //Login user to site
-                    this.setState({login: true});
+                    this.setState({
+                        login: true,
+                        mainLoading: false
+                    });
                 }
             })
             .catch((error) => {
                 this.setState({
-                    login_error: true
+                    login_error: true,
+                    mainLoading: false
                 });
                 console.log(error);
             });
