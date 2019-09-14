@@ -25,8 +25,10 @@ class ApprovedCPDProviders extends React.Component {
             location_name: '',
             host: '',
             start_date: '',
-            reverse: false,
-            sortBy: 'StartDate',
+            sort: {
+                column: 'StartDate',
+                direction: 'desc'
+            },
             approved_cpd_records: [],
             totalPages: 0,
             totalCount: 0,
@@ -66,8 +68,8 @@ class ApprovedCPDProviders extends React.Component {
                 HostName: this.state.host,
                 LocationName: this.state.location_name,
                 StartDate: this.state.start_date,
-                reverse: this.state.reverse,
-                sortBy: this.state.sortBy,
+                reverse: this.state.sort.direction,
+                sortBy: this.state.sort.column,
                 page: pageNumber,
                 pageSize: this.state.per_page,
             },
@@ -112,8 +114,10 @@ class ApprovedCPDProviders extends React.Component {
             location_name: '',
             host: '',
             start_date: '',
-            reverse: false,
-            sortBy: 'StartDate',
+            sort: {
+                column: 'StartDate',
+                direction: 'desc'
+            },
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
@@ -122,11 +126,23 @@ class ApprovedCPDProviders extends React.Component {
         $('.datepicker').datepicker();
     }
 
-    onSort(event, sortKey){
-        const data = this.state.sortBy;
-        data.sort((a,b) => a[sortKey].localeCompare(b[sortKey]));
-        this.setState({data})
-    }
+    onSort = (column) => (e) => {
+        const direction = this.state.sort.column ? (this.state.sort.direction === 'asc' ? 'desc' : 'asc') : 'desc';
+        this.setState({
+            sort: {
+                column,
+                direction,
+            }
+        });
+    };
+
+    setArrow = (column) => {
+        let className = 'fa fa-sort';
+        if (this.state.sort.column === column) {
+            className += this.state.sort.direction === 'asc' ? '-asc' : '-desc';
+        }
+        return className;
+    };
 
     render () {
         if (this.state.unauthorized) {
@@ -162,45 +178,41 @@ class ApprovedCPDProviders extends React.Component {
                             <div style={{padding: '1rem'}}>
 
 
+                                <div className="md-grid">
+                                    <TextField
+                                          id="floating-center-title"
+                                          label="Course Name"
+                                          lineDirection="center"
+                                          placeholder="Course Name"
+                                          className="md-cell md-cell--6 md-cell--bottom"
+                                        />
+                                    <TextField
+                                          id="floating-center-title"
+                                          label="Host"
+                                          lineDirection="center"
+                                          placeholder="Host"
+                                          className="md-cell md-cell--6 md-cell--bottom"
+                                        />
+                                    </div>
 
+                                    <div className="md-grid">
+                                    <TextField
+                                          id="floating-center-title"
+                                          label="Location Name"
+                                          lineDirection="center"
+                                          placeholder="Location Name"
+                                          className="md-cell md-cell--6 md-cell--bottom"
+                                        />
 
+                                    <DatePicker
+                                        id="appointment-date-auto"
+                                        label="Select an appointment date"
+                                        className="md-cell md-cell--6 md-cell--bottom"
+                                    />
 
-<div className="md-grid">
-<TextField
-      id="floating-center-title"
-      label="Course Name"
-      lineDirection="center"
-      placeholder="Course Name"
-      className="md-cell md-cell--6 md-cell--bottom"
-    />
-<TextField
-      id="floating-center-title"
-      label="Host"
-      lineDirection="center"
-      placeholder="Host"
-      className="md-cell md-cell--6 md-cell--bottom"
-    />
-</div>
-
-<div className="md-grid">
-<TextField
-      id="floating-center-title"
-      label="Location Name"
-      lineDirection="center"
-      placeholder="Location Name"
-      className="md-cell md-cell--6 md-cell--bottom"
-    />
-
-<DatePicker
-    id="appointment-date-auto"
-    label="Select an appointment date"
-    className="md-cell md-cell--6 md-cell--bottom"
-/>
-
-</div>
+                                </div>
 
                                 <div className="form-group input-group" style={{width: '100%'}}>
-
 
                                     <span className="has-float-label" style={{width: '50%'}}>
                                         <input className="form-control ng-pristine ng-valid ng-empty ng-touched"
@@ -294,17 +306,17 @@ class ApprovedCPDProviders extends React.Component {
                 <div className="col">
                     <table className='table table-striped table-bordered table-hover table-condensed'>
                         <thead>
-                        <tr className="header">
-                            <th> </th>
-                            <th>Course Name <i className="fa fa-fw fa-sort" onClick={ this.onSort}> </i></th>
-                            <th>Location <i className="fa fa-fw fa-sort"> </i></th>
-                            <th>CPD Hours <i className="fa fa-fw fa-sort"> </i></th>
-                            <th>Host <i className="fa fa-fw fa-sort"> </i></th>
-                            <th>Type <i className="fa fa-fw fa-sort"> </i></th>
-                            <th>Trainer <i className="fa fa-fw fa-sort"> </i></th>
-                            <th>Start Date <i className="fa fa-fw fa-sort"> </i></th>
-                            <th>View</th>
-                        </tr>
+                            <tr className="header">
+                                <th> </th>
+                                <th role="button" onClick={this.onSort('course')}>Course Name <i className={this.setArrow('course')}> </i></th>
+                                <th role="button" onClick={this.onSort('location')}>Location<i className={this.setArrow('location')}> </i></th>
+                                <th role="button" onClick={this.onSort('cpdhours')}>CPD Hours<i className={this.setArrow('cpdhours')}> </i></th>
+                                <th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}> </i></th>
+                                <th role="button" onClick={this.onSort('type')}>Type<i className={this.setArrow('type')}> </i></th>
+                                <th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}> </i></th>
+                                <th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}> </i></th>
+                                <th>View</th>
+                            </tr>
                         </thead>
                         <tbody>
                         { approved_cpd_records }

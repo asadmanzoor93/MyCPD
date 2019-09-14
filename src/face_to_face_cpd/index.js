@@ -294,7 +294,7 @@ class FaceToFace extends React.Component {
                                 <th role="button" onClick={this.onSort('type')}>Type<i className={this.setArrow('type')}> </i></th>
                                 <th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}> </i></th>
                                 <th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}> </i></th>
-                                <th>Actions</th>
+                                <th>View</th>
                             </tr>
                         </thead>
                         <tbody>
