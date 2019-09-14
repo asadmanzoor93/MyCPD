@@ -63,7 +63,7 @@ class ApprovedCPDProviders extends React.Component {
                 HostName: this.state.host,
                 LocationName: this.state.location_name,
                 StartDate: this.state.start_date,
-                reverse: this.state.sort.direction,
+                reverse: (this.state.sort.direction === 'asc') ? false : true,
                 sortBy: this.state.sort.column,
                 page: pageNumber,
                 pageSize: this.state.per_page,

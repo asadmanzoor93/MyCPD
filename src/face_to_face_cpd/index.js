@@ -100,7 +100,7 @@ class FaceToFace extends React.Component {
                 HostName: this.state.host_name,
                 LocationName: this.state.location_name,
                 StartDate: this.state.start_date_iso,
-                reverse: this.state.sort.direction,
+                reverse: (this.state.sort.direction === 'asc') ? false : true,
                 sortBy: this.state.sort.column,
                 page: pageNumber,
                 pageSize: this.state.per_page,

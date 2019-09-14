@@ -23,9 +23,9 @@ class Library extends React.Component {
         this.exportExcelReport = this.exportExcelReport.bind(this);
 
         this.state = {
-            host_dict: [],
-            types_dict: [],
-            locations_dict: [],
+            host_dict: {},
+            types_dict: {},
+            locations_dict: {},
             host_list: [],
             types_list: [],
             library_records: [],
@@ -81,12 +81,9 @@ class Library extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data){
-                    let type_dic = [];
+                    let type_dic = {};
                     for(let i = 0; i < data.length; i++){
-                        type_dic.push({
-                            key:   data[i]['CPDTypeId'],
-                            value: data[i]['Description']
-                        });
+                        type_dic[data[i]['CPDTypeId']] = data[i]['Description'];
                     }
 
                     this.setState({
@@ -110,12 +107,9 @@ class Library extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data){
-                    let host_dic = [];
+                    let host_dic = {};
                     for(let i = 0; i < data.length; i++){
-                        host_dic.push({
-                            key:   data[i]['ID'],
-                            value: data[i]['Name']
-                        });
+                        host_dic[data[i]['ID']] = data[i]['Name'];
                     }
 
                     this.setState({
@@ -139,12 +133,9 @@ class Library extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data){
-                    let locations_dic = [];
+                    let locations_dic = {};
                     for(let i = 0; i < data.length; i++){
-                        locations_dic.push({
-                            key:   data[i]['ID'],
-                            value: data[i]['Name']
-                        });
+                        locations_dic[data[i]['ID']] = data[i]['Name'];
                     }
 
                     this.setState({
@@ -163,7 +154,7 @@ class Library extends React.Component {
                 HostId: this.state.host_id,
                 LocationName: this.state.location_name,
                 Venue: this.state.venue,
-                reverse: this.state.sort.direction,
+                reverse: (this.state.sort.direction === 'asc') ? false : true,
                 sortBy: this.state.sort.column,
                 page: pageNumber,
                 pageSize: this.state.per_page,
@@ -268,7 +259,6 @@ class Library extends React.Component {
         return className;
     };
 
-
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
@@ -280,10 +270,10 @@ class Library extends React.Component {
                 <tr key={index}>
                     <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
-                    <td>{cpd_record.LocationID}</td>
+                    <td>{this.state.locations_dict[cpd_record.LocationID]}</td>
                     <td>{cpd_record.DurationHours}h</td>
-                    <td>{cpd_record.CPDTypeId}</td>
-                    <td>{cpd_record.HostID}</td>
+                    <td>{this.state.type_dic[cpd_record.CPDTypeId]}</td>
+                    <td>{this.state.host_dic[cpd_record.HostID]}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.Venue}</td>
                     <td>{cpd_record.StartDate}</td>
