@@ -3,6 +3,7 @@ import "react-table/react-table.css";
 import { Redirect } from 'react-router-dom';
 import $ from "jquery";
 import axios from "axios";
+import { DatePicker } from 'react-md';
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
@@ -14,6 +15,7 @@ const Locations_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/Location';
 const Courses_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/GetCourses';
 const Course_Detail_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/GetCourse';
 const ADD_Record_URL = 'http://34.248.242.178/CPDCompliance/api/Workflow/add';
+const File_Upload_URL = 'http://34.248.242.178/CPDCompliance/api/Workflow/file/upload';
 
 
 //On view load: Call member info, types, formats, hosts, locations api. Fill data for first step automatically
@@ -43,6 +45,7 @@ class RecordCPD extends React.Component {
             cpd_mins: null,
             cpd_year: null,
             date_completed: null,
+            start_date_iso: '',
             file_upload: null,
             file_name: null,
             host_id: null,
@@ -50,6 +53,7 @@ class RecordCPD extends React.Component {
             location_id: null,
             is_declared: false,
             unauthorized: false,
+            redirectDashboard: false,
         };
 
         this.handlePrevStep = this.handlePrevStep.bind(this);
@@ -63,17 +67,12 @@ class RecordCPD extends React.Component {
         this.fetchLocations = this.fetchLocations.bind(this);
         this.fetchCourses = this.fetchCourses.bind(this);
         this.fetchCourseDetail = this.fetchCourseDetail.bind(this);
+        this.handleFileUpload = this.handleFileUpload.bind(this);
 
     };
 
     componentDidMount() {
         const { match: { params } } = this.props;
-
-        console.log(params.wfid)
-        console.log(params.mode)
-
-
-
         $('.datepicker').datepicker({autoclose: true});
         this.fetchTypes();
         this.fetchMemberInfo();
@@ -294,8 +293,7 @@ class RecordCPD extends React.Component {
             Trainer: this.state.trainer,
             Hours: this.state.cpd_hours,
             Minutes: this.state.cpd_mins,
-            Company:"rnnxinpangnpt.nxp",
-            CompletionDate: this.state.date_completed,
+            CompletionDate: this.state.start_date_iso,
             CPDYear: this.state.cpd_year,
             CPDWorkflowId: 0,
             FileName: this.state.file_name,
@@ -313,37 +311,84 @@ class RecordCPD extends React.Component {
         })
             .then(response => response.data)
             .then((data) => {
-
-
-        }).catch(console.log);
+                this.handleFileUpload(data)
+            }).catch(function (error) {
+                console.log(error.response);
+                if(error){
+                    if(error.response){
+                        if(error.response.data){
+                            alert(error.response.data[0])
+                        }
+                    }
+                }
+            });
     }
 
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
+    handleFileUpload(record){
 
-        if(name === 'file_upload'){
+        console.log(record.CPDQueueId);
+        console.log(this.state.file_upload);
+
+        var blobFile = this.state.file_upload;
+        var formData = new FormData();
+        formData.append("file", blobFile);
+
+        axios.post(File_Upload_URL, formData,{
+            processData: false,
+            contentType: false,
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryoCoWNN0H9G5MODKB',
+                'workflowreqid': record.CPDWorkflowId,
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                this.setState({
+                    redirectDashboard: true
+                })
+            }).catch(console.log);
+    }
+
+
+    handleInputChange(event,field_name) {
+        if (field_name == 'date_completed') {
+            let newValue = event;
+            let newDate = new Date(event);
+            newValue = newDate.toISOString();
             this.setState({
-                [name]: URL.createObjectURL(event.target.files[0]),
-                file_name: event.target.files[0]['name']
-            });
-        } else if (name === 'is_declared'){
-            this.setState({
-                is_declared: target.checked
+                start_date_iso: newValue,
+                [field_name]: event
             });
         } else {
-            this.setState({
-                [name]: value
-            });
-        }
+            const target = event.target;
+            const value = target.value;
+            const name = target.name;
 
-        if (name === 'cpd_type_id'){
-            this.fetchCourses(value);
-        }
+            if(name === 'file_upload'){
+                console.log(event.target.files[0]);
+                this.setState({
+                    [name]: event.target.files[0],
+                    file_name: event.target.files[0]['name']
+                });
+            } else if (name === 'is_declared'){
+                this.setState({
+                    is_declared: target.checked
+                });
+            } else {
+                this.setState({
+                    [name]: value
+                });
+            }
 
-        if (name === 'course_id'){
-            this.fetchCourseDetail(value);
+            if (name === 'cpd_type_id'){
+                this.fetchCourses(value);
+            }
+
+            if (name === 'course_id'){
+                this.fetchCourseDetail(value);
+            }
         }
     }
 
@@ -351,15 +396,19 @@ class RecordCPD extends React.Component {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
         }
+
+        if (this.state.redirectDashboard) {
+            return <Redirect to='/dashboard'/>;
+        }
         
-        let ListItemOne,
-            ListItemTwo;
+        let ListItemOne, ListItemTwo;
 
         if(this.state.currentStep > 1) {
             ListItemOne = <li className="done"><a>Submitter Details</a></li>
         } else {
             ListItemOne = <li className="current"><a>Submitter Details</a></li>
         }
+
         if(this.state.currentStep > 2) {
             ListItemTwo = <li className="done"><a>Confirm CPD Activity Details</a></li>
         } else if(this.state.currentStep === 2) {
@@ -466,7 +515,6 @@ class RecordCPD extends React.Component {
                                                     )}
                                                 </select>
                                             </div>
-
                                             <div className="form-group required" aria-hidden="true">
                                                 <label className="control-label" htmlFor="course_id">Course Title
                                                 </label>
@@ -494,7 +542,6 @@ class RecordCPD extends React.Component {
                                                     />
                                                 </div>
                                             </div>
-
                                             <div className="form-group required">
                                                 <label htmlFor="cmbformat" className="control-label">Format</label>
                                                 <select className="form-control ng-empty ng-invalid ng-invalid-required"
@@ -571,25 +618,18 @@ class RecordCPD extends React.Component {
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <div className="form-group required">
                                                 <label  className="control-label">Date Completed {this.state.date_completed}
                                                 </label>
-                                                <div className="input-group">
-
-                                                    <input id="date_completed" type="text"
-                                                           name="date_completed"
-                                                           value={this.state.date_completed}
-                                                           onChange={this.handleInputChange}
-                                                           className="form-control datepicker"
-                                                    />
-                                                    <label htmlFor="date_completed" className="input-group-addon">
-                                                        <span className="glyphicon glyphicon-calendar"> </span>
-                                                    </label>
-                                                </div>
-
+                                                <DatePicker
+                                                    id="date_completed"
+                                                    label="Enter Completed Date"
+                                                    name="date_completed"
+                                                    value={this.state.date_completed}
+                                                    onChange={(value) => {this.handleInputChange(value,'date_completed')}}
+                                                    className="md-cell md-cell--6 md-cell--bottom"
+                                                />
                                             </div>
-
                                             <div className="form-group required">
                                                 <label className="control-label">Upload Evidence of Attendance
                                                 </label>
@@ -603,7 +643,6 @@ class RecordCPD extends React.Component {
                                                     <button className="icon-folder glyphicon glyphicon-folder-open"> </button>
                                                 </div>
                                             </div>
-
                                             <div >
                                                 <button className="btn btn-default" name="previous" onClick={this.handlePrevStep} type="button"><i className="fa fa-arrow-left"> </i> Previous step
                                                 </button>
@@ -616,7 +655,6 @@ class RecordCPD extends React.Component {
                                 </div>
                             </div>
                         </section>
-
 
                         <section className="step" style={{display: (this.state.currentStep === 3) ? 'block' : 'none' }}>
                             <div style={{marginTop: '60px'}} className="ng-scope"> </div>
@@ -686,7 +724,7 @@ class RecordCPD extends React.Component {
                                             <div style={{ marginBottom: '20px'}}>
                                                 <button className="btn btn-default" name="previous" onClick={this.handlePrevStep} type="button"><i className="fa fa-arrow-left"> </i> Previous step
                                                 </button>
-                                                <button className="btn btn-primary pull-right" type="button"
+                                                <button className="btn btn-success pull-right" type="button"
                                                         disabled={ (this.state.is_declared === true) ? "" : "disabled"}
                                                         value={this.state.is_declared}
                                                         onClick={this.handleSaveRecord} > Save <i className="fa fa-arrow-right"> </i></button>

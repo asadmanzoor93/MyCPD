@@ -275,7 +275,8 @@ class Dashboard extends React.Component {
 						<td>{dashboard_record.Trainer}</td>
 						<td>{dashboard_record.HostId}</td>
 						<td>{dashboard_record.StartDate}</td>
-						<td><a data-item={dashboard_record}
+						<td>
+							<a data-item={dashboard_record}
 							   onClick={() => {this.openModalWithItem(
 							   	dashboard_record.CourseName,
 								dashboard_record.StartDate,
@@ -286,7 +287,17 @@ class Dashboard extends React.Component {
 								dashboard_record.Venue,
 								dashboard_record.Trainer,
 								dashboard_record.CourseDescription
-							)}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+							)}} style={{fontSize:'25px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i>
+							</a>
+							<a style={{fontSize:'25px', cursor: 'pointer'}}>
+								<i title="" className="fa fa-edit ng-scope" tooltip="" role="button" tabIndex="0"
+								  data-original-title="Edit CPD"> </i>
+							</a>
+							<a style={{fontSize:'25px', cursor: 'pointer'}}>
+								<i title="" className="fa fa-trash ng-scope" tooltip="" role="button" tabIndex="0"
+								  data-original-title="Delete CPD"> </i>
+							</a>
+
 						</td>
 					</tr>
 				)
