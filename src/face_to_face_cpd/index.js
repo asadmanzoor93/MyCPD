@@ -166,7 +166,9 @@ class FaceToFace extends React.Component {
     };
 
     render () {
-
+        if (this.state.unauthorized) {
+            return <Redirect to='/'/>;
+        }
 
         let cpd_records;
         if (this.state.cpd_records !== null) {
