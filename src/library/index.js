@@ -33,8 +33,10 @@ class Library extends React.Component {
             location_name: '',
             venue: '',
             unauthorized: false,
-            reverse: false,
-            sortBy: 'StartDate',
+            sort: {
+                column: 'StartDate',
+                direction: 'desc'
+            },
         }
     };
 
@@ -105,8 +107,8 @@ class Library extends React.Component {
                 HostId: this.state.host_id,
                 LocationName: this.state.location_name,
                 Venue: this.state.venue,
-                reverse: this.state.reverse,
-                sortBy: this.state.sortBy,
+                reverse: this.state.sort.direction,
+                sortBy: this.state.sort.column,
                 page: pageNumber,
                 pageSize: this.state.per_page,
             },
@@ -159,8 +161,10 @@ class Library extends React.Component {
             location_name: '',
             venue: '',
             unauthorized: false,
-            reverse: false,
-            sortBy: 'StartDate',
+            sort: {
+                column: 'StartDate',
+                direction: 'desc'
+            },
         });
     }
 
@@ -190,11 +194,29 @@ class Library extends React.Component {
         })
     }
 
+    onSort = (column) => (e) => {
+        const direction = this.state.sort.column ? (this.state.sort.direction === 'asc' ? 'desc' : 'asc') : 'desc';
+        this.setState({
+            sort: {
+                column,
+                direction,
+            }
+        });
+    };
+
+    setArrow = (column) => {
+        let className = 'fa fa-sort';
+        if (this.state.sort.column === column) {
+            className += this.state.sort.direction === 'asc' ? '-asc' : '-desc';
+        }
+        return className;
+    };
+
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
         }
-
+        
         let library_records;
         if (this.state.library_records !== null) {
             library_records = this.state.library_records.map((cpd_record , index) => (
@@ -289,7 +311,7 @@ class Library extends React.Component {
                                 </div>
                                 <div className="clearfix"> </div>
                                 <div>
-                                    <button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
+                                    <button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
                                         <span className="glyphicon glyphicon-search"> </span>
                                         Search
                                     </button>
@@ -309,7 +331,7 @@ class Library extends React.Component {
                                 className="btn btn-danger btn-circle btn-lg ng-scope">
                             <i className="fa fa-print"> </i>
                         </button>
-                        <button type="button" onClick={(e)=> this.exportExcelReport(e)}
+                        <button type="button" style={{marginLeft: '10px'}} onClick={(e)=> this.exportExcelReport(e)}
                                 className="btn btn-success btn-circle btn-lg ng-scope">
                             <i className="fa fa-file-excel-o"> </i>
                         </button>
@@ -328,14 +350,14 @@ class Library extends React.Component {
                         <thead>
                         <tr className="header">
                             <td> </td>
-                            <th>Course Name </th>
-                            <th>Location</th>
-                            <th>CPD Hours</th>
-                            <th>Type</th>
-                            <th>Host</th>
-                            <th>Trainer</th>
-                            <th>Venue</th>
-                            <th>Start Date</th>
+                            <th role="button" onClick={this.onSort('course')}>Course Name <i className={this.setArrow('course')}> </i></th>
+                            <th role="button" onClick={this.onSort('location')}>Location<i className={this.setArrow('location')}> </i></th>
+                            <th role="button" onClick={this.onSort('cpdhours')}>CPD Hours<i className={this.setArrow('cpdhours')}> </i></th>
+                            <th role="button" onClick={this.onSort('type')}>Type<i className={this.setArrow('type')}> </i></th>
+                            <th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}> </i></th>
+                            <th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}> </i></th>
+                            <th role="button" onClick={this.onSort('venue')}>Venue<i className={this.setArrow('venue')}> </i></th>
+                            <th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}> </i></th>
                             <th>View</th>
                         </tr>
                         </thead>
