@@ -186,7 +186,7 @@ class FaceToFace extends React.Component {
         let cpd_records;
         if (this.state.cpd_records !== null) {
             cpd_records = this.state.cpd_records.map((cpd_record , index) => (
-                <tr key={index}>list after a while
+                <tr key={index}>
                     <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationName}</td>
