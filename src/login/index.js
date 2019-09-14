@@ -1,6 +1,7 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
+import { LinearProgress } from 'react-md';
 
 const qs = require('querystring');
 
@@ -14,6 +15,7 @@ class App extends React.Component {
           submitted: false,
           login: false,
           login_error: false,
+          mainLoading: false
       };
 
       this.handleChange = this.handleChange.bind(this);
@@ -28,7 +30,10 @@ class App extends React.Component {
   handleSubmit(e) {
       e.preventDefault();
 
-        this.setState({submitted: true});
+        this.setState({
+            submitted: true,
+            mainLoading: true
+        });
         const {username, password} = this.state;
         if (username && password) {
 
@@ -72,6 +77,7 @@ class App extends React.Component {
     } else {
       return (
         <div className="col-md-6 col-md-offset-3">
+          { this.state.mainLoading && <LinearProgress id="main-loader" /> }
             <div className="modal-header ng-scope" align="center">
                 <img className="img-circle" id="img_logo" src={"/images/MyCPDLogoImage.jpg"} alt="logo"/>
             </div>
@@ -114,7 +120,7 @@ class App extends React.Component {
                                         type="text" placeholder="Enter Username"
                                         required="" autoFocus="" aria-invalid="false"
                                         autoComplete="off"
-                                        style={{backgroundImage: 'url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAUBJREFUOBGVVE2ORUAQLvIS4gwzEysHkHgnkMiEc4zEJXCMNwtWTmDh3UGcYoaFhZUFCzFVnu4wIaiE+vvq6+6qTgthGH6O4/jA7x1OiCAIPwj7CoLgSXDxSjEVzAt9k01CBKdWfsFf/2WNuEwc2YqigKZpK9glAlVVwTTNbQJZlnlCkiTAZnF/mePB2biRdhwHdF2HJEmgaRrwPA+qqoI4jle5/8XkXzrCFoHg+/5ICdpm13UTho7Q9/0WnsfwiL/ouHwHrJgQR8WEwVG+oXpMPaDAkdzvd7AsC8qyhCiKJjiRnCKwbRsMw9hcQ5zv9maSBeu6hjRNYRgGFuKaCNwjkjzPoSiK1d1gDDecQobOBwswzabD/D3Np7AHOIrvNpHmPI+Kc2RZBm3bcp8wuwSIot7QQ0PznoR6wYSK0Xb/AGVLcWwc7Ng3AAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;'}} />
+                                        style={{backgroundImage: 'url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAUBJREFUOBGVVE2ORUAQLvIS4gwzEysHkHgnkMiEc4zEJXCMNwtWTmDh3UGcYoaFhZUFCzFVnu4wIaiE+vvq6+6qTgthGH6O4/jA7x1OiCAIPwj7CoLgSXDxSjEVzAt9k01CBKdWfsFf/2WNuEwc2YqigKZpK9glAlVVwTTNbQJZlnlCkiTAZnF/mePB2biRdhwHdF2HJEmgaRrwPA+qqoI4jle5/8XkXzrCFoHg+/5ICdpm13UTho7Q9/0WnsfwiL/ouHwHrJgQR8WEwVG+oXpMPaDAkdzvd7AsC8qyhCiKJjiRnCKwbRsMw9hcQ5zv9maSBeu6hjRNYRgGFuKaCNwjkjzPoSiK1d1gDDecQobOBwswzabD/D3Np7AHOIrvNpHmPI+Kc2RZBm3bcp8wuwSIot7QQ0PznoR6wYSK0Xb/AGVLcWwc7Ng3AAAAAElFTkSuQmCC&quot)', backgroundRepeat: 'no-repeat', backgroundAttachment: 'scroll', backgroundSize: '16px 18px', backgroundPosition: '98% 50%'}} />
                                 </div>
 
                                 <div style={{marginBottom: '25px'}} className={'input-group' + (submitted && !password ? ' has-error' : '')}>

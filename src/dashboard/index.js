@@ -5,6 +5,8 @@ import "react-table/react-table.css";
 import Pagination from "react-js-pagination";
 import { CSVLink, CSVDownload } from "react-csv";
 import $ from "jquery";
+import { TextField, DatePicker, SelectField } from 'react-md';
+import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import ViewModal from "./_modal/view";
@@ -58,11 +60,7 @@ class Dashboard extends React.Component {
 		}
 	};
 
-	handleInputChange(event) {
-		const target = event.target;
-		const value = target.value;
-		const name = target.name;
-
+	handleInputChange(name,value) {
 		this.setState({
 			[name]: value
 		});
@@ -338,85 +336,76 @@ class Dashboard extends React.Component {
 						<div className="panel-heading-cpd-3" style={{padding: '10px'}}>
 							<i className="fa fa-filter " title="" tooltip="" data-original-title="Search"> Search</i>
 						</div>
-						<div className="shadow">
-							<div className="layout-gt-sm-row">
-								<div style={{padding: '1rem'}}>
-
-									<div className="form-group input-group" style={{width: '100%'}}>
-										<span className="has-float-label" style={{width: '50%'}}>
-											 <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-													placeholder="Course Name" id="courseName"
-													type="text"
-													value={this.state.course_name}
-													name="course_name"
-													onChange={this.handleInputChange}
-													aria-invalid="false"
-											 />
-											<label htmlFor="course_name">Course Name</label>
-										</span>
-										<div className="has-float-label form-group input-group" style={{width: '50%'}}>
-											<select className="form-control ng-pristine ng-valid ng-not-empty ng-touched"
-													id="year" name="year"
-													onChange={this.handleInputChange}
-													value={this.state.year} aria-invalid="false" >
-												<option value="" > </option>
-												<option aria-checked="true" value="2018">2018</option>
-												<option aria-checked="true" value="2019">2019</option>
-											</select>
-											<label htmlFor="Year">Year</label>
-										</div>
-									</div>
-									<div className="form-group input-group" style={{width: '100%'}}>
-										<span className="has-float-label">
-											<input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-												   id="location_name"
-												   placeholder="Location Name"
-												   type="text"
-												   value={this.state.location_name}
-												   name="location_name"
-												   onChange={this.handleInputChange}
-												   aria-invalid="false"
-											/>
-											<label htmlFor="location_name">Location Name</label>
-										</span>
-										<div className="has-float-label" >
-											<p className="input-group datepicker" style={{ padding: '0' }}>
-												<input type="text" id="startdate" className="form-control" placeholder="Enter Start Date" my-date-picker="" end-date="+3y" aria-invalid="true" />
-												<span className="input-group-addon">
-													<span className="glyphicon glyphicon-calendar"> </span>
-												</span>
-											</p>
-											<label htmlFor="courseDate">Enter Start Date</label>
-										</div>
-									</div>
-
-									<div className="form-group input-group" style={{width: '45.5%'}}>
-										<div className="has-float-label" >
-											<select id="host_id" name="host_id" value={this.state.host_id} onChange={this.handleInputChange}
-													className="form-control ng-pristine ng-valid ng-empty ng-touched">
-												<option value="" defaultValue> </option>
-												{this.state.host_list.map((item, key) =>
-													<option key={key} value={item.ID} >{item.Name}</option>
-												)}
-											</select>
-											<label htmlFor="host">Host</label>
-										</div>
-									</div>
+	                    <div className="shadow">
+	                        <div className="layout-gt-sm-row">
+	                            <div style={{padding: '1rem'}}>
 
 
-									<div className="clearfix"> </div>
-									<div>
-										<button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
-											<span className="glyphicon glyphicon-search"> </span>
-											Search
-										</button>
-										<button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
-											<span className="glyphicon glyphicon-remove-sign"> </span>
-											Clear
-										</button>
-									</div>
-								</div>
-							</div>
+	                                <div className="md-grid">
+	                                    <TextField
+	                                          id="courseName"
+	                                          label="Course Name"
+	                                          lineDirection="center"
+	                                          placeholder="Course Name"
+	                                          name="course_name"
+	                                          onChange={(value) => {this.handleInputChange('course_name',value)}}
+	                                          className="md-cell md-cell--6 md-cell--bottom"
+	                                        />
+
+	                                    <SelectField
+										    id="select_year"
+										    label="Select Year"
+										    placeholder="Year"
+										    name="year"
+										    menuItems={['2017', '2018']}
+	                                        onChange={(value) => {this.handleInputChange('year',value)}}
+										    className="md-cell md-cell--6 md-cell--bottom"
+										/>
+	                                </div>
+
+	                                <div className="md-grid">
+	                                    <TextField
+	                                          id="location_name"
+	                                          label="Location Name"
+	                                          lineDirection="center"
+	                                          placeholder="Location Name"
+	                                          name="location_name"
+	                                          onChange={(value) => {this.handleInputChange('location_name',value)}}
+	                                          className="md-cell md-cell--6 md-cell--bottom"
+	                                        />
+
+	                                    <DatePicker
+	                                          id="start_date"
+	                                          label="Enter Start Date"
+	                                          name="start_date"
+	                                          onChange={(value) => {this.handleInputChange('start_date',value)}}
+	                                          className="md-cell md-cell--6 md-cell--bottom"
+	                                    />
+
+	                                </div>
+	                                <div className="md-grid">
+	                                    <TextField
+	                                          id="host"
+	                                          label="Host"
+	                                          lineDirection="center"
+	                                          placeholder="Host"
+	                                          onChange={(value) => {this.handleInputChange('host',value)}}
+	                                          className="md-cell md-cell--6 md-cell--bottom"
+	                                        />
+
+	                                </div>
+	                                <div>
+	                                    <button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
+	                                        <span className="glyphicon glyphicon-search"> </span>
+	                                        Search
+	                                    </button>
+	                                    <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
+	                                        <span className="glyphicon glyphicon-remove-sign"> </span>
+	                                        Clear
+	                                    </button>
+	                                </div>
+	                            </div>
+	                        </div>
 						</div>
 					</div>
 				</div>

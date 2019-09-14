@@ -6,8 +6,6 @@ import Pagination from "react-js-pagination";
 import $ from "jquery";
 import { TextField, DatePicker } from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
-import "bootstrap-datepicker/js/bootstrap-datepicker.js";
-import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
 const Approved_CPD_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd";
 
@@ -38,11 +36,8 @@ class ApprovedCPDProviders extends React.Component {
         }
     };
 
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
+    handleInputChange(name,value) {
+        console.log(name,value);
         this.setState({
             [name]: value
         });
@@ -158,7 +153,7 @@ class ApprovedCPDProviders extends React.Component {
                     <td>{cpd_record.LocationName}</td>
                     <td>{cpd_record.Duration}h</td>
                     <td>{cpd_record.HostName}</td>
-                    <td>{cpd_record.CPDTypeName}</td>
+                    <td>{cpd_record.CPDTypeName}</td>dsfkjs hfkjdsh fjsdhkd
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.StartDate}</td>
                     <td> </td>
@@ -180,92 +175,43 @@ class ApprovedCPDProviders extends React.Component {
 
                                 <div className="md-grid">
                                     <TextField
-                                          id="floating-center-title"
+                                          id="courseName"
                                           label="Course Name"
                                           lineDirection="center"
                                           placeholder="Course Name"
+                                          name="course_name"
+                                          onChange={(value) => {this.handleInputChange('course_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
                                     <TextField
-                                          id="floating-center-title"
+                                          id="host"
                                           label="Host"
                                           lineDirection="center"
                                           placeholder="Host"
+                                          onChange={(value) => {this.handleInputChange('host',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
                                     </div>
 
                                     <div className="md-grid">
                                     <TextField
-                                          id="floating-center-title"
+                                          id="location_name"
                                           label="Location Name"
                                           lineDirection="center"
                                           placeholder="Location Name"
+                                          name="location_name"
+                                          onChange={(value) => {this.handleInputChange('location_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
 
                                     <DatePicker
-                                        id="appointment-date-auto"
-                                        label="Select an appointment date"
-                                        className="md-cell md-cell--6 md-cell--bottom"
+                                          id="start_date"
+                                          label="Enter Start Date"
+                                          name="start_date"
+                                          onChange={(value) => {this.handleInputChange('start_date',value)}}
+                                          className="md-cell md-cell--6 md-cell--bottom"
                                     />
 
-                                </div>
-
-                                <div className="form-group input-group" style={{width: '100%'}}>
-
-                                    <span className="has-float-label" style={{width: '50%'}}>
-                                        <input className="form-control ng-pristine ng-valid ng-empty ng-touched"
-                                               id="courseName"
-                                               placeholder="Course Name"
-                                               type="text"
-                                               value={this.state.course_name}
-                                               name="course_name"
-                                               onChange={this.handleInputChange}
-                                               aria-invalid="false" />
-                                        <label htmlFor="course_name">Course Name</label>
-                                    </span>
-
-                                    <span className="has-float-label" style={{width: '50%'}}>
-                                        <input className="form-control ng-pristine ng-valid ng-empty ng-touched"
-                                               id="host"
-                                               placeholder="Host"
-                                               type="text"
-                                               value={this.state.host}
-                                               name="host"
-                                               onChange={this.handleInputChange}
-                                               aria-invalid="false" />
-                                        <label htmlFor="host">Host</label>
-                                    </span>
-                                </div>
-
-                                <div className="form-group input-group" style={{width: '100%'}}>
-                                    <span className="has-float-label">
-                                        <input className="form-control"
-                                               id="location_name"
-                                               placeholder="Location Name"
-                                               type="text"
-                                               value={this.state.location_name}
-                                               name="location_name"
-                                               onChange={this.handleInputChange}
-                                        />
-                                        <label htmlFor="location_name">Location Name</label>
-                                    </span>
-
-                                    <div className="has-float-label" >
-                                        <p className="input-group datepicker" style={{ padding: '0' }}>
-                                            <input type="text" className="form-control"
-                                                   placeholder="Enter Start Date"
-                                                   name="start_date"
-                                                   value={this.state.start_date}
-                                                   onChange={this.handleInputChange}
-                                                   aria-invalid="true" />
-                                            <span className="input-group-addon">
-													<span className="glyphicon glyphicon-calendar"> </span>
-												</span>
-                                        </p>
-                                        <label htmlFor="start_date">Enter Start Date</label>
-                                    </div>
                                 </div>
 
                                 <div className="clearfix"> </div>

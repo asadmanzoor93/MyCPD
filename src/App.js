@@ -12,8 +12,12 @@ import ApprovedCPDProviders from "./approved_cpd_providers";
 import Library from "./library";
 import FeedbackModal from './feedback/_modals/modal';
 import AboutUsModal from './about-us/_modals/about-us';
+import { LinearProgress } from 'react-md';
 
 const SignOut_URL = 'http://34.248.242.178/CPDCompliance/api/account/LogOff';
+const REFRESH_TIME = 3000;
+const UPDATE_INTERVAL = 15;
+const UPDATE_INCREMENT = 100 / (REFRESH_TIME / UPDATE_INTERVAL);
 
 class App extends React.Component {
   constructor(props) {
@@ -27,14 +31,24 @@ class App extends React.Component {
           feedBackModalShown: false,
           aboutUsModalShown: false,
           logout: false,
+          mainLoading: true
       };
 
       this.makeSignOutRequest = this.makeSignOutRequest.bind(this);
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        mainLoading: false
+      })
+    }, 1000)
+  }
+
   makeSignOutRequest() {
     this.setState({
       logout: true,
+      mainLoading: false
     });
     axios.get(SignOut_URL, {
       method: 'GET',
@@ -61,6 +75,7 @@ class App extends React.Component {
 
     return (
         <div>
+          { this.state.mainLoading && <LinearProgress id="main-loader"  /> }
           <header css="headerdashboard" text="Home Page"
                   style={{display: (this.props.location.pathname === '/login' || this.props.location.pathname === '/') ? 'none' : 'block'}}
                   className="ng-scope ng-isolate-scope">

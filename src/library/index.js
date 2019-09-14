@@ -3,6 +3,8 @@ import "react-table/react-table.css";
 import { Redirect } from 'react-router-dom';
 import axios from "axios";
 import Pagination from "react-js-pagination";
+import { TextField, DatePicker, SelectField } from 'react-md';
+import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 
 const Types_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypes";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
@@ -38,18 +40,13 @@ class Library extends React.Component {
         }
     };
 
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
+    handleInputChange(name, value) {
         this.setState({
             [name]: value
         });
     }
 
     handlePageChange(pageNumber) {
-        console.log(`active page is ${pageNumber}`);
         this.setState({
             activePage: pageNumber
         });
@@ -220,76 +217,66 @@ class Library extends React.Component {
                     <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
                         <i className="fa fa-filter " title="" data-original-title="Search"> Search</i>
                     </div>
+
                     <div className="shadow">
                         <div className="layout-gt-sm-row">
                             <div style={{padding: '1rem'}}>
-                                <div className="form-group input-group">
-                                    <span className="has-float-label" style={{width: '590px'}}>
-                                        <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                               placeholder="Course Name" id="courseName"
-                                               type="text"
-                                               value={this.state.course_name}
-                                               name="course_name"
-                                               onChange={this.handleInputChange}
-                                               aria-invalid="false"
+
+
+                                <div className="md-grid">
+                                    <TextField
+                                          id="courseName"
+                                          label="Course Name"
+                                          lineDirection="center"
+                                          placeholder="Course Name"
+                                          name="course_name"
+                                          onChange={(value) => {this.handleInputChange('course_name',value)}}
+                                          className="md-cell md-cell--6 md-cell--bottom"
                                         />
-                                        <label htmlFor="courseName">Course Name</label>
-                                    </span>
-                                    <span className="has-float-label" style={{width: '590px'}}>
-                                        <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                               id="location_name"
-                                               placeholder="Location Name"
-                                               type="text"
-                                               value={this.state.location_name}
-                                               name="location_name"
-                                               onChange={this.handleInputChange}
-                                               aria-invalid="false"
+
+                                    <TextField
+                                          id="location_name"
+                                          label="Location Name"
+                                          lineDirection="center"
+                                          placeholder="Location Name"
+                                          name="location_name"
+                                          onChange={(value) => {this.handleInputChange('location_name',value)}}
+                                          className="md-cell md-cell--6 md-cell--bottom"
                                         />
-                                        <label htmlFor="LocationName">Location Name</label>
-                                    </span>
+                                </div>
+                                <div className="md-grid">
+                                    <SelectField
+                                        id="host"
+                                        label="Host"
+                                        placeholder="Host"
+                                        name="host"
+                                        menuItems={['Host 1', 'Host 2']}
+                                        onChange={(value) => {this.handleInputChange('host',value)}}
+                                        className="md-cell md-cell--6 md-cell--bottom"
+                                    />
+                                    <TextField
+                                          id="venue"
+                                          label="Venue"
+                                          lineDirection="center"
+                                          placeholder="Host"
+                                          onChange={(value) => {this.handleInputChange('venue',value)}}
+                                          className="md-cell md-cell--6 md-cell--bottom"
+                                        />
                                 </div>
 
-                                <div className="form-group input-group">
-                                    <div className="has-float-label" style={{width: '560px'}}>
-                                        <select id="cpd_type_id" name="cpd_type_id" value={this.state.cpd_type_id} onChange={this.handleInputChange}
-                                                className="form-control ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
-                                            <option value="" defaultValue> </option>
-                                            {this.state.types_list.map((item, key) =>
-                                                <option key={key} label={item.Description} value={item.CPDTypeId} >{item.Description}</option>
-                                            )}
-                                        </select>
-                                        <label htmlFor="courseType">CPD Type</label>
-                                    </div>
-
-                                    <span className="has-float-label" style={{width: '560px'}}>
-                                        <input className="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                               id="Venue"
-                                               placeholder="Venue"
-                                               type="text"
-                                               value={this.state.venue}
-                                               name="location_name"
-                                               onChange={this.handleInputChange}
-                                               aria-invalid="false"
-                                        />
-                                        <label htmlFor="Venue">Venue</label>
-                                    </span>
+                                <div className="md-grid">
+                                    <SelectField
+                                        id="cpd_type_id"
+                                        label="CPD Type"
+                                        placeholder="cpd_type_id"
+                                        name="host"
+                                        menuItems={['CPD Type 1', 'CPD Type 2']}
+                                        onChange={(value) => {this.handleInputChange('cpd_type_id',value)}}
+                                        className="md-cell md-cell--6 md-cell--bottom"
+                                    />
                                 </div>
-
-                                <div className="form-group input-group" style={{width: '45.5%'}}>
-                                    <div className="has-float-label" >
-                                        <select id="host_id" name="host_id" value={this.state.host_id} onChange={this.handleInputChange}
-                                                className="form-control ng-pristine ng-valid ng-empty ng-touched">
-                                            <option value="" defaultValue> </option>
-                                            {this.state.host_list.map((item, key) =>
-                                                <option key={key} value={item.ID} >{item.Name}</option>
-                                            )}
-                                        </select>
-                                        <label htmlFor="host">Host</label>
-                                    </div>
-                                </div>
-                                <div className="clearfix"> </div>
                                 <div>
-                                    <button className="btn btn-primary" onClick={() => this.makeHttpRequestWithPage(1)}>
+                                    <button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
                                         <span className="glyphicon glyphicon-search"> </span>
                                         Search
                                     </button>
@@ -302,7 +289,6 @@ class Library extends React.Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="row" style={{paddingBottom: '30px'}}>
                     <div className="gridTopButtons">
                         <button type="button" onClick={() => window.print()}
