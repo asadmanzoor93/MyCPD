@@ -61,9 +61,14 @@ class Dashboard extends React.Component {
 	};
 
 	handleInputChange(name,value) {
-		this.setState({
-			[name]: value
-		});
+        let newValue = value;
+        if (name == 'start_date') {
+            let newDate = new Date(value);
+            newValue = newDate.toISOString();
+        }
+        this.setState({
+            [name]: newValue
+        });
 	}
 
 	handlePageChange(pageNumber) {
