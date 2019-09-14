@@ -153,7 +153,7 @@ class ApprovedCPDProviders extends React.Component {
                     <td>{cpd_record.LocationName}</td>
                     <td>{cpd_record.Duration}h</td>
                     <td>{cpd_record.HostName}</td>
-                    <td>{cpd_record.CPDTypeName}</td>dsfkjs hfkjdsh fjsdhkd
+                    <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.StartDate}</td>
                     <td> </td>
@@ -180,6 +180,7 @@ class ApprovedCPDProviders extends React.Component {
                                           lineDirection="center"
                                           placeholder="Course Name"
                                           name="course_name"
+                                          value={this.state.course_name}
                                           onChange={(value) => {this.handleInputChange('course_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -188,6 +189,7 @@ class ApprovedCPDProviders extends React.Component {
                                           label="Host"
                                           lineDirection="center"
                                           placeholder="Host"
+                                          value={this.state.host}
                                           onChange={(value) => {this.handleInputChange('host',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -200,6 +202,7 @@ class ApprovedCPDProviders extends React.Component {
                                           lineDirection="center"
                                           placeholder="Location Name"
                                           name="location_name"
+                                          value={this.state.location_name}
                                           onChange={(value) => {this.handleInputChange('location_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -208,6 +211,7 @@ class ApprovedCPDProviders extends React.Component {
                                           id="start_date"
                                           label="Enter Start Date"
                                           name="start_date"
+                                          value={this.state.start_date}
                                           onChange={(value) => {this.handleInputChange('start_date',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                     />
@@ -254,13 +258,13 @@ class ApprovedCPDProviders extends React.Component {
                         <thead>
                             <tr className="header">
                                 <th> </th>
-                                <th role="button" onClick={this.onSort('course')}>Course Name <i className={this.setArrow('course')}> </i></th>
-                                <th role="button" onClick={this.onSort('location')}>Location<i className={this.setArrow('location')}> </i></th>
-                                <th role="button" onClick={this.onSort('cpdhours')}>CPD Hours<i className={this.setArrow('cpdhours')}> </i></th>
-                                <th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}> </i></th>
-                                <th role="button" onClick={this.onSort('type')}>Type<i className={this.setArrow('type')}> </i></th>
-                                <th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}> </i></th>
-                                <th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}> </i></th>
+                                <th role="button" onClick={this.onSort('CourseName')}>Course Name <i className={this.setArrow('CourseName')}> </i></th>
+                                <th role="button" onClick={this.onSort('LocationName')}>Location<i className={this.setArrow('LocationName')}> </i></th>
+                                <th role="button" onClick={this.onSort('Duration')}>CPD Hours<i className={this.setArrow('Duration')}> </i></th>
+                                <th role="button" onClick={this.onSort('HostName')}>Host<i className={this.setArrow('HostName')}> </i></th>
+                                <th role="button" onClick={this.onSort('CPDTypeName')}>Type<i className={this.setArrow('CPDTypeName')}> </i></th>
+                                <th role="button" onClick={this.onSort('Trainer')}>Trainer<i className={this.setArrow('Trainer')}> </i></th>
+                                <th role="button" onClick={this.onSort('StartDate')}>Start Date<i className={this.setArrow('StartDate')}> </i></th>
                                 <th>View</th>
                             </tr>
                         </thead>

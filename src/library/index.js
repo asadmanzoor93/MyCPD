@@ -214,6 +214,7 @@ class Library extends React.Component {
         return className;
     };
 
+
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
@@ -223,7 +224,7 @@ class Library extends React.Component {
         if (this.state.library_records !== null) {
             library_records = this.state.library_records.map((cpd_record , index) => (
                 <tr key={index}>
-                    <td> </td>
+                    <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationID}</td>
                     <td>{cpd_record.DurationHours}h</td>
@@ -257,6 +258,7 @@ class Library extends React.Component {
                                           lineDirection="center"
                                           placeholder="Course Name"
                                           name="course_name"
+                                          value={this.state.course_name}
                                           onChange={(value) => {this.handleInputChange('course_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -267,6 +269,7 @@ class Library extends React.Component {
                                           lineDirection="center"
                                           placeholder="Location Name"
                                           name="location_name"
+                                          value={this.state.location_name}
                                           onChange={(value) => {this.handleInputChange('location_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -278,6 +281,7 @@ class Library extends React.Component {
                                         placeholder="Host"
                                         name="host"
                                         menuItems={['Host 1', 'Host 2']}
+                                        value={this.state.host}
                                         onChange={(value) => {this.handleInputChange('host',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />
@@ -285,7 +289,8 @@ class Library extends React.Component {
                                           id="venue"
                                           label="Venue"
                                           lineDirection="center"
-                                          placeholder="Host"
+                                          placeholder="Venue"
+                                          value={this.state.venue}
                                           onChange={(value) => {this.handleInputChange('venue',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -296,8 +301,9 @@ class Library extends React.Component {
                                         id="cpd_type_id"
                                         label="CPD Type"
                                         placeholder="cpd_type_id"
-                                        name="host"
+                                        name="cpd_type_id"
                                         menuItems={['CPD Type 1', 'CPD Type 2']}
+                                        value={this.state.cpd_type_id}
                                         onChange={(value) => {this.handleInputChange('cpd_type_id',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />
@@ -341,14 +347,14 @@ class Library extends React.Component {
                         <thead>
                         <tr className="header">
                             <td> </td>
-                            <th role="button" onClick={this.onSort('course')}>Course Name <i className={this.setArrow('course')}> </i></th>
-                            <th role="button" onClick={this.onSort('location')}>Location<i className={this.setArrow('location')}> </i></th>
-                            <th role="button" onClick={this.onSort('cpdhours')}>CPD Hours<i className={this.setArrow('cpdhours')}> </i></th>
-                            <th role="button" onClick={this.onSort('type')}>Type<i className={this.setArrow('type')}> </i></th>
-                            <th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}> </i></th>
-                            <th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}> </i></th>
-                            <th role="button" onClick={this.onSort('venue')}>Venue<i className={this.setArrow('venue')}> </i></th>
-                            <th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}> </i></th>
+                            <th role="button" onClick={this.onSort('CourseName')}>Course Name <i className={this.setArrow('CourseName')}> </i></th>
+                            <th role="button" onClick={this.onSort('LocationID')}>Location<i className={this.setArrow('LocationID')}> </i></th>
+                            <th role="button" onClick={this.onSort('DurationHours')}>CPD Hours<i className={this.setArrow('DurationHours')}> </i></th>
+                            <th role="button" onClick={this.onSort('CPDTypeId')}>Type<i className={this.setArrow('CPDTypeId')}> </i></th>
+                            <th role="button" onClick={this.onSort('HostID')}>Host<i className={this.setArrow('HostID')}> </i></th>
+                            <th role="button" onClick={this.onSort('Trainer')}>Trainer<i className={this.setArrow('Trainer')}> </i></th>
+                            <th role="button" onClick={this.onSort('Venue')}>Venue<i className={this.setArrow('Venue')}> </i></th>
+                            <th role="button" onClick={this.onSort('StartDate')}>Start Date<i className={this.setArrow('StartDate')}> </i></th>
                             <th>View</th>
                         </tr>
                         </thead>
