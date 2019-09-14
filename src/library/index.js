@@ -257,6 +257,7 @@ class Library extends React.Component {
                                           lineDirection="center"
                                           placeholder="Course Name"
                                           name="course_name"
+                                          value={this.state.course_name}
                                           onChange={(value) => {this.handleInputChange('course_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -267,6 +268,7 @@ class Library extends React.Component {
                                           lineDirection="center"
                                           placeholder="Location Name"
                                           name="location_name"
+                                          value={this.state.location_name}
                                           onChange={(value) => {this.handleInputChange('location_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -278,6 +280,7 @@ class Library extends React.Component {
                                         placeholder="Host"
                                         name="host"
                                         menuItems={['Host 1', 'Host 2']}
+                                        value={this.state.host}
                                         onChange={(value) => {this.handleInputChange('host',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />
@@ -285,7 +288,8 @@ class Library extends React.Component {
                                           id="venue"
                                           label="Venue"
                                           lineDirection="center"
-                                          placeholder="Host"
+                                          placeholder="Venue"
+                                          value={this.state.venue}
                                           onChange={(value) => {this.handleInputChange('venue',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
@@ -296,8 +300,9 @@ class Library extends React.Component {
                                         id="cpd_type_id"
                                         label="CPD Type"
                                         placeholder="cpd_type_id"
-                                        name="host"
+                                        name="cpd_type_id"
                                         menuItems={['CPD Type 1', 'CPD Type 2']}
+                                        value={this.state.cpd_type_id}
                                         onChange={(value) => {this.handleInputChange('cpd_type_id',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />

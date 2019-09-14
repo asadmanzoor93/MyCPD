@@ -339,7 +339,7 @@ class Dashboard extends React.Component {
 
 					<div className="panel panel-default">
 						<div className="panel-heading-cpd-3" style={{padding: '10px'}}>
-							<i className="fa fa-filter " title="" tooltip="" data-original-title="Search"> Search</i>
+							<i className="fa fa-filter " title="" data-original-title="Search"> Search</i>
 						</div>
 	                    <div className="shadow">
 	                        <div className="layout-gt-sm-row">
@@ -351,6 +351,7 @@ class Dashboard extends React.Component {
 	                                          lineDirection="center"
 	                                          placeholder="Course Name"
 	                                          name="course_name"
+											  value={this.state.course_name}
 	                                          onChange={(value) => {this.handleInputChange('course_name',value)}}
 	                                          className="md-cell md-cell--6 md-cell--bottom"
 	                                        />
@@ -361,6 +362,7 @@ class Dashboard extends React.Component {
 										    placeholder="Year"
 										    name="year"
 										    menuItems={['2017', '2018']}
+											value={this.state.year}
 	                                        onChange={(value) => {this.handleInputChange('year',value)}}
 										    className="md-cell md-cell--6 md-cell--bottom"
 										/>
@@ -373,6 +375,7 @@ class Dashboard extends React.Component {
 	                                          lineDirection="center"
 	                                          placeholder="Location Name"
 	                                          name="location_name"
+											  value={this.state.location_name}
 	                                          onChange={(value) => {this.handleInputChange('location_name',value)}}
 	                                          className="md-cell md-cell--6 md-cell--bottom"
 	                                        />
@@ -381,6 +384,7 @@ class Dashboard extends React.Component {
 	                                          id="start_date"
 	                                          label="Enter Start Date"
 	                                          name="start_date"
+											  value={this.state.start_date}
 	                                          onChange={(value) => {this.handleInputChange('start_date',value)}}
 	                                          className="md-cell md-cell--6 md-cell--bottom"
 	                                    />
@@ -392,6 +396,7 @@ class Dashboard extends React.Component {
 	                                          label="Host"
 	                                          lineDirection="center"
 	                                          placeholder="Host"
+											  value={this.state.host}
 	                                          onChange={(value) => {this.handleInputChange('host',value)}}
 	                                          className="md-cell md-cell--6 md-cell--bottom"
 	                                        />
