@@ -48,6 +48,7 @@ class Dashboard extends React.Component {
 		    },
 			unauthorized: false,
 			listViewModalShown: false,
+			listViewDataCourseName:          "",
 	        listViewDatastartDate:          "",
 	        listViewDatacourseLocation:     "",
 	        listViewDatacourseType:         "",
@@ -198,24 +199,17 @@ class Dashboard extends React.Component {
 		});
 	}
 
-    openModalWithItem(startDate,courseLocation,courseType,host,cpdFormat,venue,trainer,courseDescription) {
-    	console.log(startDate,'startDate',
-    		courseLocation,"courseLocation",
-    		courseType,"courseType",
-    		host,"host",
-    		cpdFormat,"cpdFormat",
-    	venue,"venue",
-    	trainer,"trainer",
-    	courseDescription,"courseDescription");
+    openModalWithItem(courseName,startDate,courseLocation,courseType,host,cpdFormat,venue,trainer,courseDescription) {
        this.setState({
-	        listViewDatastartDate:          startDate,
-	        listViewDatacourseLocation:     courseLocation,
-	        listViewDatacourseType:         courseType,
-	        listViewDatahost:               host,
-	        listViewDatacpdFormat:          cpdFormat,
-	        listViewDatavenue:              venue,
-	        listViewDatatrainer:            trainer,
-	        listViewDatacourseDescription:  courseDescription,
+	        listViewDataCourseName:         courseName,
+	        listViewDatastartDate:          (startDate) ? startDate : 'na',
+	        listViewDatacourseLocation:     (courseLocation) ? courseLocation : 'na',
+	        listViewDatacourseType:         (courseType) ? courseType : 'na',
+	        listViewDatahost:               (host) ? host : 'na',
+	        listViewDatacpdFormat:          (cpdFormat) ? cpdFormat : 'na',
+	        listViewDatavenue:              (venue) ? venue : 'na',
+	        listViewDatatrainer:            (trainer) ? trainer : 'na',
+	        listViewDatacourseDescription:  (courseDescription) ? courseDescription : 'na',
 			listViewModalShown: true
        })
     }
@@ -266,7 +260,19 @@ class Dashboard extends React.Component {
 						<td>{dashboard_record.Trainer}</td>
 						<td>{dashboard_record.HostId}</td>
 						<td>{dashboard_record.StartDate}</td>
-						<td><a onClick={() => {this.openModalWithItem(dashboard_record.StartDate,dashboard_record.CourseLocation,dashboard_record.CourseType,dashboard_record.Host,dashboard_record.CPDFormat,dashboard_record.Venue,dashboard_record.Trainer,dashboard_record.CourseDescription)}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"></i></a></td>
+						<td><a data-item={dashboard_record}
+							   onClick={() => {this.openModalWithItem(
+							   	dashboard_record.CourseName,
+								dashboard_record.StartDate,
+								dashboard_record.LocationName,
+								dashboard_record.CPDTypeName,
+								dashboard_record.HostId,
+								dashboard_record.CPDFormatId,
+								dashboard_record.Venue,
+								dashboard_record.Trainer,
+								dashboard_record.CourseDescription
+							)}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+						</td>
 					</tr>
 				)
 			}
@@ -440,14 +446,14 @@ class Dashboard extends React.Component {
 						<thead>
 						<tr className="header">
 							<th> </th>
-							<th role="button" onClick={this.onSort('courseType')}>Course Type <i className={this.setArrow('courseType')}></i></th>
-							<th role="button" onClick={this.onSort('course')}>Course<i className={this.setArrow('course')}></i></th>
-							<th role="button" onClick={this.onSort('completedHours')}>Completed Hours<i className={this.setArrow('completedHours')}></i></th>
-							<th role="button" onClick={this.onSort('completionDate')}>Completion Date<i className={this.setArrow('completionDate')}></i></th>
-							<th role="button" onClick={this.onSort('venue')}>Venue<i className={this.setArrow('venue')}></i></th>
-							<th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}></i></th>
-							<th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}></i></th>
-							<th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}></i></th>
+							<th role="button" onClick={this.onSort('courseType')}>Course Type <i className={this.setArrow('courseType')}> </i></th>
+							<th role="button" onClick={this.onSort('course')}>Course<i className={this.setArrow('course')}> </i></th>
+							<th role="button" onClick={this.onSort('completedHours')}>Completed Hours<i className={this.setArrow('completedHours')}> </i></th>
+							<th role="button" onClick={this.onSort('completionDate')}>Completion Date<i className={this.setArrow('completionDate')}> </i></th>
+							<th role="button" onClick={this.onSort('venue')}>Venue<i className={this.setArrow('venue')}> </i></th>
+							<th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}> </i></th>
+							<th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}> </i></th>
+							<th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}> </i></th>
 							<th>Actions</th>
 						</tr>
 						</thead>
@@ -470,11 +476,18 @@ class Dashboard extends React.Component {
 
 				</div>
 				<ViewModal show={ this.state.listViewModalShown }
-
-	        data={this.state}
-
-
-				onHide={listViewModalShownClose} />
+						   data={this.state}
+						   onHide={listViewModalShownClose}
+						   coursename={this.state.listViewDataCourseName}
+						   startdate={this.state.listViewDatastartDate}
+						   courselocation={this.state.listViewDatacourseLocation}
+						   coursetype={this.state.listViewDatacourseType}
+						   host={this.state.listViewDatahost}
+						   cpdformat={this.state.listViewDatacpdFormat}
+						   venue={this.state.listViewDatavenue}
+						   trainer={this.state.listViewDatatrainer}
+						   description={this.state.listViewDatacourseDescription}
+				/>
 			</div>
 		);
 	}
