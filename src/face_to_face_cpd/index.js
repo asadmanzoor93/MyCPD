@@ -30,6 +30,10 @@ class FaceToFace extends React.Component {
             totalCount: 0,
             per_page: 10,
             activePage: 0,
+            sort: {
+                column: 'StartDate',
+                direction: 'desc'
+            },
             unauthorized: false
         }
     };
@@ -84,9 +88,8 @@ class FaceToFace extends React.Component {
                 HostName: this.state.host_name,
                 LocationName: this.state.location_name,
                 StartDate: this.state.start_date,
-                reverse: this.state.reverse,
-                sortBy: this.state.sortBy,
-
+                reverse: this.state.sort.direction,
+                sortBy: this.state.sort.column,
                 page: pageNumber,
                 pageSize: this.state.per_page,
             },
@@ -131,8 +134,10 @@ class FaceToFace extends React.Component {
             location_name: '',
             host_name: '',
             start_date: '',
-            reverse: false,
-            sortBy: 'StartDate',
+            sort: {
+                column: 'StartDate',
+                direction: 'desc'
+            },
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
@@ -142,10 +147,26 @@ class FaceToFace extends React.Component {
         $('.datepicker').datepicker();
     }
 
-    render () {
-        if (this.state.unauthorized) {
-            return <Redirect to='/'/>;
+    onSort = (column) => (e) => {
+        const direction = this.state.sort.column ? (this.state.sort.direction === 'asc' ? 'desc' : 'asc') : 'desc';
+        this.setState({
+            sort: {
+                column,
+                direction,
+            }
+        });
+    };
+
+    setArrow = (column) => {
+        let className = 'fa fa-sort';
+        if (this.state.sort.column === column) {
+            className += this.state.sort.direction === 'asc' ? '-asc' : '-desc';
         }
+        return className;
+    };
+
+    render () {
+
 
         let cpd_records;
         if (this.state.cpd_records !== null) {
@@ -264,14 +285,14 @@ class FaceToFace extends React.Component {
                         <thead>
                             <tr className="header">
                                 <th> </th>
-                                <th>Course Name </th>
-                                <th>Location</th>
-                                <th>CPD Hours</th>
-                                <th>Host</th>
-                                <th>Type</th>
-                                <th>Trainer</th>
-                                <th>Start Date</th>
-                                <th> </th>
+                                <th role="button" onClick={this.onSort('course')}>Course Name <i className={this.setArrow('course')}> </i></th>
+                                <th role="button" onClick={this.onSort('location')}>Location<i className={this.setArrow('location')}> </i></th>
+                                <th role="button" onClick={this.onSort('cpdhours')}>CPD Hours<i className={this.setArrow('cpdhours')}> </i></th>
+                                <th role="button" onClick={this.onSort('host')}>Host<i className={this.setArrow('host')}> </i></th>
+                                <th role="button" onClick={this.onSort('type')}>Type<i className={this.setArrow('type')}> </i></th>
+                                <th role="button" onClick={this.onSort('trainer')}>Trainer<i className={this.setArrow('trainer')}> </i></th>
+                                <th role="button" onClick={this.onSort('startDate')}>Start Date<i className={this.setArrow('startDate')}> </i></th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>

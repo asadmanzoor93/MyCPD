@@ -36,8 +36,6 @@ class Dashboard extends React.Component {
 			host_id: '',
 			year: '',
 			date_selected: '',
-			reverse: false,
-			sortBy: 'StartDate',
 			totalPages: 0,
 			totalCount: 0,
 			per_page: 10,
@@ -185,8 +183,6 @@ class Dashboard extends React.Component {
 			host_id: '',
 			year: '',
 			date_selected: '',
-			reverse: false,
-			sortBy: 'StartDate',
 			sort: {
 				column: 'StartDate',
 				direction: 'desc'
