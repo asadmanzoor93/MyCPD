@@ -6,6 +6,7 @@ import Pagination from "react-js-pagination";
 import { TextField, DatePicker, SelectField } from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 
+const Locations_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/Location";
 const Types_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypes";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const Library_URL = "http://34.248.242.178/CPDCompliance/api/Library";
@@ -22,6 +23,9 @@ class Library extends React.Component {
         this.exportExcelReport = this.exportExcelReport.bind(this);
 
         this.state = {
+            host_dict: [],
+            types_dict: [],
+            locations_dict: [],
             host_list: [],
             types_list: [],
             library_records: [],
@@ -77,7 +81,18 @@ class Library extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data){
-                    this.setState({ types_list: data });
+                    let type_dic = [];
+                    for(let i = 0; i < data.length; i++){
+                        type_dic.push({
+                            key:   data[i]['CPDTypeId'],
+                            value: data[i]['Description']
+                        });
+                    }
+
+                    this.setState({
+                        types_list: data,
+                        type_dic: type_dic
+                    });
                 }
             }).catch(console.log);
 
@@ -95,7 +110,46 @@ class Library extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data){
-                    this.setState({ host_list: data });
+                    let host_dic = [];
+                    for(let i = 0; i < data.length; i++){
+                        host_dic.push({
+                            key:   data[i]['ID'],
+                            value: data[i]['Name']
+                        });
+                    }
+
+                    this.setState({
+                        host_list: data,
+                        host_dic: host_dic
+                    });
+                }
+            }).catch(console.log);
+
+        // Locations List
+        axios.get(Locations_URL, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.data)
+            .then((data) => {
+                if(data){
+                    let locations_dic = [];
+                    for(let i = 0; i < data.length; i++){
+                        locations_dic.push({
+                            key:   data[i]['ID'],
+                            value: data[i]['Name']
+                        });
+                    }
+
+                    this.setState({
+                        locations_dict: locations_dic
+                    });
                 }
             }).catch(console.log);
     }
