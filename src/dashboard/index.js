@@ -163,10 +163,14 @@ class Dashboard extends React.Component {
 				});
 
 			}).catch(function (error) {
-				if (error.response.status === 401) {
-					self.setState({
-						unauthorized: true,
-					});
+				if(error){
+					if(error.response){
+						if (error.response.status === 401) {
+							self.setState({
+								unauthorized: true,
+							});
+						}
+					}
 				}
 			});
 	};
@@ -237,6 +241,7 @@ class Dashboard extends React.Component {
 		}
 
 		let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
+
 		let dashboard_records;
 
 		const csvData = [

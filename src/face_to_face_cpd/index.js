@@ -124,10 +124,14 @@ class FaceToFace extends React.Component {
                 });
 
             }).catch(function (error) {
-                if (error.response.status === 401) {
-                    self.setState({
-                        unauthorized: true,
-                    });
+                if(error){
+                    if(error.response){
+                        if (error.response.status === 401) {
+                            self.setState({
+                                unauthorized: true,
+                            });
+                        }
+                    }
                 }
             });
     };

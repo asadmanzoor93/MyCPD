@@ -5,6 +5,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import { TextField, DatePicker, SelectField } from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
+import ViewModal from "./_modal/view";
 
 const Locations_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/Location";
 const Types_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypes";
@@ -88,7 +89,7 @@ class Library extends React.Component {
 
                     this.setState({
                         types_list: data,
-                        type_dic: type_dic
+                        type_dict: type_dic
                     });
                 }
             }).catch(console.log);
@@ -114,7 +115,7 @@ class Library extends React.Component {
 
                     this.setState({
                         host_list: data,
-                        host_dic: host_dic
+                        host_dict: host_dic
                     });
                 }
             }).catch(console.log);
@@ -178,10 +179,14 @@ class Library extends React.Component {
                 });
 
             }).catch(function (error) {
-                if (error.response.status === 401) {
-                    self.setState({
-                        unauthorized: true,
-                    });
+                if(error){
+                    if(error.response){
+                        if (error.response.status === 401) {
+                            self.setState({
+                                unauthorized: true,
+                            });
+                        }
+                    }
                 }
             });
     };
@@ -272,8 +277,8 @@ class Library extends React.Component {
                     <td>{cpd_record.CourseName}</td>
                     <td>{this.state.locations_dict[cpd_record.LocationID]}</td>
                     <td>{cpd_record.DurationHours}h</td>
-                    <td>{this.state.type_dic[cpd_record.CPDTypeId]}</td>
-                    <td>{this.state.host_dic[cpd_record.HostID]}</td>
+                    <td>{this.state.type_dict[cpd_record.CPDTypeId]}</td>
+                    <td>{this.state.host_dict[cpd_record.HostID]}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.Venue}</td>
                     <td>{cpd_record.StartDate}</td>
