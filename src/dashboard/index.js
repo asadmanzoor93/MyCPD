@@ -1,6 +1,6 @@
 import React from "react";
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import "react-table/react-table.css";
 import Pagination from "react-js-pagination";
 import { CSVLink, CSVDownload } from "react-csv";
@@ -436,8 +436,11 @@ class Dashboard extends React.Component {
 						</CSVLink>
 						<button type="button"
 								style={{marginLeft: '10px'}}
-								className="btn btn-primary btn-circle btn-lg ng-scope" tooltip=""
-								data-original-title="" title=""><i className="fa fa-plus"> </i>
+								className="btn btn-primary btn-circle btn-lg ng-scope"
+								data-original-title="" title="">
+								<Link to={'/mycpd'}>
+									<i className="fa fa-plus"> </i>
+								</Link>
 						</button>
 					</div>
 				</div>
