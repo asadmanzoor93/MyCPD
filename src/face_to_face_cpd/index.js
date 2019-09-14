@@ -11,6 +11,7 @@ import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const FaceToFace_URL = "http://34.248.242.178/CPDCompliance/api/faceToface";
+let hostList = [];
 
 class FaceToFace extends React.Component {
 
@@ -82,7 +83,9 @@ class FaceToFace extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data){
-                    this.setState({ host_list: data });
+                    hostList = data.map((item)=>{
+                        return item.Name;
+                    });
                 }
             }).catch(console.log);
 
@@ -183,7 +186,7 @@ class FaceToFace extends React.Component {
         let cpd_records;
         if (this.state.cpd_records !== null) {
             cpd_records = this.state.cpd_records.map((cpd_record , index) => (
-                <tr key={index}>
+                <tr key={index}>list after a while
                     <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationName}</td>
@@ -225,9 +228,9 @@ class FaceToFace extends React.Component {
                                         id="host"
                                         label="Host"
                                         placeholder="Host"
-                                        name="host_list"
-                                        menuItems={ this.state.host_list }
-                                        onChange={(value) => {this.handleInputChange('host_list',value)}}
+                                        name="host_name"
+                                        menuItems={ hostList }
+                                        onChange={(value) => {this.handleInputChange('host_name',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />
                                 </div>
