@@ -26,8 +26,10 @@ class FaceToFace extends React.Component {
             location_name: '',
             host_name: '',
             start_date: '',
+            start_date_iso: '',
             cpd_records: [],
             host_list: [],
+            host: '',
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
@@ -42,12 +44,16 @@ class FaceToFace extends React.Component {
 
     handleInputChange(name, value) {
         let newValue = value;
+        console.log(name, value);
         if (name == 'start_date') {
             let newDate = new Date(value);
             newValue = newDate.toISOString();
+            this.setState({
+                start_date_iso: newValue
+            });
         }
         this.setState({
-            [name]: newValue
+            [name]: value
         });
     }
 
@@ -90,7 +96,7 @@ class FaceToFace extends React.Component {
                 CourseName: this.state.course_name,
                 HostName: this.state.host_name,
                 LocationName: this.state.location_name,
-                StartDate: this.state.start_date,
+                StartDate: this.state.start_date_iso,
                 reverse: this.state.sort.direction,
                 sortBy: this.state.sort.column,
                 page: pageNumber,
@@ -137,6 +143,7 @@ class FaceToFace extends React.Component {
             location_name: '',
             host_name: '',
             start_date: '',
+            start_date_iso: '',
             sort: {
                 column: 'StartDate',
                 direction: 'desc'
@@ -209,18 +216,20 @@ class FaceToFace extends React.Component {
                                           lineDirection="center"
                                           placeholder="Course Name"
                                           name="course_name"
+                                          value={this.state.course_name}
                                           onChange={(value) => {this.handleInputChange('course_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                         />
 
-                                    <TextField
-                                          id="host"
-                                          label="Host"
-                                          lineDirection="center"
-                                          placeholder="Host"
-                                          onChange={(value) => {this.handleInputChange('host',value)}}
-                                          className="md-cell md-cell--6 md-cell--bottom"
-                                        />
+                                    <SelectField
+                                        id="host"
+                                        label="Host"
+                                        placeholder="Host"
+                                        name="host_list"
+                                        menuItems={ this.state.host_list }
+                                        onChange={(value) => {this.handleInputChange('host_list',value)}}
+                                        className="md-cell md-cell--6 md-cell--bottom"
+                                    />
                                 </div>
 
                                 <div className="md-grid">
@@ -229,6 +238,7 @@ class FaceToFace extends React.Component {
                                           label="Location Name"
                                           lineDirection="center"
                                           placeholder="Location Name"
+                                          value={this.state.location_name}
                                           name="location_name"
                                           onChange={(value) => {this.handleInputChange('location_name',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
@@ -238,6 +248,7 @@ class FaceToFace extends React.Component {
                                           id="start_date"
                                           label="Enter Start Date"
                                           name="start_date"
+                                          value={this.state.start_date}
                                           onChange={(value) => {this.handleInputChange('start_date',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                     />
