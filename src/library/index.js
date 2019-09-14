@@ -214,6 +214,7 @@ class Library extends React.Component {
         return className;
     };
 
+
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
@@ -223,7 +224,7 @@ class Library extends React.Component {
         if (this.state.library_records !== null) {
             library_records = this.state.library_records.map((cpd_record , index) => (
                 <tr key={index}>
-                    <td> </td>
+                    <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{cpd_record.LocationID}</td>
                     <td>{cpd_record.DurationHours}h</td>
