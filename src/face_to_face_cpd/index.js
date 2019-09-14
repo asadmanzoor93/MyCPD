@@ -8,6 +8,7 @@ import { TextField, DatePicker, SelectField } from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
+import ViewModal from "./_modal/view";
 
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const FaceToFace_URL = "http://34.248.242.178/CPDCompliance/api/faceToface";
@@ -39,7 +40,17 @@ class FaceToFace extends React.Component {
                 column: 'StartDate',
                 direction: 'desc'
             },
-            unauthorized: false
+            unauthorized: false,
+            listViewModalShown: false,
+            listViewDataCourseName:          "",
+            listViewDatastartDate:          "",
+            listViewDatacourseLocation:     "",
+            listViewDatacourseType:         "",
+            listViewDatahost:               "",
+            listViewDataDuration:          "",
+            listViewDatavenue:              "",
+            listViewDatatrainer:            "",
+            listViewDatacourseDescription:  ""
         }
     };
 
@@ -91,7 +102,18 @@ class FaceToFace extends React.Component {
 
     }
 
-    makeHttpRequestWithPage(pageNumber) {
+    makeHttpRequestWithPage(pageNumber, column, direction) {
+        let reverse= (this.state.sort.direction === 'asc') ? false : true;
+        let sortBy= this.state.sort.column;
+
+        if(column){
+            sortBy = column;
+        }
+
+        if(direction){
+            reverse = direction;
+        }
+
         let self = this;
         axios.get(FaceToFace_URL, {
             params: {
@@ -100,8 +122,8 @@ class FaceToFace extends React.Component {
                 HostName: this.state.host_name,
                 LocationName: this.state.location_name,
                 StartDate: this.state.start_date_iso,
-                reverse: (this.state.sort.direction === 'asc') ? false : true,
-                sortBy: this.state.sort.column,
+                reverse: reverse,
+                sortBy: sortBy,
                 page: pageNumber,
                 pageSize: this.state.per_page,
             },
@@ -135,7 +157,6 @@ class FaceToFace extends React.Component {
                 }
             });
     };
-
 
     handlePaginationFilter(event){
         let value = event.target.value;
@@ -172,6 +193,8 @@ class FaceToFace extends React.Component {
                 direction,
             }
         });
+
+        this.makeHttpRequestWithPage(1, column, direction);
     };
 
     setArrow = (column) => {
@@ -182,12 +205,29 @@ class FaceToFace extends React.Component {
         return className;
     };
 
+    openModalWithItem(courseName,startDate,courseLocation,courseType,host,duration,venue,trainer,courseDescription) {
+        this.setState({
+            listViewDataCourseName:         courseName,
+            listViewDatastartDate:          (startDate) ? startDate : 'na',
+            listViewDatacourseLocation:     (courseLocation) ? courseLocation : 'na',
+            listViewDatacourseType:         (courseType) ? courseType : 'na',
+            listViewDatahost:               (host) ? host : 'na',
+            listViewDataDuration:          (duration) ? duration : 'na',
+            listViewDatavenue:              (venue) ? venue : 'na',
+            listViewDatatrainer:            (trainer) ? trainer : 'na',
+            listViewDatacourseDescription:  (courseDescription) ? courseDescription : 'na',
+            listViewModalShown: true
+        })
+    }
+
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
         }
 
+        let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
         let cpd_records;
+
         if (this.state.cpd_records !== null) {
             cpd_records = this.state.cpd_records.map((cpd_record , index) => (
                 <tr key={index}>
@@ -199,7 +239,19 @@ class FaceToFace extends React.Component {
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.StartDate}</td>
-                    <td></td>
+                    <td><a data-item={cpd_record}
+                           onClick={() => {this.openModalWithItem(
+                               cpd_record.CourseName,
+                               cpd_record.StartDate,
+                               cpd_record.LocationName,
+                               cpd_record.CPDTypeName,
+                               cpd_record.HostName,
+                               cpd_record.Duration,
+                               cpd_record.Venue,
+                               cpd_record.Trainer,
+                               cpd_record.CourseDescription
+                           )}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+                    </td>
                 </tr>
             ));
         }
@@ -276,7 +328,6 @@ class FaceToFace extends React.Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="row" style={{paddingBottom: '30px'}}>
                     <div className="gridTopButtons">
                         <button type="button" onClick={() => window.print()}
@@ -328,6 +379,19 @@ class FaceToFace extends React.Component {
                         />
                     </div>
                 </div>
+                <ViewModal show={ this.state.listViewModalShown }
+                           data={this.state}
+                           onHide={listViewModalShownClose}
+                           coursename={this.state.listViewDataCourseName}
+                           startdate={this.state.listViewDatastartDate}
+                           courselocation={this.state.listViewDatacourseLocation}
+                           coursetype={this.state.listViewDatacourseType}
+                           host={this.state.listViewDatahost}
+                           duration={this.state.listViewDataDuration}
+                           venue={this.state.listViewDatavenue}
+                           trainer={this.state.listViewDatatrainer}
+                           description={this.state.listViewDatacourseDescription}
+                />
             </div>
         );
     }

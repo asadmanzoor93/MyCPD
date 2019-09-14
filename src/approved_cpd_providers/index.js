@@ -66,7 +66,18 @@ class ApprovedCPDProviders extends React.Component {
         this.makeHttpRequestWithPage(1);
     }
     
-    makeHttpRequestWithPage(pageNumber) {
+    makeHttpRequestWithPage(pageNumber, column, direction) {
+        let reverse= (this.state.sort.direction === 'asc') ? false : true;
+        let sortBy= this.state.sort.column;
+
+        if(column){
+            sortBy = column;
+        }
+
+        if(direction){
+            reverse = direction;
+        }
+
         let self = this;
         axios.get(Approved_CPD_URL, {
             params: {
@@ -74,8 +85,8 @@ class ApprovedCPDProviders extends React.Component {
                 HostName: this.state.host,
                 LocationName: this.state.location_name,
                 StartDate: this.state.start_date,
-                reverse: (this.state.sort.direction === 'asc') ? false : true,
-                sortBy: this.state.sort.column,
+                reverse: reverse,
+                sortBy: sortBy,
                 page: pageNumber,
                 pageSize: this.state.per_page,
             },
@@ -144,6 +155,7 @@ class ApprovedCPDProviders extends React.Component {
                 direction,
             }
         });
+        this.makeHttpRequestWithPage(1, column, direction);
     };
 
     setArrow = (column) => {

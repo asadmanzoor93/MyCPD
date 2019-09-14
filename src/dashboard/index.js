@@ -130,7 +130,18 @@ class Dashboard extends React.Component {
 			}).catch(console.log);
 	}
 
-	makeHttpRequestWithPage(pageNumber) {
+	makeHttpRequestWithPage(pageNumber, column, direction) {
+		let reverse= (this.state.sort.direction === 'asc') ? false : true;
+		let sortBy= this.state.sort.column;
+
+		if(column){
+			sortBy = column;
+		}
+
+		if(direction){
+			reverse = direction;
+		}
+
 		let self = this;
 		axios.get(Listing_URL, {
 			params: {
@@ -139,8 +150,8 @@ class Dashboard extends React.Component {
 				HostId: this.state.host_id,
 				LocationName: this.state.location_name,
 				Venue: this.state.venue,
-				reverse: (this.state.sort.direction === 'asc') ? false : true,
-				sortBy: this.state.sort.column,
+				reverse: reverse,
+				sortBy: sortBy,
 				page: pageNumber,
 				pageSize: this.state.per_page,
 			},
@@ -220,11 +231,12 @@ class Dashboard extends React.Component {
 	onSort = (column) => (e) => {
 	    const direction = this.state.sort.column ? (this.state.sort.direction === 'asc' ? 'desc' : 'asc') : 'desc';
 	    this.setState({
-	      sort: {
-	        column,
-	        direction,
-	      }
+			sort: {
+				column,
+				direction,
+			}
 	    });
+		this.makeHttpRequestWithPage(1, column, direction);
 	};
 
 	setArrow = (column) => {
