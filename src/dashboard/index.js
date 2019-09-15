@@ -15,6 +15,7 @@ import ViewModal from "./_modal/view";
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const Hours_URL = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDHours";
+const Delete_Record_URL = "http://34.248.242.178/CPDCompliance/api/Workflow/DeleteMemberCPD";
 
 class Dashboard extends React.Component {
 
@@ -24,6 +25,7 @@ class Dashboard extends React.Component {
 		this.handlePageChange = this.handlePageChange.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.clearSearchFilters = this.clearSearchFilters.bind(this);
+		this.deleteCPDRecord = this.deleteCPDRecord.bind(this);
 
 		this.state = {
 			host_list: [],
@@ -247,6 +249,28 @@ class Dashboard extends React.Component {
 		return className;
 	};
 
+	deleteCPDRecord(workflowId){
+		let self = this;
+		axios.get(Delete_Record_URL, {
+
+			params: {
+				workflowId: workflowId
+			},
+			method: 'GET',
+			withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(response => response.data)
+			.then((data) => {
+				self.makeHttpRequestWithPage(1)
+			}).catch(console.log);
+	}
+
 	render () {
 		if (this.state.unauthorized) {
 			return <Redirect to='/'/>;
@@ -289,11 +313,14 @@ class Dashboard extends React.Component {
 								dashboard_record.CourseDescription
 							)}} style={{fontSize:'25px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i>
 							</a>
-							<a style={{fontSize:'25px', cursor: 'pointer'}}>
+							<a style={{fontSize:'25px', cursor: 'pointer', marginLeft: '10px'}}>
 								<i title="" className="fa fa-edit ng-scope" tooltip="" role="button" tabIndex="0"
 								  data-original-title="Edit CPD"> </i>
 							</a>
-							<a style={{fontSize:'25px', cursor: 'pointer'}}>
+							<a
+								style={{fontSize:'25px', cursor: 'pointer', marginLeft: '10px'}}
+								onClick={() => this.deleteCPDRecord(dashboard_record.CPDWorkflowId)}
+							>
 								<i title="" className="fa fa-trash ng-scope" tooltip="" role="button" tabIndex="0"
 								  data-original-title="Delete CPD"> </i>
 							</a>

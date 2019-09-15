@@ -46,10 +46,8 @@ class App extends React.Component {
   }
 
   makeSignOutRequest() {
-    this.setState({
-      logout: true,
-      mainLoading: false
-    });
+    let self = this;
+
     axios.get(SignOut_URL, {
       method: 'GET',
       withCredentials: true,
@@ -62,7 +60,11 @@ class App extends React.Component {
     })
     .then(response => response)
     .then((response) => {
-
+        self.setState({
+          logout: true,
+          mainLoading: true
+        });
+        window.location.reload()
     }).catch(console.log);
   };
 
@@ -70,7 +72,7 @@ class App extends React.Component {
     let feedBackModalShownClose = () => this.setState({ feedBackModalShown: false });
     let aboutUsModalShownClose = () => this.setState({ aboutUsModalShown: false });
     if (this.state.logout) {
-      return <Redirect to="/" />;
+      return <Redirect to="/login" />;
     }
 
     return (
@@ -117,7 +119,7 @@ class App extends React.Component {
                       <li aria-hidden="false" className="">
                         <a onClick={() => this.setState({ aboutUsModalShown : true }) } href="#"><i className="fa fa-info-circle"></i> About Us</a>
                       </li>
-                      <li><a href="#" onClick={()=> this.makeSignOutRequest()}><i className="fa fa-sign-out"></i> Sign Out</a></li>
+                      <li><a href="javascript:{}" onClick={()=> this.makeSignOutRequest()}><i className="fa fa-sign-out"></i> Sign Out</a></li>
                     </ul>
                   </div>
 
@@ -135,7 +137,6 @@ class App extends React.Component {
                       }
                     })()}
                   </h4>
-
 
                 </div>
               </nav>
