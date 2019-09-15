@@ -2,6 +2,7 @@ import React from "react";
 import "react-table/react-table.css";
 import { Redirect } from 'react-router-dom';
 import axios from "axios";
+import { CSVLink, CSVDownload } from "react-csv";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
 import { TextField, DatePicker } from 'react-md';
@@ -186,6 +187,22 @@ class ApprovedCPDProviders extends React.Component {
             return <Redirect to='/'/>;
         }
 
+        let csvData = [
+            [ "Course Name", "Location", "CPD Hours", "Host", "Type", "Trainer", "Start Date"],
+        ];
+
+        this.state.approved_cpd_records.map((cpd_record, index) =>
+            csvData.push([
+                cpd_record.CourseName,
+                cpd_record.LocationName,
+                cpd_record.Duration+'h',
+                cpd_record.HostName,
+                cpd_record.CPDTypeName,
+                cpd_record.Trainer,
+                cpd_record.StartDate,
+            ])
+        );
+
         let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
         let approved_cpd_records;
 
@@ -293,9 +310,9 @@ class ApprovedCPDProviders extends React.Component {
                                 className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
                             <i className="fa fa-print"> </i>
                         </button>
-                        <button type="button" className="btn btn-success btn-circle btn-lg ng-scope" tooltip="">
+                        <CSVLink data={csvData} className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px',lineHeight: '28px'}}>
                             <i className="fa fa-file-excel-o"> </i>
-                        </button>
+                        </CSVLink>
                     </div>
                     <div className="gridTopDropdown"> Show
                         <select className="input-sm ng-pristine ng-untouched ng-valid ng-not-empty" onChange={(e) => this.handlePaginationFilter(e)}>
