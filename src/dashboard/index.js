@@ -288,15 +288,22 @@ class Dashboard extends React.Component {
 		let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
 		let dashboard_records;
 
-		const csvData = [
-			["firstname", "lastname", "email"],
-			["Ahmed", "Tomi", "ah@smthing.co.com"],
-			["Raed", "Labes", "rl@smthing.co.com"],
-			["Yezzi", "Min l3b", "ymin@cocococo.com"]
+		let csvData = [
+			["Course Type", "Course", "Completed Hours", "Completion Date", "Venue", "Trainer", "Host", "Start Date"],
 		];
 
 		if (this.state.dashboard_records !== null) {
 			dashboard_records = this.state.dashboard_records.map((dashboard_record , index) => {
+				csvData.push([
+					dashboard_record.CPDTypeName,
+					dashboard_record.CourseName,
+					dashboard_record.Hours+'h',
+					dashboard_record.CompletionDate,
+					dashboard_record.Venue,
+					dashboard_record.Trainer,
+					(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
+					dashboard_record.StartDate
+				]);
 					return (
 					<tr key={index}>
 						<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>

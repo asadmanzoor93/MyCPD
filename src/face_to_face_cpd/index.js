@@ -5,6 +5,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
 import { TextField, DatePicker, SelectField } from 'react-md';
+import { CSVLink, CSVDownload } from "react-csv";
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
@@ -226,6 +227,21 @@ class FaceToFace extends React.Component {
         }
 
         let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
+        let csvData = [
+            [ "Course Name", "Location", "CPD Hours", "Host", "Type", "Trainer", "Start Date"],
+        ];
+        this.state.cpd_records.map((cpd_record, index) =>
+            csvData.push([
+                cpd_record.CourseName,
+                cpd_record.LocationName,
+                cpd_record.Duration+'h',
+                cpd_record.HostName,
+                cpd_record.CPDTypeName,
+                cpd_record.Trainer,
+                cpd_record.StartDate,
+            ])
+        );
+
         let cpd_records;
 
         if (this.state.cpd_records !== null) {
@@ -266,8 +282,6 @@ class FaceToFace extends React.Component {
                     <div className="shadow">
                         <div className="layout-gt-sm-row">
                             <div style={{padding: '1rem'}}>
-
-
                                 <div className="md-grid">
                                     <TextField
                                           id="courseName"
@@ -291,7 +305,6 @@ class FaceToFace extends React.Component {
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />
                                 </div>
-
                                 <div className="md-grid">
                                     <TextField
                                           id="location_name"
@@ -334,9 +347,9 @@ class FaceToFace extends React.Component {
                                 className="btn btn-danger btn-circle btn-lg ">
                             <i className="fa fa-print"> </i>
                         </button>
-                        <button type="button" className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px'}}>
+                        <CSVLink data={csvData} className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px',lineHeight: '28px'}}>
                             <i className="fa fa-file-excel-o"> </i>
-                        </button>
+                        </CSVLink>
                     </div>
                     <div className="gridTopDropdown"> Show
                         <select className="input-sm ng-pristine ng-untouched ng-valid ng-not-empty" onChange={(e) => this.handlePaginationFilter(e)}>
