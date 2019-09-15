@@ -12,6 +12,7 @@ const Types_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypes";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const Library_URL = "http://34.248.242.178/CPDCompliance/api/Library";
 const Excel_Report_URL = "http://34.248.242.178/CPDCompliance/api/Library/Excel";
+let hostList = [];
 
 class Library extends React.Component {
 
@@ -57,7 +58,10 @@ class Library extends React.Component {
         }
     };
 
-    handleInputChange(name, value) {
+    handleInputChange(name, value,item) {
+        debugger;
+        console.log(value);
+
         let newValue = value;
         if (name == 'start_date') {
             let newDate = new Date(value);
@@ -122,6 +126,10 @@ class Library extends React.Component {
                     for(let i = 0; i < data.length; i++){
                         host_dic[data[i]['ID']] = data[i]['Name'];
                     }
+
+                    hostList = data.map((item)=>{
+                        return { 'key':item.ID, 'value':item.ID, 'label':item.Name};
+                    });
 
                     this.setState({
                         host_list: data,
@@ -377,9 +385,9 @@ class Library extends React.Component {
                                         label="Host"
                                         placeholder="Host"
                                         name="host"
-                                        menuItems={['Host 1', 'Host 2']}
-                                        value={this.state.host}
-                                        onChange={(value) => {this.handleInputChange('host',value)}}
+                                        menuItems={hostList}
+                                        value={this.state.host_id}
+                                        onChange={(value) => {this.handleInputChange('cpd_type_id',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />
                                     <TextField
@@ -399,7 +407,7 @@ class Library extends React.Component {
                                         label="CPD Type"
                                         placeholder="cpd_type_id"
                                         name="cpd_type_id"
-                                        menuItems={['CPD Type 1', 'CPD Type 2']}
+                                        menuItems={[]}
                                         value={this.state.cpd_type_id}
                                         onChange={(value) => {this.handleInputChange('cpd_type_id',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
