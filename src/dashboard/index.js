@@ -28,6 +28,7 @@ class Dashboard extends React.Component {
 		this.deleteCPDRecord = this.deleteCPDRecord.bind(this);
 
 		this.state = {
+			host_dict: {},
 			host_list: [],
 			overdue_hours: 0,
 			overdue_minutes: 0,
@@ -99,7 +100,15 @@ class Dashboard extends React.Component {
 			.then(response => response.data)
 			.then((data) => {
 				if(data){
-					this.setState({ host_list: data });
+					let host_dic = {};
+					for(let i = 0; i < data.length; i++){
+						host_dic[data[i]['ID']] = data[i]['Name'];
+					}
+
+					this.setState({
+						host_list: data,
+						host_dict: host_dic
+					});
 				}
 			}).catch(console.log);
 
@@ -297,7 +306,7 @@ class Dashboard extends React.Component {
 						<td>{dashboard_record.CompletionDate}</td>
 						<td>{dashboard_record.Venue}</td>
 						<td>{dashboard_record.Trainer}</td>
-						<td>{dashboard_record.HostId}</td>
+						<td>{(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId}</td>
 						<td>{dashboard_record.StartDate}</td>
 						<td>
 							<a data-item={dashboard_record}
@@ -306,7 +315,7 @@ class Dashboard extends React.Component {
 								dashboard_record.StartDate,
 								dashboard_record.LocationName,
 								dashboard_record.CPDTypeName,
-								dashboard_record.HostId,
+								   (dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
 								dashboard_record.CPDFormatId,
 								dashboard_record.Venue,
 								dashboard_record.Trainer,

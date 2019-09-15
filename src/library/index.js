@@ -25,7 +25,7 @@ class Library extends React.Component {
 
         this.state = {
             host_dict: {},
-            types_dict: {},
+            type_dict: {},
             locations_dict: {},
             host_list: [],
             types_list: [],
@@ -313,10 +313,10 @@ class Library extends React.Component {
                 <tr key={index}>
                     <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
-                    <td>{this.state.locations_dict[cpd_record.LocationID]}</td>
+                    <td>{(cpd_record.LocationID in this.state.locations_dict) ? this.state.locations_dict[cpd_record.LocationID] : cpd_record.LocationID}</td>
                     <td>{cpd_record.DurationHours}h</td>
-                    <td>{this.state.type_dict[cpd_record.CPDTypeId]}</td>
-                    <td>{this.state.host_dict[cpd_record.HostID]}</td>
+                    <td>{(cpd_record.CPDTypeId in this.state.type_dict) ? this.state.type_dict[cpd_record.CPDTypeId] : cpd_record.CPDTypeId}</td>
+                    <td>{(cpd_record.HostID in this.state.host_dict) ? this.state.host_dict[cpd_record.HostID] : cpd_record.HostID}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.Venue}</td>
                     <td>{cpd_record.StartDate}</td>
@@ -324,9 +324,9 @@ class Library extends React.Component {
                            onClick={() => {this.openModalWithItem(
                                cpd_record.CourseName,
                                cpd_record.StartDate,
-                               this.state.locations_dict[cpd_record.LocationID],
-                               this.state.type_dict[cpd_record.CPDTypeId],
-                               this.state.host_dict[cpd_record.HostID],
+                               (cpd_record.LocationID in this.state.locations_dict) ? this.state.locations_dict[cpd_record.LocationID] : cpd_record.LocationID,
+                               (cpd_record.CPDTypeId in this.state.type_dict) ? this.state.type_dict[cpd_record.CPDTypeId] : cpd_record.CPDTypeId,
+                               (cpd_record.HostID in this.state.host_dict) ? this.state.host_dict[cpd_record.HostID] : cpd_record.HostID,
                                cpd_record.FormatName,
                                cpd_record.Venue,
                                cpd_record.Trainer,
