@@ -1,4 +1,4 @@
-## MyCPD
+## MyCPD - Continuing Professional Development
 
 In the project directory, you can run:
 
