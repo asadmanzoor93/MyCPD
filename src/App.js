@@ -1,6 +1,8 @@
 import React from "react";
 import { Switch, Route, withRouter, Redirect, Link } from "react-router-dom";
 import axios from "axios";
+import profile_logo from './header_images/profile_logo.png';
+import header_logo from './header_images/MyCPDLogoImg.png';
 
 import Login from './login/index.js'
 import Home from './home/index.js'
@@ -92,7 +94,7 @@ class App extends React.Component {
                       <span className="icon-bar"> </span>
                     </button>
                     <a className="navbar-brand" href="#">
-                      <img src={'images\/MyCPDLogoImg.png'} alt="" />
+                      <img src={header_logo} alt="" />
                     </a>
                   </div>
                   <div id="bs-example-navbar-collapse-1" className="collapse navbar-collapse animated fadeIn">
@@ -114,7 +116,7 @@ class App extends React.Component {
                         {localStorage.getItem('displayName')}
                       </li>
                       <li>
-                        <img src={"images\/if_user_1902268.png"} />
+                        <img src={profile_logo} />
                       </li>
                       <li aria-hidden="false" className="">
                         <a onClick={() => this.setState({ aboutUsModalShown : true }) } href="#"><i className="fa fa-info-circle"></i> About Us</a>
@@ -179,7 +181,7 @@ class App extends React.Component {
               <Route exact path="/home" component={withRouter(Home)} />
               <Route exact path="/dashboard" component={withRouter(Dashboard)} />
               <Route exact path="/cpdgo" component={withRouter(CPDGO)} />
-              <Route exact path="/mycpd/:mode?/:wfid?" component={withRouter(RecordCPD)} />
+              <Route exact path="/mycpd/:mode?/:workFlowId?" component={withRouter(RecordCPD)} />
               <Route exact path="/cpdclassroom" component={withRouter(FaceToFace)} />
               <Route exact path="/cpdaccredt" component={withRouter(ApprovedCPDProviders)} />
               <Route exact path="/library" component={withRouter(Library)} />

@@ -23,11 +23,11 @@ const File_Upload_URL = 'http://34.248.242.178/CPDCompliance/api/Workflow/file/u
 class RecordCPD extends React.Component {
     constructor(props) {
         super(props);
-        const { mode, workFlowId } = props;
+        const { match: { params } } = this.props;
 
         this.state = {
-            mode: mode,
-            workFlowId: workFlowId,
+            mode: params.mode,
+            workFlowId: params.workFlowId,
             currentStep: 1,
             host_list: [],
             member_info: [],
@@ -75,7 +75,7 @@ class RecordCPD extends React.Component {
 
     };
 
-    componentDidMount() {
+    componentWillMount() {
         $('.datepicker').datepicker({autoclose: true});
         this.fetchTypes();
         this.fetchMemberInfo();
@@ -84,9 +84,7 @@ class RecordCPD extends React.Component {
         this.fetchLocations();
         this.fetchCourses();
 
-        console.log(this.props.mode);
-
-        if(this.props.mode === 'edit'){
+        if(this.state.mode === 'edit'){
             this.fetchCPDRecord();
         }
     }
@@ -296,37 +294,46 @@ class RecordCPD extends React.Component {
     }
 
     handleSaveRecord() {
+        let self = this;
+        if(this.state.mode === 'edit'){
 
-        axios.post(ADD_Record_URL, {
-            MemberId: this.state.MemberId,
-            CPDTypeId: this.state.cpd_type_id,
-            CourseId: this.state.course_id,
-            CourseName: this.state.course_name,
-            Description: this.state.course_description,
-            Venue: this.state.venue,
-            Trainer: this.state.trainer,
-            Hours: this.state.cpd_hours,
-            Minutes: this.state.cpd_mins,
-            CompletionDate: this.state.start_date_iso,
-            CPDYear: this.state.cpd_year,
-            CPDWorkflowId: 0,
-            FileName: this.state.file_name,
-            CPDFormatId: 1,
-            HostId: this.state.host_id,
-            LocationId: this.state.location_id,
-            CourseMode:"",
-            IsDeclared: this.state.is_declared
-        },{
-            headers: {
-                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.data)
-            .then((data) => {
-                this.handleFileUpload(data)
-            }).catch(function (error) {
+            axios.post('http://34.248.242.178/CPDCompliance/api/Workflow/Update', {
+                MemberId: this.state.MemberId,
+                CPDTypeId: this.state.cpd_type_id,
+                CourseId: this.state.course_id,
+                CourseName: this.state.course_name,
+                Description: this.state.course_description,
+                Venue: this.state.venue,
+                Trainer: this.state.trainer,
+                Hours: this.state.cpd_hours,
+                Minutes: this.state.cpd_mins,
+                CompletionDate: this.state.start_date_iso,
+                CPDYear: this.state.cpd_year,
+                CPDWorkflowId: this.state.workFlowId,
+                FileName: this.state.file_name,
+                CPDFormatId: this.state.course_format,
+                HostId: this.state.host_id,
+                LocationId: this.state.location_id,
+                CourseMode: 1,
+                IsDeclared: this.state.is_declared
+            },{
+                headers: {
+                    'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.data)
+                .then((data) => {
+                    if(self.state.file_upload){
+                        self.handleFileUpload(data)
+                    } else {
+                        self.setState({
+                            redirectDashboard: true
+                        })
+                    }
+
+                }).catch(function (error) {
                 console.log(error.response);
                 if(error){
                     if(error.response){
@@ -336,6 +343,48 @@ class RecordCPD extends React.Component {
                     }
                 }
             });
+        } else {
+            axios.post(ADD_Record_URL, {
+                MemberId: this.state.MemberId,
+                CPDTypeId: this.state.cpd_type_id,
+                CourseId: this.state.course_id,
+                CourseName: this.state.course_name,
+                Description: this.state.course_description,
+                Venue: this.state.venue,
+                Trainer: this.state.trainer,
+                Hours: this.state.cpd_hours,
+                Minutes: this.state.cpd_mins,
+                CompletionDate: this.state.start_date_iso,
+                CPDYear: this.state.cpd_year,
+                CPDWorkflowId: 0,
+                FileName: this.state.file_name,
+                CPDFormatId: this.state.course_format,
+                HostId: this.state.host_id,
+                LocationId: this.state.location_id,
+                CourseMode:"",
+                IsDeclared: this.state.is_declared
+            },{
+                headers: {
+                    'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.data)
+                .then((data) => {
+                    this.handleFileUpload(data)
+                }).catch(function (error) {
+                console.log(error.response);
+                if(error){
+                    if(error.response){
+                        if(error.response.data){
+                            alert(error.response.data[0])
+                        }
+                    }
+                }
+            });
+        }
+
     }
 
     handleFileUpload(record){
@@ -404,6 +453,7 @@ class RecordCPD extends React.Component {
 
     fetchCPDRecord(){
         let self = this;
+
         axios.get(CPDRecord_Info_URL, {
             params: {
                 page: 1,
@@ -424,23 +474,27 @@ class RecordCPD extends React.Component {
             .then(response => response.data)
             .then((data) => {
                 if(data.Items){
-                    self.setState({
-                        course_format: '',
-                        course_id: '',
-                        course_name: '',
-                        course_detail: [],
-                        course_description: '',
-                        venue: '',
-                        cpd_hours: '',
-                        cpd_mins: '',
-                        cpd_year: '',
-                        date_completed: null,
-                        start_date_iso: '',
-                        file_upload: null,
-                        file_name: '',
-                        host_id: '',
-                        trainer: '',
-                        location_id: '',
+
+                    data.Items.forEach((element) => {
+                        if(element.CPDWorkflowId == self.state.workFlowId){
+                            self.setState({
+                                course_format: element.CPDFormatId,
+                                course_id: element.CourseId,
+                                course_name: element.CourseName,
+                                course_description: element.CourseDescription,
+                                venue: element.Trainer,
+                                cpd_hours: element.Hours,
+                                cpd_mins: (element.Minutes) ? element.Minutes : '',
+                                cpd_year: element.CPDYear,
+                                date_completed: element.CompletionDate,
+                                start_date_iso: element.CompletionDate,
+                                file_name: element.FileName,
+                                host_id: element.HostId,
+                                trainer: element.Trainer,
+                                location_id: element.LocationId,
+                                is_declared: element.IsDeclared,
+                            });
+                        }
                     });
                 }
             }).catch(function (error) {
