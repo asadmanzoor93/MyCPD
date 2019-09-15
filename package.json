@@ -1,0 +1,48 @@
+{
+  "name": "mycpd",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.19.0",
+    "bootstrap": "^3.4.1",
+    "bootstrap-datepicker": "^1.9.0",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.4.1",
+    "lodash": "^4.17.15",
+    "react": "^16.9.0",
+    "react-bootstrap": "^0.32.4",
+    "react-bootstrap-date-picker": "^5.1.0",
+    "react-csv": "^1.1.1",
+    "react-datepicker": "^2.9.6",
+    "react-dom": "^16.9.0",
+    "react-js-pagination": "^3.0.2",
+    "react-md": "^1.12.3",
+    "react-pdf": "^4.1.0",
+    "react-player": "^1.12.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.1.1",
+    "react-table": "^6.10.0",
+    "screenfull": "^5.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
