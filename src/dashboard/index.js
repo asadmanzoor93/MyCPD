@@ -314,8 +314,11 @@ class Dashboard extends React.Component {
 							)}} style={{fontSize:'25px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i>
 							</a>
 							<a style={{fontSize:'25px', cursor: 'pointer', marginLeft: '10px'}}>
-								<i title="" className="fa fa-edit ng-scope" tooltip="" role="button" tabIndex="0"
-								  data-original-title="Edit CPD"> </i>
+								<Link to={'/mycpd/edit/'+dashboard_record.CPDWorkflowId} className="nav-link">
+									<i title="" className="fa fa-edit ng-scope" role="button"
+									   tabIndex="0" data-original-title="Edit CPD"> </i>
+								</Link>
+
 							</a>
 							<a
 								style={{fontSize:'25px', cursor: 'pointer', marginLeft: '10px'}}
