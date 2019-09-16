@@ -57,7 +57,6 @@ class FaceToFace extends React.Component {
 
     handleInputChange(name, value) {
         let newValue = value;
-        console.log(name, value);
         if (name == 'start_date') {
             let newDate = new Date(value);
             newValue = newDate.toISOString();
