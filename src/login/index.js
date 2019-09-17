@@ -85,9 +85,8 @@ class App extends React.Component {
             <div className="modal-header ng-scope" align="center">
                 <img className="img-circle" id="img_logo" src={"/images/MyCPDLogoImage.jpg"} alt="logo"/>
             </div>
-            <div className="container ng-scope">
-                <div id="loginbox" style={{marginTop: '50px'}}
-                     className="mainbox col-md-6 col-sm-8">
+            <div className="">
+                <div id="loginbox" style={{marginTop: '50px'}} className="mainbox">
                     <div className="panel panel-info">
                         <div className="panel-heading">
                             <div className="panel-title">Sign In</div>
@@ -120,7 +119,7 @@ class App extends React.Component {
                                     </span>
                                     <input
                                         name="username" value={username} onChange={this.handleChange}
-                                        className="form-control ng-not-empty ng-dirty ng-valid-parse ng-valid ng-valid-required ng-touched"
+                                        className="form-control"
                                         type="text" placeholder="Enter Username"
                                         required="" autoFocus="" aria-invalid="false"
                                         autoComplete="off"
