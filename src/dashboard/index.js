@@ -6,10 +6,12 @@ import Pagination from "react-js-pagination";
 import { CSVLink, CSVDownload } from "react-csv";
 import $ from "jquery";
 import { TextField, DatePicker, SelectField, LinearProgress } from 'react-md';
+import { DropdownButton, MenuItem, Dropdown, Glyphicon } from 'react-bootstrap';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import ViewModal from "./_modal/view";
+import Loader from "../_components/loader";
 
 
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
@@ -27,6 +29,7 @@ class Dashboard extends React.Component {
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.clearSearchFilters = this.clearSearchFilters.bind(this);
 		this.deleteCPDRecord = this.deleteCPDRecord.bind(this);
+		this.downloadExcel = this.downloadExcel.bind(this);
 
 		this.state = {
 			host_dict: {},
@@ -64,7 +67,7 @@ class Dashboard extends React.Component {
 	        listViewDatavenue:              "",
 	        listViewDatatrainer:            "",
 	        listViewDatacourseDescription:  "",
-	        mainLoading: true
+	        mainLoading: false
 		}
 	};
 
@@ -81,6 +84,35 @@ class Dashboard extends React.Component {
         this.setState({
             [name]: value
         });
+    }
+
+    downloadExcel(year) {
+		this.setState({ mainLoading: true });
+		axios.get('http://34.248.242.178/CPDCompliance/api/Member/PDF', {
+			params: {
+				UserName: localStorage.getItem('displayName'),
+				Year: year,
+			},
+			responseType: 'blob',
+			method: 'GET',
+			withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/json'
+			}
+		})
+		.then((response) => {
+			const file = new Blob(
+		    [response.data], 
+		    {type: 'application/pdf'});
+		    const fileURL = URL.createObjectURL(file);
+		    window.open(fileURL);
+		})
+		.then((data) => {
+			this.setState({ mainLoading: false });
+		}).catch(console.log);
     }
 
 	handlePageChange(pageNumber) {
@@ -209,6 +241,7 @@ class Dashboard extends React.Component {
 					if (error.response.status === 401) {
 						self.setState({
 							unauthorized: true,
+							mainLoading: false
 						});
 					}
 				}
@@ -516,9 +549,15 @@ class Dashboard extends React.Component {
 								className="btn btn-danger btn-circle btn-lg ">
 							<i className="fa fa-print"> </i>
 						</button>
-						<CSVLink data={csvData} className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px',lineHeight: '28px'}}>
-							<i className="fa fa-file-excel-o"> </i>
-						</CSVLink>
+						<Dropdown id="dropdown-custom-1">
+							<Dropdown.Toggle className="btn btn-success btn-circle btn-lg" noCaret>
+								<i className="fa fa-file-excel-o"> </i>
+							</Dropdown.Toggle>
+							<Dropdown.Menu>
+								<MenuItem onClick={() => {this.downloadExcel(2018)}} eventKey="1">2018</MenuItem>
+								<MenuItem onClick={() => {this.downloadExcel(2019)}} eventKey="2">2019</MenuItem>
+							</Dropdown.Menu>
+						</Dropdown>
 						<button type="button"
 								style={{marginLeft: '10px'}}
 								className="btn btn-primary btn-circle btn-lg ng-scope"
@@ -530,6 +569,7 @@ class Dashboard extends React.Component {
 					</div>
 				</div>
 				<div className="col">
+					{ this.state.mainLoading && <Loader /> }
 					<table className='table table-striped table-bordered table-hover table-condensed'>
 						<thead>
 						<tr className="header">

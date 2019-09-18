@@ -195,6 +195,7 @@ class ATICodeProfessionalEthicsModal extends React.Component {
 
         return (
             <Modal
+                bsSize="large"
                 {...this.props}
             >
               <Modal.Header closeButton className="modal-header-primary">
