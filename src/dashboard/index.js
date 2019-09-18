@@ -58,7 +58,7 @@ class Dashboard extends React.Component {
 		    },
 			unauthorized: false,
 			listViewModalShown: false,
-			listViewDataCourseName:          "",
+			listViewDataCourseName:         "",
 	        listViewDatastartDate:          "",
 	        listViewDatacourseLocation:     "",
 	        listViewDatacourseType:         "",
@@ -87,8 +87,12 @@ class Dashboard extends React.Component {
     }
 
     downloadExcel(year) {
+
+	    // var file = filePath;
+	    var fileType = 'application/vnd.ms-excel';
+	    var name;
 		this.setState({ mainLoading: true });
-		axios.get('http://34.248.242.178/CPDCompliance/api/Member/PDF', {
+		axios('http://34.248.242.178/CPDCompliance/api/Member/PDF', {
 			params: {
 				UserName: localStorage.getItem('displayName'),
 				Year: year,
@@ -104,11 +108,25 @@ class Dashboard extends React.Component {
 			}
 		})
 		.then((response) => {
-			const file = new Blob(
-		    [response.data], 
-		    {type: 'application/pdf'});
-		    const fileURL = URL.createObjectURL(file);
-		    window.open(fileURL);
+        // console.log(response.getResponseHeaders);
+        // var header = response.Headers('Content-Disposition');
+        // if (header) {
+        //     name = header.split("=")[1].replace(/\"/gi, '');
+        // }
+	        var blob = new Blob([response.data],
+	            { type: fileType });
+
+	        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+	            window.navigator.msSaveOrOpenBlob(blob, name);
+	        }
+	        else {
+				const url = window.URL.createObjectURL(new Blob([response.data]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', 'file.pdf');
+				document.body.appendChild(link);
+				link.click();
+			}
 		})
 		.then((data) => {
 			this.setState({ mainLoading: false });
@@ -550,8 +568,8 @@ class Dashboard extends React.Component {
 							<i className="fa fa-print"> </i>
 						</button>
 						<Dropdown id="dropdown-custom-1">
-							<Dropdown.Toggle className="btn btn-success btn-circle btn-lg" noCaret>
-								<i className="fa fa-file-excel-o"> </i>
+							<Dropdown.Toggle className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px'}} noCaret>
+								<i className="fa fa-file-pdf-o"> </i>
 							</Dropdown.Toggle>
 							<Dropdown.Menu>
 								<MenuItem onClick={() => {this.downloadExcel(2018)}} eventKey="1">2018</MenuItem>
