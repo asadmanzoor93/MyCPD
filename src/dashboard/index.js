@@ -123,7 +123,7 @@ class Dashboard extends React.Component {
 				const url = window.URL.createObjectURL(new Blob([response.data]));
 				const link = document.createElement('a');
 				link.href = url;
-				link.setAttribute('download', 'file.pdf');
+				link.setAttribute('download', 'MyCPDReport.pdf');
 				document.body.appendChild(link);
 				link.click();
 			}
@@ -503,7 +503,7 @@ class Dashboard extends React.Component {
 										    label="Select Year"
 										    placeholder="Year"
 										    name="year"
-										    menuItems={['2017', '2018']}
+										    menuItems={['2018', '2019']}
 											value={this.state.year}
 	                                        onChange={(value) => {this.handleInputChange('year',value)}}
 										    className="md-cell md-cell--6 md-cell--bottom"
