@@ -18,6 +18,7 @@ const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const Hours_URL = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDHours";
 const Delete_Record_URL = "http://34.248.242.178/CPDCompliance/api/Workflow/DeleteMemberCPD";
+const MyCPDReport_URL = "http://34.248.242.178/CPDCompliance/api/Member/PDF";
 let hostList = [];
 
 class Dashboard extends React.Component {
@@ -92,7 +93,7 @@ class Dashboard extends React.Component {
 	    var fileType = 'application/vnd.ms-excel';
 	    var name;
 		this.setState({ mainLoading: true });
-		axios('http://34.248.242.178/CPDCompliance/api/Member/PDF', {
+		axios(MyCPDReport_URL, {
 			params: {
 				UserName: localStorage.getItem('displayName'),
 				Year: year,
@@ -108,11 +109,6 @@ class Dashboard extends React.Component {
 			}
 		})
 		.then((response) => {
-        // console.log(response.getResponseHeaders);
-        // var header = response.Headers('Content-Disposition');
-        // if (header) {
-        //     name = header.split("=")[1].replace(/\"/gi, '');
-        // }
 	        var blob = new Blob([response.data],
 	            { type: fileType });
 
