@@ -23,6 +23,7 @@ class FaceToFace extends React.Component {
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.clearSearchFilters = this.clearSearchFilters.bind(this);
+        this.downloadExcel = this.downloadExcel.bind(this);
 
         this.state = {
             course_name: '',

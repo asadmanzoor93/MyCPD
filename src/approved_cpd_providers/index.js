@@ -18,6 +18,7 @@ class ApprovedCPDProviders extends React.Component {
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.clearSearchFilters = this.clearSearchFilters.bind(this);
+        this.downloadExcel = this.downloadExcel.bind(this);
         this.onSort = this.onSort.bind(this);
 
         this.state = {
