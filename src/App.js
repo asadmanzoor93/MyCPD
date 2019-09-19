@@ -15,6 +15,8 @@ import Library from "./library";
 import FeedbackModal from './feedback/_modals/modal';
 import AboutUsModal from './about-us/_modals/about-us';
 import { LinearProgress } from 'react-md';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 const SignOut_URL = 'http://34.248.242.178/CPDCompliance/api/account/LogOff';
 const REFRESH_TIME = 3000;
@@ -38,7 +40,6 @@ class App extends React.Component {
 
       this.makeSignOutRequest = this.makeSignOutRequest.bind(this);
   }
-
   componentDidMount() {
     setTimeout(() => {
       this.setState({
@@ -49,7 +50,7 @@ class App extends React.Component {
 
   makeSignOutRequest() {
     let self = this;
-
+    NotificationManager.info('message');
     axios.get(SignOut_URL, {
       method: 'GET',
       withCredentials: true,
@@ -66,7 +67,7 @@ class App extends React.Component {
           logout: true,
           mainLoading: true
         });
-        window.location.reload()
+        // window.location.reload()
     }).catch(console.log);
   };
 
@@ -103,12 +104,12 @@ class App extends React.Component {
                         <Link to={'/home'}><i className="fa fa-home"> </i> Home </Link>
                       </li>
                       <li className="active" style={{display: this.props.location.pathname === '/home' ? 'none' : 'block' }}>
-                        <a href="#" onClick={e => { e.preventDefault(); this.setState({quickNavShown: !this.state.quickNavShown }) }} >
+                        <a href="#" onClick={e => { e.preventDefault(); this.setState({quickNavShown: !this.state.quickNavShown }); }} >
                           <i className={this.state.quickNavShown ? "fa fa-toggle-on" : "fa fa-toggle-off"}> </i> Quick Navigation
                         </a>
                       </li>
                       <li>
-                        <a onClick={() => this.setState({ feedBackModalShown : true }) } href="#"><i className="fa fa-paper-plane"> </i> Feedback!</a>
+                        <a onClick={() => {this.setState({ feedBackModalShown : true })} } href="#"><i className="fa fa-paper-plane"> </i> Feedback!</a>
                       </li>
                     </ul>
                     <ul className="nav navbar-nav navbar-right animated fadeIn text16">
@@ -189,6 +190,7 @@ class App extends React.Component {
           </div>
           <FeedbackModal show={ this.state.feedBackModalShown } onHide={feedBackModalShownClose} />
           <AboutUsModal show={ this.state.aboutUsModalShown } onHide={aboutUsModalShownClose} />
+          <NotificationContainer/>
         </div>
     );
   }

@@ -11,6 +11,8 @@ import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import ViewModal from "./_modal/view";
 import Loader from "../_components/loader";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
@@ -210,7 +212,9 @@ class Dashboard extends React.Component {
 	makeHttpRequestWithPage(pageNumber, column, direction) {
 		let reverse= (this.state.sort.direction === 'asc') ? false : true;
 		let sortBy= this.state.sort.column;
-
+NotificationManager.success('Success message', 'Title here');
+NotificationManager.error('Success message', 'Title here');
+NotificationManager.warning('Success message', 'Title here');
 		this.setState({
 			mainLoading: true
 		});
