@@ -3,7 +3,6 @@ import axios from 'axios';
 import {Link, Redirect} from 'react-router-dom';
 import "react-table/react-table.css";
 import Pagination from "react-js-pagination";
-import { CSVLink, CSVDownload } from "react-csv";
 import $ from "jquery";
 import { TextField, DatePicker, SelectField, LinearProgress } from 'react-md';
 import { DropdownButton, MenuItem, Dropdown, Glyphicon } from 'react-bootstrap';
@@ -159,6 +158,15 @@ class Dashboard extends React.Component {
 			.then((data) => {
 				if(data){
 					let host_dic = {};
+					for(let i = 0; i < data.length; i++){
+						host_dic[data[i]['ID']] = data[i]['Name'];
+					}
+
+					this.setState({
+						host_list: data,
+						host_dict: host_dic
+					});
+
 	                if(data){
 	                    hostList = data.map((item)=>{
 	                        return {

@@ -2,7 +2,6 @@ import React from "react";
 import "react-table/react-table.css";
 import { Redirect } from 'react-router-dom';
 import axios from "axios";
-import { CSVLink, CSVDownload } from "react-csv";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
 import { TextField, DatePicker } from 'react-md';
@@ -10,6 +9,7 @@ import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import ViewModal from "../dashboard/_modal/view";
 
 const Approved_CPD_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd";
+const Excel_Download_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd/Excel";
 
 class ApprovedCPDProviders extends React.Component {
     constructor() {
@@ -182,26 +182,46 @@ class ApprovedCPDProviders extends React.Component {
         })
     }
 
+    downloadExcel() {
+        var fileType = 'application/vnd.ms-excel';
+        var name;
+        this.setState({ mainLoading: true });
+        axios(Excel_Download_URL, {
+            responseType: 'blob',
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                var blob = new Blob([response.data],
+                    { type: fileType });
+
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(blob, name);
+                }
+                else {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'ApprovedCPDProviders.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+                }
+            })
+            .then((data) => {
+                this.setState({ mainLoading: false });
+            }).catch(console.log);
+    }
+
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
         }
-
-        let csvData = [
-            [ "Course Name", "Location", "CPD Hours", "Host", "Type", "Trainer", "Start Date"],
-        ];
-
-        this.state.approved_cpd_records.map((cpd_record, index) =>
-            csvData.push([
-                cpd_record.CourseName,
-                cpd_record.LocationName,
-                cpd_record.Duration+'h',
-                cpd_record.HostName,
-                cpd_record.CPDTypeName,
-                cpd_record.Trainer,
-                cpd_record.StartDate,
-            ])
-        );
 
         let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
         let approved_cpd_records;
@@ -310,9 +330,11 @@ class ApprovedCPDProviders extends React.Component {
                                 className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
                             <i className="fa fa-print"> </i>
                         </button>
-                        <CSVLink data={csvData} className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px',lineHeight: '28px'}}>
+                        <button type="button" onClick={() => {this.downloadExcel()}}
+                                style={{marginLeft: '10px',lineHeight: '28px'}}
+                                className="btn btn-success btn-circle btn-lg ">
                             <i className="fa fa-file-excel-o"> </i>
-                        </CSVLink>
+                        </button>
                     </div>
                     <div className="gridTopDropdown"> Show
                         <select className="input-sm ng-pristine ng-untouched ng-valid ng-not-empty" onChange={(e) => this.handlePaginationFilter(e)}>
