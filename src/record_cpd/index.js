@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import $ from "jquery";
 import axios from "axios";
 import { DatePicker } from 'react-md';
+import {NotificationManager} from 'react-notifications';
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
@@ -328,6 +329,7 @@ class RecordCPD extends React.Component {
                     if(self.state.file_upload){
                         self.handleFileUpload(data)
                     } else {
+                        NotificationManager.success('Success!', 'MyCPD Record Created Successfully');
                         self.setState({
                             redirectDashboard: true
                         })
@@ -374,7 +376,7 @@ class RecordCPD extends React.Component {
                 .then((data) => {
                     this.handleFileUpload(data)
                 }).catch(function (error) {
-                console.log(error.response);
+                    console.log(error.response);
                 if(error){
                     if(error.response){
                         if(error.response.data){
@@ -407,7 +409,8 @@ class RecordCPD extends React.Component {
             .then((data) => {
                 self.setState({
                     redirectDashboard: true
-                })
+                });
+                NotificationManager.success('Success!', 'MyCPD Record Created Successfully');
             }).catch(console.log);
     }
 
@@ -504,6 +507,7 @@ class RecordCPD extends React.Component {
                         self.setState({
                             unauthorized: true,
                         });
+                        localStorage.setItem('failureMessage', 'Login Expired');
                     }
                 }
             }

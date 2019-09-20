@@ -2,6 +2,7 @@ import React from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 import { LinearProgress } from 'react-md';
+import {NotificationManager} from 'react-notifications';
 
 const qs = require('querystring');
 
@@ -22,7 +23,21 @@ class App extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e) {
+  componentDidMount() {
+      let failureMessage = localStorage.getItem('failureMessage');
+      if(failureMessage){
+          localStorage.removeItem('failureMessage');
+          NotificationManager.error('Failure!', failureMessage);
+      }
+
+      let successMessage = localStorage.getItem('successMessage');
+      if(successMessage){
+          localStorage.removeItem('successMessage');
+          NotificationManager.success('Success!', successMessage);
+      }
+  }
+
+    handleChange(e) {
       const { name, value } = e.target;
       this.setState({ [name]: value });
   }
@@ -54,7 +69,7 @@ class App extends React.Component {
                     localStorage.setItem('displayName', response.data.displayName);
                     localStorage.setItem('expires_in', response.data.expires_in);
                     localStorage.setItem('role', response.data.role);
-                    localStorage.setItem('successMessage', true);
+                    localStorage.setItem('successMessage', 'Login Successful');
 
                     //Login user to site
                     this.setState({

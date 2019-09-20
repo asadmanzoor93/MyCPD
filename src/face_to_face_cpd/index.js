@@ -153,6 +153,7 @@ class FaceToFace extends React.Component {
                             self.setState({
                                 unauthorized: true,
                             });
+                            localStorage.setItem('failureMessage', 'Login Expired');
                         }
                     }
                 }

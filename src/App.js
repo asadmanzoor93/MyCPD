@@ -50,7 +50,7 @@ class App extends React.Component {
 
   makeSignOutRequest() {
     let self = this;
-    NotificationManager.info('message');
+
     axios.get(SignOut_URL, {
       method: 'GET',
       withCredentials: true,
@@ -65,9 +65,10 @@ class App extends React.Component {
     .then((response) => {
         self.setState({
           logout: true,
-          mainLoading: true
+          mainLoading: false
         });
-        // window.location.reload()
+        localStorage.setItem('successMessage', 'Logout Successful');
+        window.location.reload()
     }).catch(console.log);
   };
 

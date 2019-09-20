@@ -11,7 +11,7 @@ import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import ViewModal from "./_modal/view";
 import Loader from "../_components/loader";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 
@@ -138,12 +138,18 @@ class Dashboard extends React.Component {
 	}
 
 	componentDidMount() {
+        let successMessage = localStorage.getItem('successMessage');
+        if(successMessage){
+            localStorage.removeItem('successMessage');
+            NotificationManager.success('Success!', successMessage);
+        }
+
 		this.makeHttpRequestWithPage(1);
 	    setTimeout(() => {
 	      this.setState({
 	        mainLoading: false
 	      })
-	    }, 1000)
+	    }, 1000);
 
 		// Hosts List
 		axios.get(Hosts_URL, {
@@ -212,9 +218,7 @@ class Dashboard extends React.Component {
 	makeHttpRequestWithPage(pageNumber, column, direction) {
 		let reverse= (this.state.sort.direction === 'asc') ? false : true;
 		let sortBy= this.state.sort.column;
-NotificationManager.success('Success message', 'Title here');
-NotificationManager.error('Success message', 'Title here');
-NotificationManager.warning('Success message', 'Title here');
+
 		this.setState({
 			mainLoading: true
 		});
@@ -269,6 +273,7 @@ NotificationManager.warning('Success message', 'Title here');
 							unauthorized: true,
 							mainLoading: false
 						});
+                        localStorage.setItem('failureMessage', 'Login Expired');
 					}
 				}
 			}
