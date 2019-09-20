@@ -4,9 +4,10 @@ import { Redirect } from 'react-router-dom';
 import axios from "axios";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
-import { TextField, DatePicker } from 'react-md';
+import {TextField, DatePicker, LinearProgress} from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import ViewModal from "../dashboard/_modal/view";
+import Loader from "../_components/loader";
 
 const Approved_CPD_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd";
 const Excel_Download_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd/Excel";
@@ -45,7 +46,8 @@ class ApprovedCPDProviders extends React.Component {
             listViewDatacpdFormat:          "",
             listViewDatavenue:              "",
             listViewDatatrainer:            "",
-            listViewDatacourseDescription:  ""
+            listViewDatacourseDescription:  "",
+            mainLoading: false
         }
     };
 
@@ -63,12 +65,22 @@ class ApprovedCPDProviders extends React.Component {
         this.makeHttpRequestWithPage(pageNumber);
     }
 
-    componentDidMount() {
+    componentDidMount(){
+        setTimeout(() => {
+            this.setState({
+                mainLoading: false
+            })
+        }, 1000);
+
         $('.datepicker').datepicker();
         this.makeHttpRequestWithPage(1);
     }
     
     makeHttpRequestWithPage(pageNumber, column, direction) {
+        this.setState({
+            mainLoading: true
+        });
+
         let reverse= (this.state.sort.direction === 'asc') ? false : true;
         let sortBy= this.state.sort.column;
 
@@ -108,6 +120,7 @@ class ApprovedCPDProviders extends React.Component {
                     totalPages: data.TotalPages,
                     activePage: data.Page,
                     totalCount: data.TotalCount,
+                    mainLoading: false
                 });
 
             }).catch(function (error) {
@@ -116,6 +129,7 @@ class ApprovedCPDProviders extends React.Component {
                         if (error.response.status === 401) {
                             self.setState({
                                 unauthorized: true,
+                                mainLoading: false
                             });
                             localStorage.setItem('failureMessage', 'Login Expired');
                         }
@@ -259,6 +273,7 @@ class ApprovedCPDProviders extends React.Component {
         return (
 
             <div >
+                { this.state.mainLoading && <LinearProgress id="main-loader"  /> }
                 <div className="panel panel-default">
                     <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
                         <i className="fa fa-filter " title="" tooltip="" data-original-title="Search"> Search</i>
@@ -348,6 +363,7 @@ class ApprovedCPDProviders extends React.Component {
                     </div>
                 </div>
                 <div className="col">
+                    { this.state.mainLoading && <Loader /> }
                     <table className='table table-striped table-bordered table-hover table-condensed'>
                         <thead>
                             <tr className="header">

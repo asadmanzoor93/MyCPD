@@ -4,11 +4,12 @@ import { Redirect } from 'react-router-dom';
 import axios from "axios";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
-import { TextField, DatePicker, SelectField } from 'react-md';
+import {TextField, DatePicker, SelectField, LinearProgress} from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import ViewModal from "./_modal/view";
+import Loader from "../_components/loader";
 
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const FaceToFace_URL = "http://34.248.242.178/CPDCompliance/api/faceToface";
@@ -52,7 +53,8 @@ class FaceToFace extends React.Component {
             listViewDataDuration:          "",
             listViewDatavenue:              "",
             listViewDatatrainer:            "",
-            listViewDatacourseDescription:  ""
+            listViewDatacourseDescription:  "",
+            mainLoading: false
         }
     };
 
@@ -79,6 +81,12 @@ class FaceToFace extends React.Component {
 
     componentDidMount() {
         this.makeHttpRequestWithPage(1);
+        setTimeout(() => {
+            this.setState({
+                mainLoading: false
+            })
+        }, 1000);
+
         $('.datepicker').datepicker();
 
         // Hosts List
@@ -104,6 +112,10 @@ class FaceToFace extends React.Component {
     }
 
     makeHttpRequestWithPage(pageNumber, column, direction) {
+        this.setState({
+            mainLoading: true
+        });
+
         let reverse= (this.state.sort.direction === 'asc') ? false : true;
         let sortBy= this.state.sort.column;
 
@@ -144,6 +156,7 @@ class FaceToFace extends React.Component {
                     totalPages: data.TotalPages,
                     totalCount: data.TotalCount,
                     activePage: data.Page,
+                    mainLoading: false
                 });
 
             }).catch(function (error) {
@@ -152,6 +165,7 @@ class FaceToFace extends React.Component {
                         if (error.response.status === 401) {
                             self.setState({
                                 unauthorized: true,
+                                mainLoading: false
                             });
                             localStorage.setItem('failureMessage', 'Login Expired');
                         }
@@ -295,11 +309,11 @@ class FaceToFace extends React.Component {
         }
 
         return (
-
             <div>
+                { this.state.mainLoading && <LinearProgress id="main-loader"  /> }
                 <div className="panel panel-default">
                     <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
-                        <i className="fa fa-filter " title="" tooltip="" data-original-title="Search"> Search</i>
+                        <i className="fa fa-filter " title="" data-original-title="Search"> Search</i>
                     </div>
                     <div className="shadow">
                         <div className="layout-gt-sm-row">
@@ -385,6 +399,7 @@ class FaceToFace extends React.Component {
                     </div>
                 </div>
                 <div className="col">
+                    { this.state.mainLoading && <Loader /> }
                     <table className='table table-striped table-bordered table-hover table-condensed'>
                         <thead>
                             <tr className="header">

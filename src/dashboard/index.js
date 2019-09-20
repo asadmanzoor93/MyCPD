@@ -261,8 +261,6 @@ class Dashboard extends React.Component {
 				totalPages: data.TotalPages,
 				activePage: data.Page,
 				totalCount: data.TotalCount,
-			});
-			this.setState({
 				mainLoading: false
 			});
 		}).catch(function (error) {
