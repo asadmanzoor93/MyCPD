@@ -3,19 +3,24 @@ import axios from 'axios';
 import {Link, Redirect} from 'react-router-dom';
 import "react-table/react-table.css";
 import Pagination from "react-js-pagination";
-import { CSVLink, CSVDownload } from "react-csv";
 import $ from "jquery";
-import { TextField, DatePicker, SelectField } from 'react-md';
+import { TextField, DatePicker, SelectField, LinearProgress } from 'react-md';
+import { DropdownButton, MenuItem, Dropdown, Glyphicon } from 'react-bootstrap';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import ViewModal from "./_modal/view";
+import Loader from "../_components/loader";
+import {NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const Hours_URL = "http://34.248.242.178/CPDCompliance/api/Member/MemberCPDHours";
 const Delete_Record_URL = "http://34.248.242.178/CPDCompliance/api/Workflow/DeleteMemberCPD";
+const MyCPDReport_URL = "http://34.248.242.178/CPDCompliance/api/Member/PDF";
+let hostList = [];
 
 class Dashboard extends React.Component {
 
@@ -26,6 +31,7 @@ class Dashboard extends React.Component {
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.clearSearchFilters = this.clearSearchFilters.bind(this);
 		this.deleteCPDRecord = this.deleteCPDRecord.bind(this);
+		this.downloadExcel = this.downloadExcel.bind(this);
 
 		this.state = {
 			host_dict: {},
@@ -35,8 +41,11 @@ class Dashboard extends React.Component {
 			required_hours: 0,
 			total_hours: 0,
 			total_minutes: 0,
+			start_date_iso: '',
+			start_date: '',
 			dashboard_records: [],
 			course_name: '',
+			host_name: '',
 			location_name: '',
 			host_id: '',
 			year: '',
@@ -51,28 +60,75 @@ class Dashboard extends React.Component {
 		    },
 			unauthorized: false,
 			listViewModalShown: false,
-			listViewDataCourseName:          "",
+			listViewDataCourseName:         "",
 	        listViewDatastartDate:          "",
 	        listViewDatacourseLocation:     "",
 	        listViewDatacourseType:         "",
 	        listViewDatahost:               "",
-	        listViewDatacpdFormat:          "",
+	        listViewDatacpdFormata:          "",
 	        listViewDatavenue:              "",
 	        listViewDatatrainer:            "",
-	        listViewDatacourseDescription:  ""
+	        listViewDatacourseDescription:  "",
+	        mainLoading: false
 		}
 	};
 
-	handleInputChange(name,value) {
+    handleInputChange(name, value) {
         let newValue = value;
+        console.log(name, value);
         if (name == 'start_date') {
             let newDate = new Date(value);
             newValue = newDate.toISOString();
+            this.setState({
+                start_date_iso: newValue
+            });
         }
         this.setState({
-            [name]: newValue
+            [name]: value
         });
-	}
+    }
+
+    downloadExcel(year) {
+
+	    // var file = filePath;
+	    var fileType = 'application/vnd.ms-excel';
+	    var name;
+		this.setState({ mainLoading: true });
+		axios(MyCPDReport_URL, {
+			params: {
+				UserName: localStorage.getItem('displayName'),
+				Year: year,
+			},
+			responseType: 'blob',
+			method: 'GET',
+			withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/json'
+			}
+		})
+		.then((response) => {
+	        var blob = new Blob([response.data],
+	            { type: fileType });
+
+	        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+	            window.navigator.msSaveOrOpenBlob(blob, name);
+	        }
+	        else {
+				const url = window.URL.createObjectURL(new Blob([response.data]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', 'MyCPDReport.pdf');
+				document.body.appendChild(link);
+				link.click();
+			}
+		})
+		.then((data) => {
+			this.setState({ mainLoading: false });
+		}).catch(console.log);
+    }
 
 	handlePageChange(pageNumber) {
 		this.setState({
@@ -82,9 +138,18 @@ class Dashboard extends React.Component {
 	}
 
 	componentDidMount() {
-		this.makeHttpRequestWithPage(1);
+        let successMessage = localStorage.getItem('successMessage');
+        if(successMessage){
+            localStorage.removeItem('successMessage');
+            NotificationManager.success('Success!', successMessage);
+        }
 
-        $('.datepicker').datepicker();
+		this.makeHttpRequestWithPage(1);
+	    setTimeout(() => {
+	      this.setState({
+	        mainLoading: false
+	      })
+	    }, 1000);
 
 		// Hosts List
 		axios.get(Hosts_URL, {
@@ -109,6 +174,15 @@ class Dashboard extends React.Component {
 						host_list: data,
 						host_dict: host_dic
 					});
+
+	                if(data){
+	                    hostList = data.map((item)=>{
+	                        return {
+	                        	label: item.Name,
+	                        	value: item.ID
+	                        }
+	                    });
+	                }
 				}
 			}).catch(console.log);
 
@@ -145,6 +219,10 @@ class Dashboard extends React.Component {
 		let reverse= (this.state.sort.direction === 'asc') ? false : true;
 		let sortBy= this.state.sort.column;
 
+		this.setState({
+			mainLoading: true
+		});
+
 		if(column){
 			sortBy = column;
 		}
@@ -163,6 +241,7 @@ class Dashboard extends React.Component {
 				Venue: this.state.venue,
 				reverse: reverse,
 				sortBy: sortBy,
+				startDate: this.state.start_date_iso,
 				page: pageNumber,
 				pageSize: this.state.per_page,
 			},
@@ -175,26 +254,28 @@ class Dashboard extends React.Component {
 				'Content-Type': 'application/json'
 			}
 		})
-			.then(response => response.data)
-			.then((data) => {
-				this.setState({
-					dashboard_records: data.Items,
-					totalPages: data.TotalPages,
-					activePage: data.Page,
-					totalCount: data.TotalCount,
-				});
-
-			}).catch(function (error) {
-				if(error){
-					if(error.response){
-						if (error.response.status === 401) {
-							self.setState({
-								unauthorized: true,
-							});
-						}
+		.then(response => response.data)
+		.then((data) => {
+			this.setState({
+				dashboard_records: data.Items,
+				totalPages: data.TotalPages,
+				activePage: data.Page,
+				totalCount: data.TotalCount,
+				mainLoading: false
+			});
+		}).catch(function (error) {
+			if(error){
+				if(error.response){
+					if (error.response.status === 401) {
+						self.setState({
+							unauthorized: true,
+							mainLoading: false
+						});
+                        localStorage.setItem('failureMessage', 'Login Expired');
 					}
 				}
-			});
+			}
+		});
 	};
 
 	handlePaginationFilter(event){
@@ -211,6 +292,7 @@ class Dashboard extends React.Component {
 			location_name: '',
 			host_id: '',
 			year: '',
+			start_date: '',
 			date_selected: '',
 			sort: {
 				column: 'StartDate',
@@ -304,54 +386,53 @@ class Dashboard extends React.Component {
 					(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
 					dashboard_record.StartDate
 				]);
-					return (
-					<tr key={index}>
-						<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>
-						<td>{dashboard_record.CPDTypeName}</td>
-						<td>{dashboard_record.CourseName}</td>
-						<td>{dashboard_record.Hours}h</td>
-						<td>{dashboard_record.CompletionDate}</td>
-						<td>{dashboard_record.Venue}</td>
-						<td>{dashboard_record.Trainer}</td>
-						<td>{(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId}</td>
-						<td>{dashboard_record.StartDate}</td>
-						<td>
+			return (
+				<tr key={index}>
+					<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>
+					<td>{dashboard_record.CPDTypeName}</td>
+					<td>{dashboard_record.CourseName}</td>
+					<td>{dashboard_record.Hours}h</td>
+					<td>{dashboard_record.CompletionDate}</td>
+					<td>{dashboard_record.Venue}</td>
+					<td>{dashboard_record.Trainer}</td>
+					<td>{(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId}</td>
+					<td>{dashboard_record.StartDate}</td>
+					<td>
+						<div style={{whiteSpace: 'nowrap'}}>
 							<a data-item={dashboard_record}
 							   onClick={() => {this.openModalWithItem(
 							   	dashboard_record.CourseName,
 								dashboard_record.StartDate,
 								dashboard_record.LocationName,
 								dashboard_record.CPDTypeName,
-								   (dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
+								(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
 								dashboard_record.CPDFormatId,
 								dashboard_record.Venue,
 								dashboard_record.Trainer,
 								dashboard_record.CourseDescription
-							)}} style={{fontSize:'25px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i>
+							)}} style={{fontSize:'18px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i>
 							</a>
-							<div style={{fontSize:'25px', cursor: 'pointer', marginLeft: '10px'}}>
-								<Link to={'/mycpd/edit/'+dashboard_record.CPDWorkflowId} className="nav-link">
-									<i title="" className="fa fa-edit ng-scope" role="button"
-									   tabIndex="0" data-original-title="Edit CPD"> </i>
-								</Link>
-
-							</div>
+							<Link to={'/mycpd/edit/'+dashboard_record.CPDWorkflowId} className="nav-link" style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px'}}>
+								<i title="" className="fa fa-edit ng-scope" role="button"
+								   tabIndex="0" data-original-title="Edit CPD"> </i>
+							</Link>
 							<a
-								style={{fontSize:'25px', cursor: 'pointer', marginLeft: '10px'}}
+								style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px'}}
 								onClick={() => this.deleteCPDRecord(dashboard_record.CPDWorkflowId)}
 							>
 								<i title="" className="fa fa-trash ng-scope" tooltip="" role="button" tabIndex="0"
 								  data-original-title="Delete CPD"> </i>
 							</a>
-
-						</td>
-					</tr>
+						</div>
+					</td>
+				</tr>
 				)
 			});
 		}
 
 		return (
 			<div>
+          		{ this.state.mainLoading && <LinearProgress id="main-loader"  /> }
 				<div>
 					<div className="row" style={{ marginBottom: '3rem' }}>
 						<div className="col-md-4">
@@ -433,7 +514,7 @@ class Dashboard extends React.Component {
 										    label="Select Year"
 										    placeholder="Year"
 										    name="year"
-										    menuItems={['2017', '2018']}
+										    menuItems={['2018', '2019']}
 											value={this.state.year}
 	                                        onChange={(value) => {this.handleInputChange('year',value)}}
 										    className="md-cell md-cell--6 md-cell--bottom"
@@ -463,15 +544,17 @@ class Dashboard extends React.Component {
 
 	                                </div>
 	                                <div className="md-grid">
-	                                    <TextField
-	                                          id="host"
-	                                          label="Host"
-	                                          lineDirection="center"
-	                                          placeholder="Host"
-											  value={this.state.host}
-	                                          onChange={(value) => {this.handleInputChange('host',value)}}
-	                                          className="md-cell md-cell--6 md-cell--bottom"
-	                                        />
+
+	                                    <SelectField
+										    id="host"
+										    label="Host"
+										    placeholder="Host"
+										    name="host"
+										    menuItems={hostList}
+											value={this.state.host_id}
+	                                        onChange={(value) => {this.handleInputChange('host_id',value)}}
+										    className="md-cell md-cell--6 md-cell--bottom"
+										/>
 
 	                                </div>
 	                                <div>
@@ -495,9 +578,15 @@ class Dashboard extends React.Component {
 								className="btn btn-danger btn-circle btn-lg ">
 							<i className="fa fa-print"> </i>
 						</button>
-						<CSVLink data={csvData} className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px',lineHeight: '28px'}}>
-							<i className="fa fa-file-excel-o"> </i>
-						</CSVLink>
+						<Dropdown id="dropdown-custom-1">
+							<Dropdown.Toggle className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px'}} noCaret>
+								<i className="fa fa-file-pdf-o"> </i>
+							</Dropdown.Toggle>
+							<Dropdown.Menu>
+								<MenuItem onClick={() => {this.downloadExcel(2018)}} eventKey="1">2018</MenuItem>
+								<MenuItem onClick={() => {this.downloadExcel(2019)}} eventKey="2">2019</MenuItem>
+							</Dropdown.Menu>
+						</Dropdown>
 						<button type="button"
 								style={{marginLeft: '10px'}}
 								className="btn btn-primary btn-circle btn-lg ng-scope"
@@ -509,6 +598,7 @@ class Dashboard extends React.Component {
 					</div>
 				</div>
 				<div className="col">
+					{ this.state.mainLoading && <Loader /> }
 					<table className='table table-striped table-bordered table-hover table-condensed'>
 						<thead>
 						<tr className="header">

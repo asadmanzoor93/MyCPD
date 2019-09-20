@@ -2,14 +2,15 @@ import React from "react";
 import "react-table/react-table.css";
 import { Redirect } from 'react-router-dom';
 import axios from "axios";
-import { CSVLink, CSVDownload } from "react-csv";
 import Pagination from "react-js-pagination";
 import $ from "jquery";
-import { TextField, DatePicker } from 'react-md';
+import {TextField, DatePicker, LinearProgress} from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import ViewModal from "../dashboard/_modal/view";
+import Loader from "../_components/loader";
 
 const Approved_CPD_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd";
+const Excel_Download_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd/Excel";
 
 class ApprovedCPDProviders extends React.Component {
     constructor() {
@@ -18,6 +19,7 @@ class ApprovedCPDProviders extends React.Component {
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.clearSearchFilters = this.clearSearchFilters.bind(this);
+        this.downloadExcel = this.downloadExcel.bind(this);
         this.onSort = this.onSort.bind(this);
 
         this.state = {
@@ -44,7 +46,8 @@ class ApprovedCPDProviders extends React.Component {
             listViewDatacpdFormat:          "",
             listViewDatavenue:              "",
             listViewDatatrainer:            "",
-            listViewDatacourseDescription:  ""
+            listViewDatacourseDescription:  "",
+            mainLoading: false
         }
     };
 
@@ -62,12 +65,22 @@ class ApprovedCPDProviders extends React.Component {
         this.makeHttpRequestWithPage(pageNumber);
     }
 
-    componentDidMount() {
+    componentDidMount(){
+        setTimeout(() => {
+            this.setState({
+                mainLoading: false
+            })
+        }, 1000);
+
         $('.datepicker').datepicker();
         this.makeHttpRequestWithPage(1);
     }
     
     makeHttpRequestWithPage(pageNumber, column, direction) {
+        this.setState({
+            mainLoading: true
+        });
+
         let reverse= (this.state.sort.direction === 'asc') ? false : true;
         let sortBy= this.state.sort.column;
 
@@ -107,6 +120,7 @@ class ApprovedCPDProviders extends React.Component {
                     totalPages: data.TotalPages,
                     activePage: data.Page,
                     totalCount: data.TotalCount,
+                    mainLoading: false
                 });
 
             }).catch(function (error) {
@@ -115,7 +129,9 @@ class ApprovedCPDProviders extends React.Component {
                         if (error.response.status === 401) {
                             self.setState({
                                 unauthorized: true,
+                                mainLoading: false
                             });
+                            localStorage.setItem('failureMessage', 'Login Expired');
                         }
                     }
                 }
@@ -182,26 +198,46 @@ class ApprovedCPDProviders extends React.Component {
         })
     }
 
+    downloadExcel() {
+        var fileType = 'application/vnd.ms-excel';
+        var name;
+        this.setState({ mainLoading: true });
+        axios(Excel_Download_URL, {
+            responseType: 'blob',
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': 'bearer ' + localStorage.getItem('access_token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                var blob = new Blob([response.data],
+                    { type: fileType });
+
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(blob, name);
+                }
+                else {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'ApprovedCPDProviders.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+                }
+            })
+            .then((data) => {
+                this.setState({ mainLoading: false });
+            }).catch(console.log);
+    }
+
     render () {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
         }
-
-        let csvData = [
-            [ "Course Name", "Location", "CPD Hours", "Host", "Type", "Trainer", "Start Date"],
-        ];
-
-        this.state.approved_cpd_records.map((cpd_record, index) =>
-            csvData.push([
-                cpd_record.CourseName,
-                cpd_record.LocationName,
-                cpd_record.Duration+'h',
-                cpd_record.HostName,
-                cpd_record.CPDTypeName,
-                cpd_record.Trainer,
-                cpd_record.StartDate,
-            ])
-        );
 
         let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
         let approved_cpd_records;
@@ -237,6 +273,7 @@ class ApprovedCPDProviders extends React.Component {
         return (
 
             <div >
+                { this.state.mainLoading && <LinearProgress id="main-loader"  /> }
                 <div className="panel panel-default">
                     <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
                         <i className="fa fa-filter " title="" tooltip="" data-original-title="Search"> Search</i>
@@ -310,9 +347,11 @@ class ApprovedCPDProviders extends React.Component {
                                 className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">
                             <i className="fa fa-print"> </i>
                         </button>
-                        <CSVLink data={csvData} className="btn btn-success btn-circle btn-lg" style={{marginLeft: '10px',lineHeight: '28px'}}>
+                        <button type="button" onClick={() => {this.downloadExcel()}}
+                                style={{marginLeft: '10px',lineHeight: '28px'}}
+                                className="btn btn-success btn-circle btn-lg ">
                             <i className="fa fa-file-excel-o"> </i>
-                        </CSVLink>
+                        </button>
                     </div>
                     <div className="gridTopDropdown"> Show
                         <select className="input-sm ng-pristine ng-untouched ng-valid ng-not-empty" onChange={(e) => this.handlePaginationFilter(e)}>
@@ -324,6 +363,7 @@ class ApprovedCPDProviders extends React.Component {
                     </div>
                 </div>
                 <div className="col">
+                    { this.state.mainLoading && <Loader /> }
                     <table className='table table-striped table-bordered table-hover table-condensed'>
                         <thead>
                             <tr className="header">

@@ -3,15 +3,16 @@ import "react-table/react-table.css";
 import { Redirect } from 'react-router-dom';
 import axios from "axios";
 import Pagination from "react-js-pagination";
-import { TextField, DatePicker, SelectField } from 'react-md';
+import {TextField, DatePicker, SelectField, LinearProgress} from 'react-md';
 import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import ViewModal from "./_modal/view";
+import Loader from "../_components/loader";
 
 const Locations_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/Location";
 const Types_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypes";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const Library_URL = "http://34.248.242.178/CPDCompliance/api/Library";
-const Excel_Report_URL = "http://34.248.242.178/CPDCompliance/api/Library/Excel";
+const Excel_Download_URL = "http://34.248.242.178/CPDCompliance/api/Library/Excel";
 let hostList = [];
 
 class Library extends React.Component {
@@ -22,7 +23,7 @@ class Library extends React.Component {
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.clearSearchFilters = this.clearSearchFilters.bind(this);
-        this.exportExcelReport = this.exportExcelReport.bind(this);
+        this.downloadExcel = this.downloadExcel.bind(this);
 
         this.state = {
             host_dict: {},
@@ -54,14 +55,12 @@ class Library extends React.Component {
             listViewDatacpdFormat:          "",
             listViewDatavenue:              "",
             listViewDatatrainer:            "",
-            listViewDatacourseDescription:  ""
+            listViewDatacourseDescription:  "",
+            mainLoading: false
         }
     };
 
     handleInputChange(name, value,item) {
-        debugger;
-        console.log(value);
-
         let newValue = value;
         if (name == 'start_date') {
             let newDate = new Date(value);
@@ -81,6 +80,11 @@ class Library extends React.Component {
 
     componentDidMount() {
         this.makeHttpRequestWithPage(1);
+        setTimeout(() => {
+            this.setState({
+                mainLoading: false
+            })
+        }, 1000);
 
         // Types List
         axios.get(Types_URL, {
@@ -165,6 +169,10 @@ class Library extends React.Component {
     }
 
     makeHttpRequestWithPage(pageNumber, column, direction) {
+        this.setState({
+            mainLoading: true
+        });
+
         let reverse= (this.state.sort.direction === 'asc') ? false : true;
         let sortBy= this.state.sort.column;
 
@@ -205,6 +213,7 @@ class Library extends React.Component {
                     totalPages: data.TotalPages,
                     activePage: data.Page,
                     totalCount: data.TotalCount,
+                    mainLoading: false
                 });
 
             }).catch(function (error) {
@@ -213,7 +222,9 @@ class Library extends React.Component {
                         if (error.response.status === 401) {
                             self.setState({
                                 unauthorized: true,
+                                mainLoading: false
                             });
+                            localStorage.setItem('failureMessage', 'Login Expired');
                         }
                     }
                 }
@@ -249,30 +260,40 @@ class Library extends React.Component {
         });
     }
 
-    exportExcelReport(event){
-        axios.get(
-            Excel_Report_URL, {
+    downloadExcel(event){
+        var fileType = 'application/vnd.ms-excel';
+        var name;
+        this.setState({ mainLoading: true });
+        axios(Excel_Download_URL, {
+            responseType: 'blob',
             method: 'GET',
-                withCredentials: true,
-                credentials: 'include',
-                headers: {
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
                 'Authorization': 'bearer ' + localStorage.getItem('access_token'),
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/xlsx'
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
             }
-        }
-        ).then(response => {
-
-            console.log(response);
-            var fileName='Library.xlsx';
-            var blob = new Blob([response.data], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-            const blobURL = window.URL.createObjectURL(blob);
-            const tempLink = document.createElement('a');
-            tempLink.style.display = 'none';
-            tempLink.href = blobURL;
-            tempLink.setAttribute('download', fileName);
-            tempLink.click();
         })
+            .then((response) => {
+                var blob = new Blob([response.data],
+                    { type: fileType });
+
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(blob, name);
+                }
+                else {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'Library.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+                }
+            })
+            .then((data) => {
+                this.setState({ mainLoading: false });
+            }).catch(console.log);
     }
 
     onSort = (column) => (e) => {
@@ -348,6 +369,7 @@ class Library extends React.Component {
         return (
 
             <div >
+                { this.state.mainLoading && <LinearProgress id="main-loader"  /> }
                 <div className="panel panel-default">
                     <div className="panel-heading-cpd-3" style={{padding: '10px'}}>
                         <i className="fa fa-filter " title="" data-original-title="Search"> Search</i>
@@ -433,7 +455,7 @@ class Library extends React.Component {
                                 className="btn btn-danger btn-circle btn-lg ng-scope">
                             <i className="fa fa-print"> </i>
                         </button>
-                        <button type="button" style={{marginLeft: '10px'}} onClick={(e)=> this.exportExcelReport(e)}
+                        <button type="button" style={{marginLeft: '10px'}} onClick={(e)=> this.downloadExcel(e)}
                                 className="btn btn-success btn-circle btn-lg ng-scope">
                             <i className="fa fa-file-excel-o"> </i>
                         </button>
@@ -448,6 +470,7 @@ class Library extends React.Component {
                     </div>
                 </div>
                 <div className="col">
+                    { this.state.mainLoading && <Loader /> }
                     <table className='table table-striped table-bordered table-hover table-condensed'>
                         <thead>
                         <tr className="header">
