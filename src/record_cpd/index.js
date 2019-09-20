@@ -56,6 +56,7 @@ class RecordCPD extends React.Component {
             trainer: '',
             location_id: '',
             is_declared: false,
+            second_tab_active: false,
             unauthorized: false,
             redirectDashboard: false,
         };
@@ -73,6 +74,7 @@ class RecordCPD extends React.Component {
         this.fetchCourseDetail = this.fetchCourseDetail.bind(this);
         this.handleFileUpload = this.handleFileUpload.bind(this);
         this.fetchCPDRecord = this.fetchCPDRecord.bind(this);
+        this.makeSecondTabActive = this.makeSecondTabActive.bind(this);
 
     };
 
@@ -278,6 +280,7 @@ class RecordCPD extends React.Component {
                         host_id: data.HostId,
                         location_id: data.LocationId,
                     });
+                    this.makeSecondTabActive();
                 }
             }).catch(console.log);
     }
@@ -289,9 +292,36 @@ class RecordCPD extends React.Component {
     }
 
     handleNextStep(){
-        this.setState({
-            currentStep: this.state.currentStep + 1
-        });
+        if (this.state.currentStep === 2){
+            if (this.state.cpd_type_id !== null
+                && this.state.course_name !== '' && this.state.course_description !== ''
+                && this.state.venue !== '' && this.state.cpd_hours !== ''
+                && this.state.file_name !== '' && this.state.date_completed !== ''){
+                this.setState({
+                    currentStep: this.state.currentStep + 1,
+                    second_tab_active: true,
+                });
+            } else {
+                alert('Fill all required fields')
+            }
+        } else {
+            this.setState({
+                currentStep: this.state.currentStep + 1
+            });
+        }
+
+
+    }
+
+    makeSecondTabActive(){
+        if (this.state.cpd_type_id !== null
+            && this.state.course_name !== '' && this.state.course_description !== ''
+            && this.state.venue !== '' && this.state.cpd_hours !== ''
+            && this.state.file_name !== '' && this.state.date_completed !== ''){
+            this.setState({
+                second_tab_active: true,
+            });
+        }
     }
 
     handleSaveRecord() {
@@ -415,6 +445,7 @@ class RecordCPD extends React.Component {
     }
 
     handleInputChange(event,field_name) {
+
         if (field_name == 'date_completed') {
             let newValue = event;
             let newDate = new Date(event);
@@ -429,7 +460,6 @@ class RecordCPD extends React.Component {
             const name = target.name;
 
             if(name === 'file_upload'){
-                console.log(event.target.files[0]);
                 this.setState({
                     [name]: event.target.files[0],
                     file_name: event.target.files[0]['name']
@@ -452,6 +482,8 @@ class RecordCPD extends React.Component {
                 this.fetchCourseDetail(value);
             }
         }
+
+        this.makeSecondTabActive();
     }
 
     fetchCPDRecord(){
@@ -485,7 +517,7 @@ class RecordCPD extends React.Component {
                                 course_id: element.CourseId,
                                 course_name: element.CourseName,
                                 course_description: element.CourseDescription,
-                                venue: element.Trainer,
+                                venue: element.Venue,
                                 cpd_hours: element.Hours,
                                 cpd_mins: (element.Minutes) ? element.Minutes : '',
                                 cpd_year: element.CPDYear,
@@ -678,7 +710,6 @@ class RecordCPD extends React.Component {
                                                         required=""
                                                         disabled={ (this.state.cpd_type_id === '4') ? "" : "disabled" }
                                                         aria-invalid="true">
-                                                    <option value="" defaultValue> </option>
                                                     {this.state.formats.map((item, key) =>
                                                         <option key={key} value={item.ID} label={item.Name} >{item.Name}</option>
                                                     )}
@@ -772,7 +803,9 @@ class RecordCPD extends React.Component {
                                             <div >
                                                 <button className="btn btn-default" name="previous" onClick={this.handlePrevStep} type="button"><i className="fa fa-arrow-left"> </i> Previous step
                                                 </button>
-                                                <button className="btn btn-primary pull-right" type="button"
+                                                <button className="btn btn-primary pull-right"
+                                                        type="button"
+                                                        // disabled={ (this.state.second_tab_active === true) ? "" : "disabled"}
                                                         onClick={this.handleNextStep}
                                                 >Next step <i className="fa fa-arrow-right"> </i></button>
                                             </div>
@@ -811,7 +844,8 @@ class RecordCPD extends React.Component {
                                                 <label className="control-label">Trainer</label>
                                                 <input maxLength="200" type="text" required="required"
                                                        id="trainer"
-                                                       value={this.state.trainer}
+                                                       name="trainer"
+                                                       value={(this.state.trainer) ? this.state.trainer: ''}
                                                        onChange={this.handleInputChange}
                                                        disabled={ (this.state.cpd_type_id === '4') ? "" : "disabled" }
                                                        className="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required ng-valid-maxlength"
