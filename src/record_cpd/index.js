@@ -612,13 +612,13 @@ class RecordCPD extends React.Component {
         let ListItemOne, ListItemTwo;
 
         if(this.state.currentStep > 1) {
-            ListItemOne = <li className="done"><a>Submitter Details</a></li>
+            ListItemOne = <li className="done"><a onClick={this.handlePrevStep} href="#">Submitter Details</a></li>
         } else {
             ListItemOne = <li className="current"><a>Submitter Details</a></li>
         }
 
         if(this.state.currentStep > 2) {
-            ListItemTwo = <li className="done"><a>Confirm CPD Activity Details</a></li>
+            ListItemTwo = <li className="done"><a onClick={this.handlePrevStep} href="#">Confirm CPD Activity Details</a></li>
         } else if(this.state.currentStep === 2) {
             ListItemTwo = <li className="current"><a>Confirm CPD Activity Details</a></li>
         } else {
@@ -944,7 +944,7 @@ class RecordCPD extends React.Component {
                                                 <button className="btn btn-success pull-right" type="button"
                                                         disabled={ (this.state.is_declared === true) ? "" : "disabled"}
                                                         value={this.state.is_declared}
-                                                        onClick={this.handleSaveRecord} > Save <i className="fa fa-arrow-right"> </i></button>
+                                                        onClick={this.handleSaveRecord} ><i className="fa fa-floppy-o"> </i> Save </button>
                                             </div>
                                         </div>
                                     </div>
