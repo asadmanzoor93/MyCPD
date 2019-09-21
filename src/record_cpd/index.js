@@ -8,6 +8,8 @@ import {NotificationManager} from 'react-notifications';
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
+const MAX_DATE = new Date();
+
 const CPDRecord_Info_URL = 'http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD';
 const Member_Info_URL = 'http://34.248.242.178/CPDCompliance/api/account/GetMember?memID=';
 const Types_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypesForMyCPD';
@@ -39,7 +41,7 @@ class RecordCPD extends React.Component {
             courses_options: [],
             cpd_type_id: 2,
             MemberId: null,
-            course_format: '',
+            course_format: 'Online',
             course_id: '',
             course_name: '',
             course_detail: [],
@@ -79,7 +81,11 @@ class RecordCPD extends React.Component {
     };
 
     componentWillMount() {
-        $('.datepicker').datepicker({autoclose: true});
+        $('.datepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            maxDate: new Date()
+        });
         this.fetchTypes();
         this.fetchMemberInfo();
         this.fetchFormats();
@@ -212,6 +218,23 @@ class RecordCPD extends React.Component {
         if(TypeId){
             cpd_type_id = TypeId;
         }
+
+        this.setState( {
+            cpd_type_id: 2,
+            course_format: 'Online',
+            course_id: '',
+            course_name: '',
+            course_description: '',
+            venue: '',
+            cpd_hours: '',
+            cpd_mins: '',
+            cpd_year: '',
+            date_completed: null,
+            start_date_iso: '',
+            file_upload: null,
+            file_name: null
+        });
+
         axios.get(Courses_URL, {
             params: {
                 CPDTypeId: cpd_type_id,
@@ -776,13 +799,14 @@ class RecordCPD extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="form-group required">
-                                                <label  className="control-label">Date Completed {this.state.date_completed}
+                                                <label className="control-label">Date Completed
                                                 </label>
                                                 <DatePicker
                                                     id="date_completed"
                                                     label="Enter Completed Date"
                                                     name="date_completed"
                                                     value={this.state.date_completed}
+                                                    maxDate={MAX_DATE}
                                                     onChange={(value) => {this.handleInputChange(value,'date_completed')}}
                                                     className="md-cell md-cell--6 md-cell--bottom"
                                                 />
