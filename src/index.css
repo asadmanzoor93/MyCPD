@@ -1,3 +1,4 @@
+html { background: #fff !important; }
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -20,3 +21,12 @@ code {
 	z-index: 9999;
 	margin-top: 0;
 }
+.gridTopDropdown select {
+  margin: 0 7px;
+}
+.main-content .table-condensed thead tr td,
+.main-content .table-condensed thead tr th {
+  white-space: nowrap;
+  padding: 4px 10px;
+}
+th .fa { margin-left: 3px; }

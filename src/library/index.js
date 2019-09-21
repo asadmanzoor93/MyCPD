@@ -363,7 +363,7 @@ class Library extends React.Component {
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.Venue}</td>
                     <td>{(cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na'}</td>
-                    <td><a data-item={cpd_record}
+                    <td className="text-center"><a data-item={cpd_record}
                            onClick={() => {this.openModalWithItem(
                                cpd_record.CourseName,
                                (cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na',
