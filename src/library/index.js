@@ -234,8 +234,12 @@ class Library extends React.Component {
     handlePaginationFilter(event){
         let value = event.target.value;
         this.setState({
-            per_page: value
+            per_page: value,
+            mainLoading: true
         });
+        setTimeout(() => {
+            this.makeHttpRequestWithPage(1);
+        }, 1000);
     }
 
     clearSearchFilters(){
@@ -258,6 +262,14 @@ class Library extends React.Component {
                 direction: 'desc'
             },
         });
+
+        this.setState({
+            mainLoading: true
+        });
+
+        setTimeout(() => {
+            this.makeHttpRequestWithPage(1);
+        }, 1000);
     }
 
     downloadExcel(event){
@@ -334,6 +346,8 @@ class Library extends React.Component {
         if (this.state.unauthorized) {
             return <Redirect to='/'/>;
         }
+
+        console.log(this.state.library_records);
 
         let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
         let library_records;

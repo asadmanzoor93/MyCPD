@@ -177,8 +177,12 @@ class FaceToFace extends React.Component {
     handlePaginationFilter(event){
         let value = event.target.value;
         this.setState({
-            per_page: value
+            per_page: value,
+            mainLoading: true
         });
+        setTimeout(() => {
+            this.makeHttpRequestWithPage(1);
+        }, 1000);
     }
 
     clearSearchFilters(){
@@ -199,6 +203,14 @@ class FaceToFace extends React.Component {
             unauthorized: false
         });
         $('.datepicker').datepicker();
+
+        this.setState({
+            mainLoading: true
+        });
+
+        setTimeout(() => {
+            this.makeHttpRequestWithPage(1);
+        }, 1000);
     }
 
     onSort = (column) => (e) => {

@@ -281,8 +281,12 @@ class Dashboard extends React.Component {
 	handlePaginationFilter(event){
 		let value = event.target.value;
 		this.setState({
-			per_page: value
+			per_page: value,
+			mainLoading: true
 		});
+		setTimeout(() => {
+			this.makeHttpRequestWithPage(1);
+		}, 1000);
 	}
 
 	clearSearchFilters(){
@@ -304,6 +308,13 @@ class Dashboard extends React.Component {
 			activePage: 0,
 			unauthorized: false,
 		});
+		this.setState({
+			mainLoading: true
+		});
+
+		setTimeout(() => {
+			this.makeHttpRequestWithPage(1);
+		}, 1000);
 	}
 
     openModalWithItem(courseName,startDate,courseLocation,courseType,host,cpdFormat,venue,trainer,courseDescription) {
@@ -370,22 +381,9 @@ class Dashboard extends React.Component {
 		let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
 		let dashboard_records;
 
-		let csvData = [
-			["Course Type", "Course", "Completed Hours", "Completion Date", "Venue", "Trainer", "Host", "Start Date"],
-		];
-
 		if (this.state.dashboard_records !== null) {
 			dashboard_records = this.state.dashboard_records.map((dashboard_record , index) => {
-				csvData.push([
-					dashboard_record.CPDTypeName,
-					dashboard_record.CourseName,
-					dashboard_record.Hours+'h',
-					dashboard_record.CompletionDate,
-					dashboard_record.Venue,
-					dashboard_record.Trainer,
-					(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
-					dashboard_record.StartDate
-				]);
+
 			return (
 				<tr key={index}>
 					<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>
@@ -488,7 +486,6 @@ class Dashboard extends React.Component {
 							</div>
 						</div>
 					</div>
-
 
 					<div className="panel panel-default">
 						<div className="panel-heading-cpd-3" style={{padding: '10px'}}>
@@ -618,6 +615,7 @@ class Dashboard extends React.Component {
 						{ dashboard_records }
 						</tbody>
 					</table>
+					{ (this.state.dashboard_records !== null) ? "" : "There is no data to show in the grid."}
 					<div>
 						<Pagination
 							prevPageText='Previous'
