@@ -1041,7 +1041,7 @@ input[type="file"]{
 }
 
 .icon-folder {
-    /*background-image: url("../../images/icon-folder.png");*/
+    background-image: url("/images/icon-folder.png");
     height: 22px;
     width: 30px;
     background-size: cover;
