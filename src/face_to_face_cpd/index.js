@@ -11,6 +11,8 @@ import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import ViewModal from "./_modal/view";
 import Loader from "../_components/loader";
 
+const moment = require('moment');
+
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const FaceToFace_URL = "http://34.248.242.178/CPDCompliance/api/faceToface";
 const Excel_Download_URL = "http://34.248.242.178/CPDCompliance/api/faceToface/Excel";
@@ -303,11 +305,11 @@ class FaceToFace extends React.Component {
                     <td>{cpd_record.HostName}</td>
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
-                    <td>{cpd_record.StartDate}</td>
+                    <td>{(cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na'}</td>
                     <td><a data-item={cpd_record}
                            onClick={() => {this.openModalWithItem(
                                cpd_record.CourseName,
-                               cpd_record.StartDate,
+                               (cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na',
                                cpd_record.LocationName,
                                cpd_record.CPDTypeName,
                                cpd_record.HostName,

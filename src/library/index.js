@@ -8,12 +8,15 @@ import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import ViewModal from "./_modal/view";
 import Loader from "../_components/loader";
 
+const moment = require('moment');
+
 const Locations_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/Location";
 const Types_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypes";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const Library_URL = "http://34.248.242.178/CPDCompliance/api/Library";
 const Excel_Download_URL = "http://34.248.242.178/CPDCompliance/api/Library/Excel";
 let hostList = [];
+let typesList = [];
 
 class Library extends React.Component {
 
@@ -29,8 +32,6 @@ class Library extends React.Component {
             host_dict: {},
             type_dict: {},
             locations_dict: {},
-            host_list: [],
-            types_list: [],
             library_records: [],
             totalPages: 0,
             totalCount: 0,
@@ -106,8 +107,11 @@ class Library extends React.Component {
                         type_dic[data[i]['CPDTypeId']] = data[i]['Description'];
                     }
 
+                    typesList = data.map((item)=>{
+                        return { 'key':item.CPDTypeId, 'value':item.CPDTypeId, 'label':item.Description};
+                    });
+
                     this.setState({
-                        types_list: data,
                         type_dict: type_dic
                     });
                 }
@@ -137,7 +141,6 @@ class Library extends React.Component {
                     });
 
                     this.setState({
-                        host_list: data,
                         host_dict: host_dic
                     });
                 }
@@ -245,8 +248,6 @@ class Library extends React.Component {
 
     clearSearchFilters(){
         this.setState({
-            host_list: [],
-            types_list: [],
             library_records: [],
             totalPages: 0,
             totalCount: 0,
@@ -361,11 +362,11 @@ class Library extends React.Component {
                     <td>{(cpd_record.HostID in this.state.host_dict) ? this.state.host_dict[cpd_record.HostID] : cpd_record.HostID}</td>
                     <td>{cpd_record.Trainer}</td>
                     <td>{cpd_record.Venue}</td>
-                    <td>{cpd_record.StartDate}</td>
+                    <td>{(cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na'}</td>
                     <td><a data-item={cpd_record}
                            onClick={() => {this.openModalWithItem(
                                cpd_record.CourseName,
-                               cpd_record.StartDate,
+                               (cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na',
                                (cpd_record.LocationID in this.state.locations_dict) ? this.state.locations_dict[cpd_record.LocationID] : cpd_record.LocationID,
                                (cpd_record.CPDTypeId in this.state.type_dict) ? this.state.type_dict[cpd_record.CPDTypeId] : cpd_record.CPDTypeId,
                                (cpd_record.HostID in this.state.host_dict) ? this.state.host_dict[cpd_record.HostID] : cpd_record.HostID,
@@ -422,7 +423,7 @@ class Library extends React.Component {
                                         name="host"
                                         menuItems={hostList}
                                         value={this.state.host_id}
-                                        onChange={(value) => {this.handleInputChange('cpd_type_id',value)}}
+                                        onChange={(value) => {this.handleInputChange('host_id',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
                                     />
                                     <TextField
@@ -442,7 +443,7 @@ class Library extends React.Component {
                                         label="CPD Type"
                                         placeholder="cpd_type_id"
                                         name="cpd_type_id"
-                                        menuItems={[]}
+                                        menuItems={typesList}
                                         value={this.state.cpd_type_id}
                                         onChange={(value) => {this.handleInputChange('cpd_type_id',value)}}
                                         className="md-cell md-cell--6 md-cell--bottom"
