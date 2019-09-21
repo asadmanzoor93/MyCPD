@@ -29,12 +29,6 @@ class App extends React.Component {
           localStorage.removeItem('failureMessage');
           NotificationManager.error('Failure!', failureMessage);
       }
-
-      let successMessage = localStorage.getItem('successMessage');
-      if(successMessage){
-          localStorage.removeItem('successMessage');
-          NotificationManager.success('Success!', successMessage);
-      }
   }
 
     handleChange(e) {

@@ -67,7 +67,6 @@ class App extends React.Component {
           logout: true,
           mainLoading: false
         });
-        localStorage.setItem('successMessage', 'Logout Successful');
         window.location.reload()
     }).catch(console.log);
   };
