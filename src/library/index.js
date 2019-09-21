@@ -56,7 +56,8 @@ class Library extends React.Component {
             listViewDatavenue:              "",
             listViewDatatrainer:            "",
             listViewDatacourseDescription:  "",
-            mainLoading: false
+            mainLoading: false,
+            emptyDivMsg: "There is no data to show in the grid."
         }
     };
 
@@ -208,7 +209,7 @@ class Library extends React.Component {
         })
             .then(response => response.data)
             .then((data) => {
-                this.setState({
+                self.setState({
                     library_records: data.Items,
                     totalPages: data.TotalPages,
                     activePage: data.Page,
@@ -222,7 +223,7 @@ class Library extends React.Component {
                         if (error.response.status === 401) {
                             self.setState({
                                 unauthorized: true,
-                                mainLoading: false
+                                mainLoading: false,
                             });
                             localStorage.setItem('failureMessage', 'Login Expired');
                         }
@@ -347,8 +348,6 @@ class Library extends React.Component {
             return <Redirect to='/'/>;
         }
 
-        console.log(this.state.library_records);
-
         let listViewModalShownClose = () => this.setState({ listViewModalShown: false })
         let library_records;
         if (this.state.library_records !== null) {
@@ -374,7 +373,7 @@ class Library extends React.Component {
                                cpd_record.Venue,
                                cpd_record.Trainer,
                                cpd_record.CourseDescription
-                           )}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+                           )}} style={{fontSize:'20px', cursor: 'pointer', color: 'black'}}><i className="fa fa fa-eye"> </i></a>
                     </td>
                 </tr>
             ));
@@ -501,9 +500,10 @@ class Library extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
-                        { library_records }
+                        { library_records}
                         </tbody>
                     </table>
+                    { (library_records.length > 0) ? '' : this.state.emptyDivMsg }
                     <div>
                         <Pagination
                             prevPageText='Previous'

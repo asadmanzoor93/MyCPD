@@ -13,7 +13,7 @@ import ViewModal from "./_modal/view";
 import Loader from "../_components/loader";
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-
+const moment = require('moment');
 
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
@@ -69,7 +69,8 @@ class Dashboard extends React.Component {
 	        listViewDatavenue:              "",
 	        listViewDatatrainer:            "",
 	        listViewDatacourseDescription:  "",
-	        mainLoading: false
+	        mainLoading: false,
+			emptyDivMsg: "There is no data to show in the grid."
 		}
 	};
 
@@ -263,6 +264,7 @@ class Dashboard extends React.Component {
 				totalCount: data.TotalCount,
 				mainLoading: false
 			});
+
 		}).catch(function (error) {
 			if(error){
 				if(error.response){
@@ -390,17 +392,17 @@ class Dashboard extends React.Component {
 					<td>{dashboard_record.CPDTypeName}</td>
 					<td>{dashboard_record.CourseName}</td>
 					<td>{dashboard_record.Hours}h</td>
-					<td>{dashboard_record.CompletionDate}</td>
+					<td>{(dashboard_record.CompletionDate) ? moment(dashboard_record.CompletionDate).format('ll') : 'na'}</td>
 					<td>{dashboard_record.Venue}</td>
 					<td>{dashboard_record.Trainer}</td>
 					<td>{(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId}</td>
-					<td>{dashboard_record.StartDate}</td>
+					<td>{(dashboard_record.StartDate) ? moment(dashboard_record.StartDate).format('ll') : 'na'}</td>
 					<td>
 						<div style={{whiteSpace: 'nowrap'}}>
 							<a data-item={dashboard_record}
 							   onClick={() => {this.openModalWithItem(
 							   	dashboard_record.CourseName,
-								dashboard_record.StartDate,
+								   (dashboard_record.StartDate) ? moment(dashboard_record.StartDate).format('ll') : '',
 								dashboard_record.LocationName,
 								dashboard_record.CPDTypeName,
 								(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
@@ -408,17 +410,18 @@ class Dashboard extends React.Component {
 								dashboard_record.Venue,
 								dashboard_record.Trainer,
 								dashboard_record.CourseDescription
-							)}} style={{fontSize:'18px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i>
+							)}} style={{fontSize:'18px', cursor: 'pointer', color: 'black'}}><i className="fa fa fa-eye"> </i>
 							</a>
-							<Link to={'/mycpd/edit/'+dashboard_record.CPDWorkflowId} className="nav-link" style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px'}}>
+							<Link to={'/mycpd/edit/'+dashboard_record.CPDWorkflowId} className="nav-link"
+								  style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px', color: 'black'}}>
 								<i title="" className="fa fa-edit ng-scope" role="button"
 								   tabIndex="0" data-original-title="Edit CPD"> </i>
 							</Link>
 							<a
-								style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px'}}
+								style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px', color: 'red'}}
 								onClick={() => this.deleteCPDRecord(dashboard_record.CPDWorkflowId)}
 							>
-								<i title="" className="fa fa-trash ng-scope" tooltip="" role="button" tabIndex="0"
+								<i title="" className="fa fa-trash ng-scope" role="button" tabIndex="0"
 								  data-original-title="Delete CPD"> </i>
 							</a>
 						</div>
@@ -589,7 +592,7 @@ class Dashboard extends React.Component {
 								className="btn btn-primary btn-circle btn-lg ng-scope"
 								data-original-title="" title="">
 								<Link to={'/mycpd'}>
-									<i className="fa fa-plus"> </i>
+									<i style={{color: 'white'}} className="fa fa-plus"> </i>
 								</Link>
 						</button>
 					</div>
@@ -615,7 +618,7 @@ class Dashboard extends React.Component {
 						{ dashboard_records }
 						</tbody>
 					</table>
-					{ (this.state.dashboard_records !== null) ? "" : "There is no data to show in the grid."}
+					{ (dashboard_records.length > 0) ? '' : this.state.emptyDivMsg }
 					<div>
 						<Pagination
 							prevPageText='Previous'

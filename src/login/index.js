@@ -23,63 +23,58 @@ class App extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-      let failureMessage = localStorage.getItem('failureMessage');
-      if(failureMessage){
-          localStorage.removeItem('failureMessage');
-          NotificationManager.error('Failure!', failureMessage);
-      }
-  }
-
-    handleChange(e) {
+  handleChange(e) {
       const { name, value } = e.target;
       this.setState({ [name]: value });
   }
 
   handleSubmit(e) {
       e.preventDefault();
+      this.setState({
+          submitted: true,
+      });
+
+      const {username, password} = this.state;
+      if (username && password) {
 
         this.setState({
-            submitted: true,
             mainLoading: true
         });
-        const {username, password} = this.state;
-        if (username && password) {
 
-            axios.post('http://34.248.242.178/CPDCompliance/token', qs.stringify({
-                'username': username,
-                'password': password,
-                'grant_type': 'password',
-                'client_id': 'mycpd'
-            }), {
-                'headers': {
-                    'Content-Type': 'x-www-form-urlencoded'
-                }
-            })
-            .then((response) => {
-                if(response.data){
-                    // save data to local storage
-                    localStorage.setItem('access_token', response.data.access_token);
-                    localStorage.setItem('displayName', response.data.displayName);
-                    localStorage.setItem('expires_in', response.data.expires_in);
-                    localStorage.setItem('role', response.data.role);
-                    localStorage.setItem('successMessage', 'Login Successful');
+        axios.post('http://34.248.242.178/CPDCompliance/token', qs.stringify({
+            'username': username,
+            'password': password,
+            'grant_type': 'password',
+            'client_id': 'mycpd'
+        }), {
+            'headers': {
+                'Content-Type': 'x-www-form-urlencoded'
+            }
+        })
+        .then((response) => {
+            if(response.data){
+                // save data to local storage
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('displayName', response.data.displayName);
+                localStorage.setItem('expires_in', response.data.expires_in);
+                localStorage.setItem('role', response.data.role);
+                localStorage.setItem('successMessage', 'Hello '+response.data.displayName);
 
-                    //Login user to site
-                    this.setState({
-                        login: true,
-                        mainLoading: false
-                    });
-                }
-            })
-            .catch((error) => {
+                //Login user to site
                 this.setState({
-                    login_error: true,
+                    login: true,
                     mainLoading: false
                 });
-                console.log(error);
+            }
+        })
+        .catch((error) => {
+            this.setState({
+                login_error: true,
+                mainLoading: false
             });
-        }
+            console.log(error);
+        });
+    }
     }
 
   render() {

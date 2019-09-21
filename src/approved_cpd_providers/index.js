@@ -47,7 +47,8 @@ class ApprovedCPDProviders extends React.Component {
             listViewDatavenue:              "",
             listViewDatatrainer:            "",
             listViewDatacourseDescription:  "",
-            mainLoading: false
+            mainLoading: false,
+            emptyDivMsg: "There is no data to show in the grid."
         }
     };
 
@@ -122,14 +123,13 @@ class ApprovedCPDProviders extends React.Component {
                     totalCount: data.TotalCount,
                     mainLoading: false
                 });
-
             }).catch(function (error) {
                 if(error){
                     if(error.response){
                         if (error.response.status === 401) {
                             self.setState({
                                 unauthorized: true,
-                                mainLoading: false
+                                mainLoading: false,
                             });
                             localStorage.setItem('failureMessage', 'Login Expired');
                         }
@@ -162,7 +162,7 @@ class ApprovedCPDProviders extends React.Component {
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
-            activePage: 0
+            activePage: 0,
         });
         $('.datepicker').datepicker();
 
@@ -275,7 +275,7 @@ class ApprovedCPDProviders extends React.Component {
                                cpd_record.Venue,
                                cpd_record.Trainer,
                                cpd_record.CourseDescription
-                           )}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+                           )}} style={{fontSize:'20px', cursor: 'pointer', color: 'black'}}><i className="fa fa fa-eye"> </i></a>
                     </td>
                 </tr>
             ));
@@ -393,6 +393,7 @@ class ApprovedCPDProviders extends React.Component {
                         { approved_cpd_records }
                         </tbody>
                     </table>
+                    { (approved_cpd_records.length > 0) ? '' : this.state.emptyDivMsg }
                     <div>
                         <Pagination
                             prevPageText='Previous'
