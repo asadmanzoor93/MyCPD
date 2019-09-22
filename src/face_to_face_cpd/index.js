@@ -11,6 +11,8 @@ import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import ViewModal from "./_modal/view";
 import Loader from "../_components/loader";
 
+const moment = require('moment');
+
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
 const FaceToFace_URL = "http://34.248.242.178/CPDCompliance/api/faceToface";
 const Excel_Download_URL = "http://34.248.242.178/CPDCompliance/api/faceToface/Excel";
@@ -54,7 +56,9 @@ class FaceToFace extends React.Component {
             listViewDatavenue:              "",
             listViewDatatrainer:            "",
             listViewDatacourseDescription:  "",
-            mainLoading: false
+            mainLoading: false,
+            emptyDivMsg: "There is no data to show in the grid for the current selection.\n" +
+                "If you can't find what you are looking for? Check out our online offerings in CPDgo."
         }
     };
 
@@ -165,7 +169,7 @@ class FaceToFace extends React.Component {
                         if (error.response.status === 401) {
                             self.setState({
                                 unauthorized: true,
-                                mainLoading: false
+                                mainLoading: false,
                             });
                             localStorage.setItem('failureMessage', 'Login Expired');
                         }
@@ -177,8 +181,12 @@ class FaceToFace extends React.Component {
     handlePaginationFilter(event){
         let value = event.target.value;
         this.setState({
-            per_page: value
+            per_page: value,
+            mainLoading: true
         });
+        setTimeout(() => {
+            this.makeHttpRequestWithPage(1);
+        }, 1000);
     }
 
     clearSearchFilters(){
@@ -196,9 +204,17 @@ class FaceToFace extends React.Component {
             totalCount: 0,
             per_page: 10,
             activePage: 0,
-            unauthorized: false
+            unauthorized: false,
         });
         $('.datepicker').datepicker();
+
+        this.setState({
+            mainLoading: true
+        });
+
+        setTimeout(() => {
+            this.makeHttpRequestWithPage(1);
+        }, 1000);
     }
 
     onSort = (column) => (e) => {
@@ -290,11 +306,11 @@ class FaceToFace extends React.Component {
                     <td>{cpd_record.HostName}</td>
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
-                    <td>{cpd_record.StartDate}</td>
-                    <td><a data-item={cpd_record}
+                    <td>{(cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na'}</td>
+                    <td className="text-center"><a data-item={cpd_record}
                            onClick={() => {this.openModalWithItem(
                                cpd_record.CourseName,
-                               cpd_record.StartDate,
+                               (cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na',
                                cpd_record.LocationName,
                                cpd_record.CPDTypeName,
                                cpd_record.HostName,
@@ -302,7 +318,7 @@ class FaceToFace extends React.Component {
                                cpd_record.Venue,
                                cpd_record.Trainer,
                                cpd_record.CourseDescription
-                           )}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+                           )}} style={{fontSize:'20px', cursor: 'pointer', color: 'black'}}><i className="fa fa fa-eye"> </i></a>
                     </td>
                 </tr>
             ));
@@ -418,6 +434,7 @@ class FaceToFace extends React.Component {
                             { cpd_records }
                         </tbody>
                     </table>
+                    { (cpd_records.length > 0) ? '' : this.state.emptyDivMsg }
                     <div>
                         <Pagination
                             prevPageText='Previous'

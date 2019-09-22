@@ -123,7 +123,7 @@ class App extends React.Component {
                       <li aria-hidden="false" className="">
                         <a onClick={() => this.setState({ aboutUsModalShown : true }) } href="#"><i className="fa fa-info-circle"></i> About Us</a>
                       </li>
-                      <li><a onClick={()=> this.makeSignOutRequest()}><i className="fa fa-sign-out"></i> Sign Out</a></li>
+                      <li><a onClick={()=> this.makeSignOutRequest()} ><i className="fa fa-sign-out"></i> Sign Out</a></li>
                     </ul>
                   </div>
 
@@ -151,25 +151,25 @@ class App extends React.Component {
           >
             <ul className="c-footer-list">
               <li>
-                <Link to={'\/home'} className="nav-link">Home</Link>
+                <Link to={'\/home'} onClick={()=>{ this.setState({ quickNavShown: false }) }} className="nav-link">Home</Link>
               </li>
               <li>
-                <Link to={'\/dashboard'} className="nav-link">My CPD Dashboard <i className="fa fa-home"></i></Link>
+                <Link to={'\/dashboard'} onClick={()=>{ this.setState({ quickNavShown: false }) }} className="nav-link">My CPD Dashboard <i className="fa fa-home"></i></Link>
               </li>
               <li>
-                <Link to={'\/mycpd'} className="nav-link">Record My CPD <i className="fa fa-upload"></i></Link>
+                <Link to={'\/mycpd'} onClick={()=>{ this.setState({ quickNavShown: false }) }} className="nav-link">Record My CPD <i className="fa fa-upload"></i></Link>
               </li>
               <li>
-                <Link to={'\/cpdclassroom'} className="nav-link">Face To Face CPD <i className="fa fa-search"></i></Link>
+                <Link to={'\/cpdclassroom'} onClick={()=>{ this.setState({ quickNavShown: false }) }} className="nav-link">Face To Face CPD <i className="fa fa-search"></i></Link>
               </li>
               <li>
-                <Link to={'\/cpdgo'} className="nav-link">CPDgo <i className="fa fa-registered"></i></Link>
+                <Link to={'\/cpdgo'} onClick={()=>{ this.setState({ quickNavShown: false }) }} className="nav-link">CPDgo <i className="fa fa-registered"></i></Link>
               </li>
               <li>
-                <Link to={'\/cpdaccredt'} className="nav-link">Approved CPD Providers <i className="fa fa-credit-card"></i></Link>
+                <Link to={'\/cpdaccredt'} onClick={()=>{ this.setState({ quickNavShown: false }) }} className="nav-link">Approved CPD Providers <i className="fa fa-credit-card"></i></Link>
               </li>
               <li>
-                <Link to={'\/library'} className="nav-link">Library <i className="fa fa-unsorted"></i></Link>
+                <Link to={'\/library'} onClick={()=>{ this.setState({ quickNavShown: false }) }} className="nav-link">Library <i className="fa fa-unsorted"></i></Link>
               </li>
               <li>
                 <a href="#" onClick={e => { this.setState({quickNavShown: false }) }} className="nav-link">Close <i className="fa fa-close"></i></a>

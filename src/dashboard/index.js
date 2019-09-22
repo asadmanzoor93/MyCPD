@@ -14,6 +14,7 @@ import Loader from "../_components/loader";
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
+const moment = require('moment');
 
 const Listing_URL = "http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD";
 const Hosts_URL = "http://34.248.242.178/CPDCompliance/api/Lookup/LoadCPDHost";
@@ -69,7 +70,8 @@ class Dashboard extends React.Component {
 	        listViewDatavenue:              "",
 	        listViewDatatrainer:            "",
 	        listViewDatacourseDescription:  "",
-	        mainLoading: false
+	        mainLoading: false,
+			emptyDivMsg: "There is no data to show in the grid."
 		}
 	};
 
@@ -281,8 +283,12 @@ class Dashboard extends React.Component {
 	handlePaginationFilter(event){
 		let value = event.target.value;
 		this.setState({
-			per_page: value
+			per_page: value,
+			mainLoading: true
 		});
+		setTimeout(() => {
+			this.makeHttpRequestWithPage(1);
+		}, 1000);
 	}
 
 	clearSearchFilters(){
@@ -304,6 +310,13 @@ class Dashboard extends React.Component {
 			activePage: 0,
 			unauthorized: false,
 		});
+		this.setState({
+			mainLoading: true
+		});
+
+		setTimeout(() => {
+			this.makeHttpRequestWithPage(1);
+		}, 1000);
 	}
 
     openModalWithItem(courseName,startDate,courseLocation,courseType,host,cpdFormat,venue,trainer,courseDescription) {
@@ -370,39 +383,26 @@ class Dashboard extends React.Component {
 		let listViewModalShownClose = () => this.setState({ listViewModalShown: false });
 		let dashboard_records;
 
-		let csvData = [
-			["Course Type", "Course", "Completed Hours", "Completion Date", "Venue", "Trainer", "Host", "Start Date"],
-		];
-
 		if (this.state.dashboard_records !== null) {
 			dashboard_records = this.state.dashboard_records.map((dashboard_record , index) => {
-				csvData.push([
-					dashboard_record.CPDTypeName,
-					dashboard_record.CourseName,
-					dashboard_record.Hours+'h',
-					dashboard_record.CompletionDate,
-					dashboard_record.Venue,
-					dashboard_record.Trainer,
-					(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
-					dashboard_record.StartDate
-				]);
+
 			return (
 				<tr key={index}>
 					<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>
 					<td>{dashboard_record.CPDTypeName}</td>
 					<td>{dashboard_record.CourseName}</td>
 					<td>{dashboard_record.Hours}h</td>
-					<td>{dashboard_record.CompletionDate}</td>
+					<td>{(dashboard_record.CompletionDate) ? moment(dashboard_record.CompletionDate).format('ll') : 'na'}</td>
 					<td>{dashboard_record.Venue}</td>
 					<td>{dashboard_record.Trainer}</td>
 					<td>{(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId}</td>
-					<td>{dashboard_record.StartDate}</td>
+					<td>{(dashboard_record.StartDate) ? moment(dashboard_record.StartDate).format('ll') : 'na'}</td>
 					<td>
 						<div style={{whiteSpace: 'nowrap'}}>
 							<a data-item={dashboard_record}
 							   onClick={() => {this.openModalWithItem(
 							   	dashboard_record.CourseName,
-								dashboard_record.StartDate,
+								   (dashboard_record.StartDate) ? moment(dashboard_record.StartDate).format('ll') : '',
 								dashboard_record.LocationName,
 								dashboard_record.CPDTypeName,
 								(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId,
@@ -410,17 +410,17 @@ class Dashboard extends React.Component {
 								dashboard_record.Venue,
 								dashboard_record.Trainer,
 								dashboard_record.CourseDescription
-							)}} style={{fontSize:'18px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i>
+							)}} style={{fontSize:'18px', cursor: 'pointer', color: 'black'}}><i className="fa fa fa-eye"> </i>
 							</a>
-							<Link to={'/mycpd/edit/'+dashboard_record.CPDWorkflowId} className="nav-link" style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px'}}>
+							<Link to={'/mycpd/edit/'+dashboard_record.CPDWorkflowId} className="nav-link"
+								  style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px', color: 'black'}}>
 								<i title="" className="fa fa-edit ng-scope" role="button"
 								   tabIndex="0" data-original-title="Edit CPD"> </i>
 							</Link>
-							<a
-								style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px'}}
+							<a style={{fontSize:'18px', cursor: 'pointer', marginLeft: '10px', color: 'red'}}
 								onClick={() => this.deleteCPDRecord(dashboard_record.CPDWorkflowId)}
 							>
-								<i title="" className="fa fa-trash ng-scope" tooltip="" role="button" tabIndex="0"
+								<i title="" className="fa fa-trash ng-scope" role="button" tabIndex="0"
 								  data-original-title="Delete CPD"> </i>
 							</a>
 						</div>
@@ -488,7 +488,6 @@ class Dashboard extends React.Component {
 							</div>
 						</div>
 					</div>
-
 
 					<div className="panel panel-default">
 						<div className="panel-heading-cpd-3" style={{padding: '10px'}}>
@@ -592,7 +591,7 @@ class Dashboard extends React.Component {
 								className="btn btn-primary btn-circle btn-lg ng-scope"
 								data-original-title="" title="">
 								<Link to={'/mycpd'}>
-									<i className="fa fa-plus"> </i>
+									<i style={{color: 'white'}} className="fa fa-plus"> </i>
 								</Link>
 						</button>
 					</div>
@@ -618,6 +617,7 @@ class Dashboard extends React.Component {
 						{ dashboard_records }
 						</tbody>
 					</table>
+					{ (dashboard_records.length > 0) ? '' : this.state.emptyDivMsg }
 					<div>
 						<Pagination
 							prevPageText='Previous'

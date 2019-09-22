@@ -9,6 +9,8 @@ import "../../node_modules/react-md/dist/react-md.indigo-blue.min.css";
 import ViewModal from "../dashboard/_modal/view";
 import Loader from "../_components/loader";
 
+const moment = require('moment');
+
 const Approved_CPD_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd";
 const Excel_Download_URL = "http://34.248.242.178/CPDCompliance/api/approvedcpd/Excel";
 
@@ -47,7 +49,9 @@ class ApprovedCPDProviders extends React.Component {
             listViewDatavenue:              "",
             listViewDatatrainer:            "",
             listViewDatacourseDescription:  "",
-            mainLoading: false
+            mainLoading: false,
+            emptyDivMsg: "There is no data to show in the grid for the current selection.\n" +
+                "If you can't find what you are looking for? Check out our online offerings in CPDgo."
         }
     };
 
@@ -122,14 +126,13 @@ class ApprovedCPDProviders extends React.Component {
                     totalCount: data.TotalCount,
                     mainLoading: false
                 });
-
             }).catch(function (error) {
                 if(error){
                     if(error.response){
                         if (error.response.status === 401) {
                             self.setState({
                                 unauthorized: true,
-                                mainLoading: false
+                                mainLoading: false,
                             });
                             localStorage.setItem('failureMessage', 'Login Expired');
                         }
@@ -141,9 +144,12 @@ class ApprovedCPDProviders extends React.Component {
     handlePaginationFilter(event){
         let value = event.target.value;
         this.setState({
-            per_page: value
+            per_page: value,
+            mainLoading: true
         });
-        this.makeHttpRequestWithPage(1);
+        setTimeout(() => {
+            this.makeHttpRequestWithPage(1);
+        }, 1000);
     }
 
     clearSearchFilters(){
@@ -159,9 +165,17 @@ class ApprovedCPDProviders extends React.Component {
             totalPages: 0,
             totalCount: 0,
             per_page: 10,
-            activePage: 0
+            activePage: 0,
         });
         $('.datepicker').datepicker();
+
+        this.setState({
+            mainLoading: true
+        });
+
+        setTimeout(() => {
+            this.makeHttpRequestWithPage(1);
+        }, 1000);
     }
 
     onSort = (column) => (e) => {
@@ -252,11 +266,11 @@ class ApprovedCPDProviders extends React.Component {
                     <td>{cpd_record.HostName}</td>
                     <td>{cpd_record.CPDTypeName}</td>
                     <td>{cpd_record.Trainer}</td>
-                    <td>{cpd_record.StartDate}</td>
-                    <td><a data-item={cpd_record}
+                    <td>{(cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na'}</td>
+                    <td className="text-center"><a data-item={cpd_record}
                            onClick={() => {this.openModalWithItem(
                                cpd_record.CourseName,
-                               cpd_record.StartDate,
+                               (cpd_record.StartDate) ? moment(cpd_record.StartDate).format('ll') : 'na',
                                cpd_record.LocationName,
                                cpd_record.CPDTypeName,
                                cpd_record.HostName,
@@ -264,7 +278,7 @@ class ApprovedCPDProviders extends React.Component {
                                cpd_record.Venue,
                                cpd_record.Trainer,
                                cpd_record.CourseDescription
-                           )}} style={{fontSize:'20px', cursor: 'pointer'}}><i className="fa fa fa-eye"> </i></a>
+                           )}} style={{fontSize:'20px', cursor: 'pointer', color: 'black'}}><i className="fa fa fa-eye"> </i></a>
                     </td>
                 </tr>
             ));
@@ -382,6 +396,7 @@ class ApprovedCPDProviders extends React.Component {
                         { approved_cpd_records }
                         </tbody>
                     </table>
+                    { (approved_cpd_records.length > 0) ? '' : this.state.emptyDivMsg }
                     <div>
                         <Pagination
                             prevPageText='Previous'

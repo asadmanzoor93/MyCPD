@@ -8,7 +8,7 @@ class Home extends React.Component {
 		let successMessage = localStorage.getItem('successMessage');
 		if(successMessage){
 			localStorage.removeItem('successMessage');
-			NotificationManager.success('Success!', successMessage);
+			NotificationManager.success(successMessage, 'Login Successful');
 		}
 	}
 

@@ -8,6 +8,8 @@ import {NotificationManager} from 'react-notifications';
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
+const MAX_DATE = new Date();
+
 const CPDRecord_Info_URL = 'http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD';
 const Member_Info_URL = 'http://34.248.242.178/CPDCompliance/api/account/GetMember?memID=';
 const Types_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/CPDTypesForMyCPD';
@@ -39,7 +41,7 @@ class RecordCPD extends React.Component {
             courses_options: [],
             cpd_type_id: 2,
             MemberId: null,
-            course_format: '',
+            course_format: 'Online',
             course_id: '',
             course_name: '',
             course_detail: [],
@@ -56,7 +58,7 @@ class RecordCPD extends React.Component {
             trainer: '',
             location_id: '',
             is_declared: false,
-            second_tab_active: false,
+            third_tab_active: false,
             unauthorized: false,
             redirectDashboard: false,
         };
@@ -74,12 +76,15 @@ class RecordCPD extends React.Component {
         this.fetchCourseDetail = this.fetchCourseDetail.bind(this);
         this.handleFileUpload = this.handleFileUpload.bind(this);
         this.fetchCPDRecord = this.fetchCPDRecord.bind(this);
-        this.makeSecondTabActive = this.makeSecondTabActive.bind(this);
-
+        this.makeThirdTabActive = this.makeThirdTabActive.bind(this);
     };
 
     componentWillMount() {
-        $('.datepicker').datepicker({autoclose: true});
+        $('.datepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            maxDate: new Date()
+        });
         this.fetchTypes();
         this.fetchMemberInfo();
         this.fetchFormats();
@@ -212,6 +217,7 @@ class RecordCPD extends React.Component {
         if(TypeId){
             cpd_type_id = TypeId;
         }
+
         axios.get(Courses_URL, {
             params: {
                 CPDTypeId: cpd_type_id,
@@ -280,7 +286,7 @@ class RecordCPD extends React.Component {
                         host_id: data.HostId,
                         location_id: data.LocationId,
                     });
-                    this.makeSecondTabActive();
+                    this.makeThirdTabActive();
                 }
             }).catch(console.log);
     }
@@ -321,6 +327,45 @@ class RecordCPD extends React.Component {
             this.setState({
                 second_tab_active: true,
             });
+        }
+    }
+
+    makeThirdTabActive(){
+        if (this.state.cpd_type_id == 4) {
+            if(
+                this.state.cpd_type_id !== ''
+                && this.state.course_name !== ''
+                && this.state.course_format !== ''
+                && this.state.course_description !== ''
+                && this.state.venue !== ''
+                && this.state.cpd_hours !== ''
+                && this.state.file_name !== null
+                && this.state.date_completed !== ''){
+                this.setState({
+                    third_tab_active: true
+                });
+            } else {
+                this.setState({
+                    third_tab_active: false
+                });
+            }
+        } else {
+            if(
+                this.state.cpd_type_id !== ''
+                && this.state.course_id !== ''
+                && this.state.course_description !== ''
+                && this.state.venue !== ''
+                && this.state.cpd_hours !== ''
+                && this.state.file_name !== null
+                && this.state.date_completed !== ''){
+                this.setState({
+                    third_tab_active: true
+                });
+            } else {
+                this.setState({
+                    third_tab_active: false
+                });
+            }
         }
     }
 
@@ -366,10 +411,15 @@ class RecordCPD extends React.Component {
                     }
 
                 }).catch(function (error) {
-                console.log(error.response);
+                    console.log(error.response);
                 if(error){
                     if(error.response){
-                        if(error.response.data){
+                        if (error.response.status === 401) {
+                            self.setState({
+                                unauthorized: true,
+                            });
+                            localStorage.setItem('failureMessage', 'Login Expired');
+                        }else if(error.response.data){
                             alert(error.response.data[0])
                         }
                     }
@@ -409,7 +459,12 @@ class RecordCPD extends React.Component {
                     console.log(error.response);
                 if(error){
                     if(error.response){
-                        if(error.response.data){
+                        if (error.response.status === 401) {
+                            self.setState({
+                                unauthorized: true,
+                            });
+                            localStorage.setItem('failureMessage', 'Login Expired');
+                        }else if(error.response.data){
                             alert(error.response.data[0])
                         }
                     }
@@ -460,10 +515,12 @@ class RecordCPD extends React.Component {
             const name = target.name;
 
             if(name === 'file_upload'){
-                this.setState({
-                    [name]: event.target.files[0],
-                    file_name: event.target.files[0]['name']
-                });
+                if(event.target.files.length > 0) {
+                    this.setState({
+                        [name]: event.target.files[0],
+                        file_name: event.target.files[0].name
+                    });
+                }
             } else if (name === 'is_declared'){
                 this.setState({
                     is_declared: target.checked
@@ -475,6 +532,7 @@ class RecordCPD extends React.Component {
             }
 
             if (name === 'cpd_type_id'){
+                console.log(value);
                 this.fetchCourses(value);
             }
 
@@ -483,7 +541,9 @@ class RecordCPD extends React.Component {
             }
         }
 
-        this.makeSecondTabActive();
+        setTimeout(() => {
+            this.makeThirdTabActive();
+        }, 500);
     }
 
     fetchCPDRecord(){
@@ -558,13 +618,13 @@ class RecordCPD extends React.Component {
         let ListItemOne, ListItemTwo;
 
         if(this.state.currentStep > 1) {
-            ListItemOne = <li className="done"><a>Submitter Details</a></li>
+            ListItemOne = <li className="done"><a onClick={this.handlePrevStep} href="#">Submitter Details</a></li>
         } else {
             ListItemOne = <li className="current"><a>Submitter Details</a></li>
         }
 
         if(this.state.currentStep > 2) {
-            ListItemTwo = <li className="done"><a>Confirm CPD Activity Details</a></li>
+            ListItemTwo = <li className="done"><a onClick={this.handlePrevStep} href="#">Confirm CPD Activity Details</a></li>
         } else if(this.state.currentStep === 2) {
             ListItemTwo = <li className="current"><a>Confirm CPD Activity Details</a></li>
         } else {
@@ -660,7 +720,7 @@ class RecordCPD extends React.Component {
                                         <div className="col-md-6 col-md-offset-3">
                                             <div className="form-group required">
                                                 <label className="control-label" htmlFor="cpd_type_id">CPD Type</label>
-                                                <select className="form-control  ng-empty ng-invalid ng-invalid-required"
+                                                <select className="form-control"
                                                         name="cpd_type_id"
                                                         id="cpd_type_id"
                                                         value={this.state.cpd_type_id}
@@ -669,7 +729,7 @@ class RecordCPD extends React.Component {
                                                         aria-invalid="true">
                                                     <option value="" defaultValue> </option>
                                                     {this.state.types.map((item, key) =>
-                                                        <option key={key} value={item.CPDTypeId} label={item.Description} >{item.Description}</option>
+                                                        <option key={key} value={item.CPDTypeId}>{item.Description}</option>
                                                     )}
                                                 </select>
                                             </div>
@@ -683,7 +743,8 @@ class RecordCPD extends React.Component {
                                                             value={this.state.course_id}
                                                             onChange={this.handleInputChange}
                                                             required=""
-                                                            aria-invalid="true" style={{display: (this.state.cpd_type_id !== '4') ? 'block' : 'none' }}>
+                                                            aria-invalid="true"
+                                                            style={{display: (this.state.cpd_type_id != 4) ? 'block' : 'none' }}>
                                                         <option value="" defaultValue> </option>
                                                         {this.state.courses.map((item, key) =>
                                                             <option key={key} value={item.CourseId} label={item.CourseName} >{item.CourseName}</option>
@@ -691,18 +752,19 @@ class RecordCPD extends React.Component {
                                                     </select>
 
                                                     <input type="text" className="form-control ng-empty ng-invalid ng-invalid-required-maxlength"
-                                                           name="course_name" id="course_name"
+                                                           name="course_name"
+                                                           id="course_name"
                                                            value={this.state.course_name}
                                                            onChange={this.handleInputChange}
                                                            placeholder="Course Title" required=""
                                                            aria-invalid="true"
-                                                           style={{display: (this.state.cpd_type_id === '4') ? 'block' : 'none' }}
+                                                           style={{display: (this.state.cpd_type_id == 4) ? 'block' : 'none' }}
                                                     />
                                                 </div>
                                             </div>
                                             <div className="form-group required">
                                                 <label htmlFor="cmbformat" className="control-label">Format</label>
-                                                <select className="form-control ng-empty ng-invalid ng-invalid-required"
+                                                <select className="form-control"
                                                         name="course_format"
                                                         id="course_format"
                                                         value={this.state.course_format}
@@ -776,15 +838,15 @@ class RecordCPD extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="form-group required">
-                                                <label  className="control-label">Date Completed {this.state.date_completed}
+                                                <label className="control-label">Date Completed
                                                 </label>
                                                 <DatePicker
                                                     id="date_completed"
                                                     label="Enter Completed Date"
                                                     name="date_completed"
                                                     value={this.state.date_completed}
+                                                    maxDate={MAX_DATE}
                                                     onChange={(value) => {this.handleInputChange(value,'date_completed')}}
-                                                    className="md-cell md-cell--6 md-cell--bottom"
                                                 />
                                             </div>
                                             <div className="form-group required">
@@ -795,9 +857,9 @@ class RecordCPD extends React.Component {
                                                     <input id="file_upload" type="file"
                                                            name="file_upload"
                                                            onChange={this.handleInputChange}
-                                                           className="form-control ng-empty ng-invalid ng-invalid-required"
+                                                           className="form-control"
                                                            required="required" aria-invalid="true" />
-                                                    <button className="icon-folder glyphicon glyphicon-folder-open"> </button>
+                                                    <button className="icon-folder"> </button>
                                                 </div>
                                             </div>
                                             <div >
@@ -805,7 +867,7 @@ class RecordCPD extends React.Component {
                                                 </button>
                                                 <button className="btn btn-primary pull-right"
                                                         type="button"
-                                                        // disabled={ (this.state.second_tab_active === true) ? "" : "disabled"}
+                                                        disabled={ !this.state.third_tab_active }
                                                         onClick={this.handleNextStep}
                                                 >Next step <i className="fa fa-arrow-right"> </i></button>
                                             </div>
@@ -875,8 +937,9 @@ class RecordCPD extends React.Component {
                                                        onChange={this.handleInputChange}
                                                        checked={this.state.is_declared}
                                                        value={this.state.is_declared}
-                                                       className="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false" />
-                                                <label htmlFor="is_declared">
+                                                       style={{ float: 'left', margin: '3px 9px 0 0' }}
+                                                       aria-invalid="false" />
+                                                <label htmlFor="is_declared" style={{ overflow: 'hidden', display: 'block' }}>
                                                     I declare this CPD is relevant to my role and in accordance with the ATI CPD Guidelines and Rules.
                                                 </label>
                                             </div>
@@ -887,14 +950,12 @@ class RecordCPD extends React.Component {
                                                 <button className="btn btn-success pull-right" type="button"
                                                         disabled={ (this.state.is_declared === true) ? "" : "disabled"}
                                                         value={this.state.is_declared}
-                                                        onClick={this.handleSaveRecord} > Save <i className="fa fa-arrow-right"> </i></button>
+                                                        onClick={this.handleSaveRecord} ><i className="fa fa-floppy-o"> </i> Save </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
                         </section>
                     </div>
                 </div>
@@ -902,8 +963,5 @@ class RecordCPD extends React.Component {
         );
     }
 }
-
-
-
 
 export default RecordCPD;

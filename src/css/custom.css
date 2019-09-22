@@ -6,6 +6,8 @@
 }
 .side-navigation {
 	position: fixed;
+	z-index: 999;
+	background: #fff;
 	left: 0;
 	top: 120px;
 	width: 280px;

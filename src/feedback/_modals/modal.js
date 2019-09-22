@@ -112,7 +112,7 @@ class FeedbackModal extends React.Component {
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"  onClick={this.props.onHide}>
                   <i className="fa fa-close"> </i>
                 </button>
-              Feedback Modal
+                  Feedback
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>

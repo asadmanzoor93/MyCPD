@@ -11,7 +11,7 @@ class AboutUsModal extends React.Component {
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onClick={this.props.onHide}>
                   <i class="fa fa-close"></i>
                 </button>
-              Feedback Modal
+                  About Us
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
