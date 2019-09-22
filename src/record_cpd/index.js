@@ -58,7 +58,6 @@ class RecordCPD extends React.Component {
             trainer: '',
             location_id: '',
             is_declared: false,
-            second_tab_active: false,
             third_tab_active: false,
             unauthorized: false,
             redirectDashboard: false,
@@ -77,7 +76,6 @@ class RecordCPD extends React.Component {
         this.fetchCourseDetail = this.fetchCourseDetail.bind(this);
         this.handleFileUpload = this.handleFileUpload.bind(this);
         this.fetchCPDRecord = this.fetchCPDRecord.bind(this);
-        this.makeSecondTabActive = this.makeSecondTabActive.bind(this);
         this.makeThirdTabActive = this.makeThirdTabActive.bind(this);
 
     };
@@ -305,7 +303,7 @@ class RecordCPD extends React.Component {
                         host_id: data.HostId,
                         location_id: data.LocationId,
                     });
-                    this.makeSecondTabActive();
+                    this.makeThirdTabActive();
                 }
             }).catch(console.log);
     }
@@ -358,17 +356,6 @@ class RecordCPD extends React.Component {
                     third_tab_active: false
                 });
             }
-        }
-    }
-
-    makeSecondTabActive(){
-        if (this.state.cpd_type_id !== null
-            && this.state.course_name !== '' && this.state.course_description !== ''
-            && this.state.venue !== '' && this.state.cpd_hours !== ''
-            && this.state.file_name !== '' && this.state.date_completed !== ''){
-            this.setState({
-                second_tab_active: true,
-            });
         }
     }
 
@@ -536,7 +523,6 @@ class RecordCPD extends React.Component {
             }
         }
 
-        this.makeSecondTabActive();
         this.makeThirdTabActive();
     }
 
