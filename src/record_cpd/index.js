@@ -219,22 +219,6 @@ class RecordCPD extends React.Component {
             cpd_type_id = TypeId;
         }
 
-        // this.setState( {
-        //     cpd_type_id: TypeId,
-        //     course_format: 'Online',
-        //     course_id: '',
-        //     course_name: '',
-        //     course_description: '',
-        //     venue: '',
-        //     cpd_hours: '',
-        //     cpd_mins: '',
-        //     cpd_year: '',
-        //     date_completed: null,
-        //     start_date_iso: '',
-        //     file_upload: null,
-        //     file_name: null
-        // });
-
         axios.get(Courses_URL, {
             params: {
                 CPDTypeId: cpd_type_id,
@@ -323,7 +307,7 @@ class RecordCPD extends React.Component {
     makeThirdTabActive(){
         if (this.state.cpd_type_id == 4) {
             if(
-                   this.state.cpd_type_id !== ''
+                this.state.cpd_type_id !== ''
                 && this.state.course_name !== ''
                 && this.state.course_format !== ''
                 && this.state.course_description !== ''
@@ -341,7 +325,7 @@ class RecordCPD extends React.Component {
             }
         } else {
             if(
-                   this.state.cpd_type_id !== ''
+                this.state.cpd_type_id !== ''
                 && this.state.course_id !== ''
                 && this.state.course_description !== ''
                 && this.state.venue !== ''
@@ -401,10 +385,15 @@ class RecordCPD extends React.Component {
                     }
 
                 }).catch(function (error) {
-                console.log(error.response);
+                    console.log(error.response);
                 if(error){
                     if(error.response){
-                        if(error.response.data){
+                        if (error.response.status === 401) {
+                            self.setState({
+                                unauthorized: true,
+                            });
+                            localStorage.setItem('failureMessage', 'Login Expired');
+                        }else if(error.response.data){
                             alert(error.response.data[0])
                         }
                     }
@@ -444,7 +433,12 @@ class RecordCPD extends React.Component {
                     console.log(error.response);
                 if(error){
                     if(error.response){
-                        if(error.response.data){
+                        if (error.response.status === 401) {
+                            self.setState({
+                                unauthorized: true,
+                            });
+                            localStorage.setItem('failureMessage', 'Login Expired');
+                        }else if(error.response.data){
                             alert(error.response.data[0])
                         }
                     }
@@ -523,7 +517,9 @@ class RecordCPD extends React.Component {
             }
         }
 
-        this.makeThirdTabActive();
+        setTimeout(() => {
+            this.makeThirdTabActive();
+        }, 500);
     }
 
     fetchCPDRecord(){

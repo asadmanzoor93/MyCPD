@@ -58,7 +58,8 @@ class Library extends React.Component {
             listViewDatatrainer:            "",
             listViewDatacourseDescription:  "",
             mainLoading: false,
-            emptyDivMsg: "There is no data to show in the grid."
+            emptyDivMsg: "There is no data to show in the grid for the current selection.\n" +
+                "If you can't find what you are looking for? Check out our online offerings in CPDgo."
         }
     };
 

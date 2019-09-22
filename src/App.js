@@ -122,7 +122,7 @@ class App extends React.Component {
                       <li aria-hidden="false" className="">
                         <a onClick={() => this.setState({ aboutUsModalShown : true }) } href="#"><i className="fa fa-info-circle"></i> About Us</a>
                       </li>
-                      <li><a onClick={()=> this.makeSignOutRequest()} href="#"><i className="fa fa-sign-out"></i> Sign Out</a></li>
+                      <li><a onClick={()=> this.makeSignOutRequest()} ><i className="fa fa-sign-out"></i> Sign Out</a></li>
                     </ul>
                   </div>
 
