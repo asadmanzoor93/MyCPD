@@ -77,6 +77,7 @@ class RecordCPD extends React.Component {
         this.handleFileUpload = this.handleFileUpload.bind(this);
         this.fetchCPDRecord = this.fetchCPDRecord.bind(this);
         this.makeThirdTabActive = this.makeThirdTabActive.bind(this);
+
     };
 
     componentWillMount() {
@@ -138,16 +139,16 @@ class RecordCPD extends React.Component {
                     });
                 }
             }).catch(function (error) {
-                if(error){
-                    if(error.response){
-                        if (error.response.status === 401) {
-                            self.setState({
-                                unauthorized: true,
-                            });
-                        }
+            if(error){
+                if(error.response){
+                    if (error.response.status === 401) {
+                        self.setState({
+                            unauthorized: true,
+                        });
                     }
                 }
-            });
+            }
+        });
     }
 
     fetchFormats () {
@@ -298,36 +299,9 @@ class RecordCPD extends React.Component {
     }
 
     handleNextStep(){
-        if (this.state.currentStep === 2){
-            if (this.state.cpd_type_id !== null
-                && this.state.course_name !== '' && this.state.course_description !== ''
-                && this.state.venue !== '' && this.state.cpd_hours !== ''
-                && this.state.file_name !== '' && this.state.date_completed !== ''){
-                this.setState({
-                    currentStep: this.state.currentStep + 1,
-                    second_tab_active: true,
-                });
-            } else {
-                alert('Fill all required fields')
-            }
-        } else {
-            this.setState({
-                currentStep: this.state.currentStep + 1
-            });
-        }
-
-
-    }
-
-    makeSecondTabActive(){
-        if (this.state.cpd_type_id !== null
-            && this.state.course_name !== '' && this.state.course_description !== ''
-            && this.state.venue !== '' && this.state.cpd_hours !== ''
-            && this.state.file_name !== '' && this.state.date_completed !== ''){
-            this.setState({
-                second_tab_active: true,
-            });
-        }
+        this.setState({
+            currentStep: this.state.currentStep + 1
+        });
     }
 
     makeThirdTabActive(){
@@ -411,7 +385,7 @@ class RecordCPD extends React.Component {
                     }
 
                 }).catch(function (error) {
-                    console.log(error.response);
+                console.log(error.response);
                 if(error){
                     if(error.response){
                         if (error.response.status === 401) {
@@ -456,7 +430,7 @@ class RecordCPD extends React.Component {
                 .then((data) => {
                     this.handleFileUpload(data)
                 }).catch(function (error) {
-                    console.log(error.response);
+                console.log(error.response);
                 if(error){
                     if(error.response){
                         if (error.response.status === 401) {
@@ -515,11 +489,13 @@ class RecordCPD extends React.Component {
             const name = target.name;
 
             if(name === 'file_upload'){
+                console.log(event.target.files.length);
                 if(event.target.files.length > 0) {
                     this.setState({
                         [name]: event.target.files[0],
                         file_name: event.target.files[0].name
                     });
+                    console.log(this.state.file_name, event.target.files[0].name)
                 }
             } else if (name === 'is_declared'){
                 this.setState({
@@ -614,7 +590,7 @@ class RecordCPD extends React.Component {
         if (this.state.redirectDashboard) {
             return <Redirect to='/dashboard'/>;
         }
-        
+
         let ListItemOne, ListItemTwo;
 
         if(this.state.currentStep > 1) {
@@ -918,13 +894,13 @@ class RecordCPD extends React.Component {
                                             <div className="form-group required">
                                                 <label htmlFor="location" className="control-label">Location</label>
                                                 <select
-                                                        name="location_id"
-                                                        id="location_id"
-                                                        value={this.state.location_id}
-                                                        onChange={this.handleInputChange}
-                                                        disabled={ (this.state.cpd_type_id === '4') ? "" : "disabled" }
-                                                        className="form-control ng-pristine ng-untouched ng-valid ng-not-empty"
-                                                        aria-invalid="false" >
+                                                    name="location_id"
+                                                    id="location_id"
+                                                    value={this.state.location_id}
+                                                    onChange={this.handleInputChange}
+                                                    disabled={ (this.state.cpd_type_id === '4') ? "" : "disabled" }
+                                                    className="form-control ng-pristine ng-untouched ng-valid ng-not-empty"
+                                                    aria-invalid="false" >
                                                     <option value="" defaultValue> </option>
                                                     {this.state.locations.map((item, key) =>
                                                         <option key={key} value={item.ID} >{item.Name}</option>
