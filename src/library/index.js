@@ -355,7 +355,7 @@ class Library extends React.Component {
         if (this.state.library_records !== null) {
             library_records = this.state.library_records.map((cpd_record , index) => (
                 <tr key={index}>
-                    <td><img src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
+                    <td style={{width:'60px'}}><img style={{width:'60px'}} src={ (cpd_record.ImagePath) ? cpd_record.ImagePath.replace('app/','') : ''} /></td>
                     <td>{cpd_record.CourseName}</td>
                     <td>{(cpd_record.LocationID in this.state.locations_dict) ? this.state.locations_dict[cpd_record.LocationID] : cpd_record.LocationID}</td>
                     <td>{cpd_record.DurationHours}h</td>
@@ -489,7 +489,7 @@ class Library extends React.Component {
                     <table className='table table-striped table-bordered table-hover table-condensed'>
                         <thead>
                         <tr className="header">
-                            <td> </td>
+                            <td style={{width:'60px'}}> </td>
                             <th role="button" onClick={this.onSort('CourseName')}>Course Name <i className={this.setArrow('CourseName')}> </i></th>
                             <th role="button" onClick={this.onSort('LocationID')}>Location<i className={this.setArrow('LocationID')}> </i></th>
                             <th role="button" onClick={this.onSort('DurationHours')}>CPD Hours<i className={this.setArrow('DurationHours')}> </i></th>
