@@ -219,6 +219,25 @@ class RecordCPD extends React.Component {
             cpd_type_id = TypeId;
         }
 
+        this.setState( {
+            cpd_type_id: TypeId,
+            course_format: 'Online',
+            course_id: '',
+            course_name: '',
+            course_description: '',
+            venue: '',
+            cpd_hours: '',
+            cpd_mins: '',
+            cpd_year: '',
+            date_completed: null,
+            start_date_iso: '',
+            file_upload: null,
+            file_name: null,
+            host_id: '',
+            trainer: '',
+            location_id: '',
+        });
+
         axios.get(Courses_URL, {
             params: {
                 CPDTypeId: cpd_type_id,
@@ -276,6 +295,7 @@ class RecordCPD extends React.Component {
                 if(data){
                     self.setState({
                         course_detail: data,
+                        course_id: CourseId,
                         course_format: data.CPDFormatId,
                         course_description: data.CourseDescription,
                         venue: data.Venue,
@@ -289,6 +309,7 @@ class RecordCPD extends React.Component {
                         file_upload: null,
                         file_name: null,
                     });
+
                     this.makeThirdTabActive();
                 }
             }).catch(console.log);
