@@ -398,7 +398,7 @@ class Dashboard extends React.Component {
 					<td>{(dashboard_record.HostId in this.state.host_dict) ? this.state.host_dict[dashboard_record.HostId] : dashboard_record.HostId}</td>
 					<td>{(dashboard_record.StartDate) ? moment(dashboard_record.StartDate).format('ll') : 'na'}</td>
 					<td>
-						<div style={{whiteSpace: 'nowrap'}}>
+						<div style={{whiteSpace: 'nowrap', display: (dashboard_record.CourseId != null) ? 'block': 'none'}}>
 							<a data-item={dashboard_record}
 							   onClick={() => {this.openModalWithItem(
 							   	dashboard_record.CourseName,
@@ -422,7 +422,12 @@ class Dashboard extends React.Component {
 							>
 								<i title="" className="fa fa-trash ng-scope" role="button" tabIndex="0"
 								  data-original-title="Delete CPD"> </i>
+
 							</a>
+						</div>
+
+						<div style={{fontSize:'21px', cursor: 'pointer', marginLeft: '25px', color: 'black', display: (dashboard_record.CourseId != null) ? 'none': 'block'}}>
+							<i className="fa fa-clock-o ng-scope" title="Waiting for an approval"> </i>
 						</div>
 					</td>
 				</tr>

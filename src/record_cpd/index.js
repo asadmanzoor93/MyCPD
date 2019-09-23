@@ -286,6 +286,8 @@ class RecordCPD extends React.Component {
                         trainer: data.Trainer,
                         host_id: data.HostId,
                         location_id: data.LocationId,
+                        file_upload: null,
+                        file_name: null,
                     });
                     this.makeThirdTabActive();
                 }
