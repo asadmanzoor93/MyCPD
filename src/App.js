@@ -48,9 +48,10 @@ class App extends React.Component {
     }, 1000)
   }
 
-  makeSignOutRequest() {
+  makeSignOutRequest(event) {
     let self = this;
-
+    event.preventDefault();
+    this.setState({ mainLoading: true });
     axios.get(SignOut_URL, {
       method: 'GET',
       withCredentials: true,
@@ -68,7 +69,7 @@ class App extends React.Component {
           mainLoading: false
         });
         localStorage.setItem('successMessage', 'Logout Successful');
-        window.location.reload()
+        window.location.reload();
     }).catch(console.log);
   };
 
@@ -123,7 +124,7 @@ class App extends React.Component {
                       <li aria-hidden="false" className="">
                         <a onClick={() => this.setState({ aboutUsModalShown : true }) } href="#"><i className="fa fa-info-circle"></i> About Us</a>
                       </li>
-                      <li><a onClick={()=> this.makeSignOutRequest()} ><i className="fa fa-sign-out"></i> Sign Out</a></li>
+                      <li><a onClick={(e)=> this.makeSignOutRequest(e)} href="#" ><i className="fa fa-sign-out"></i> Sign Out</a></li>
                     </ul>
                   </div>
 
@@ -147,7 +148,7 @@ class App extends React.Component {
             </div>
           </header>
           <nav className={this.state.quickNavShown ? "side-navigation active" : "side-navigation"}
-               style={{display: (this.props.location.pathname === '/login' || this.props.location.pathname === '/') ? 'none' : 'block'}}
+               style={{display: (this.props.location.pathname === '/login' || this.props.location.pathname === '/home' || this.props.location.pathname === '/') ? 'none' : 'block'}}
           >
             <ul className="c-footer-list">
               <li>

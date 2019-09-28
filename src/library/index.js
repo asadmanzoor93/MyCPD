@@ -64,10 +64,16 @@ class Library extends React.Component {
     };
 
     handleInputChange(name, value,item) {
+
         let newValue = value;
         if (name == 'start_date') {
-            let newDate = new Date(value);
+            var mydate = moment(value, 'DD/MM/YYYY'); 
+            let newDate = new Date(moment(mydate).format("MM/DD/YYYY"));
             newValue = newDate.toISOString();
+            this.setState({
+                start_date_iso: newValue
+            });
+
         }
         this.setState({
             [name]: newValue
@@ -452,19 +458,17 @@ class Library extends React.Component {
                                 </div>
                                 <div>
                                     <button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
-                                        <span className="glyphicon glyphicon-search"> </span>
-                                        Search
+                                        <span className="glyphicon glyphicon-search"> </span> Search
                                     </button>
                                     <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
-                                        <span className="glyphicon glyphicon-remove-sign"> </span>
-                                        Clear
+                                        <span className="glyphicon glyphicon-remove-sign"> </span> Clear
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="row" style={{paddingBottom: '30px'}}>
+                <div className="row">
                     <div className="gridTopButtons">
                         <button type="button" onClick={() => window.print()}
                                 className="btn btn-danger btn-circle btn-lg ng-scope">

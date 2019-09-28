@@ -30,3 +30,14 @@ code {
   padding: 4px 10px;
 }
 th .fa { margin-left: 3px; }
+.md-list {
+  width: 100%;
+  max-width: 100%;
+}
+.table img {
+  max-width: 150px;
+}
+.modal-title {
+  color: #fff;
+  font-weight: bold;
+}

@@ -56,7 +56,15 @@ class ApprovedCPDProviders extends React.Component {
     };
 
     handleInputChange(name,value) {
-        console.log(name,value);
+        let newValue = value;
+        if (name == 'start_date') {
+            var mydate = moment(value, 'DD/MM/YYYY'); 
+            let newDate = new Date(moment(mydate).format("MM/DD/YYYY"));
+            newValue = newDate.toISOString();
+            this.setState({
+                start_date_iso: newValue
+            });
+        }
         this.setState({
             [name]: value
         });
@@ -333,7 +341,7 @@ class ApprovedCPDProviders extends React.Component {
                                           id="start_date"
                                           label="Enter Start Date"
                                           name="start_date"
-                                          value={this.state.start_date}
+                                          locales="en-GB"
                                           onChange={(value) => {this.handleInputChange('start_date',value)}}
                                           className="md-cell md-cell--6 md-cell--bottom"
                                     />
@@ -343,19 +351,17 @@ class ApprovedCPDProviders extends React.Component {
                                 <div className="clearfix"> </div>
                                 <div>
                                     <button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
-                                        <span className="glyphicon glyphicon-search"> </span>
-                                        Search
+                                        <span className="glyphicon glyphicon-search"> </span> Search
                                     </button>
                                     <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
-                                        <span className="glyphicon glyphicon-remove-sign"> </span>
-                                        Clear
+                                        <span className="glyphicon glyphicon-remove-sign"> </span> Clear
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="row" style={{paddingBottom: '30px'}}>
+                <div className="row">
                     <div className="gridTopButtons">
                         <button type="button" onClick={() => window.print()}
                                 className="btn btn-danger btn-circle btn-lg ng-scope" tooltip="">

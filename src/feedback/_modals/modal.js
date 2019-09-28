@@ -162,14 +162,14 @@ class FeedbackModal extends React.Component {
                             placeholder="Your Query here" required
                             onChange={this.handleChange.bind(this, "Query")}
                             value={this.state.fields["Query"]}
-                  > </textarea>
+                  />
                   <span style={{color: "red"}}>{this.state.errors["Query"]}</span>
               </div>
-              <div className="modal-footer">
+            </Modal.Body>
+            <Modal.Footer>
                   <button className="btn btn-warning" onClick={this.props.onHide}>Cancel</button>
                   <button className="btn btn-primary" onClick={this.feedbackSubmit.bind(this)} >Submit</button>
-              </div>
-            </Modal.Body>
+            </Modal.Footer>
           </Modal>
         );
     }

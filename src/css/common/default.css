@@ -292,7 +292,6 @@
     border-radius: 6px;
     padding-left: 15px;
     padding-right: 15px;
-    margin-top: 15px;
 }
 
 .report-dashboard-box-1 {
@@ -893,8 +892,8 @@
         }
 .headerdashboard {
    
-    padding: 15px;
-
+    padding: 10px 15px;
+    font-weight: bold;
     background: rgb(103,85,153); /* Old browsers */
     background: -moz-linear-gradient(left, rgba(103,85,153,1) 0%, rgba(94,77,145,1) 2%, rgba(71,55,124,1) 4%, rgba(58,43,113,1) 6%, rgba(255,255,255,1) 87%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(left, rgba(103,85,153,1) 0%,rgba(94,77,145,1) 2%,rgba(71,55,124,1) 4%,rgba(58,43,113,1) 6%,rgba(255,255,255,1) 87%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */

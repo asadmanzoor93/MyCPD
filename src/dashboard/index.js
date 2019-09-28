@@ -23,6 +23,8 @@ const Delete_Record_URL = "http://34.248.242.178/CPDCompliance/api/Workflow/Dele
 const MyCPDReport_URL = "http://34.248.242.178/CPDCompliance/api/Member/PDF";
 let hostList = [];
 
+const DEFAULT_DATE = new Date(2017, 10, 22, 0, 0, 0);
+
 class Dashboard extends React.Component {
 
 	constructor() {
@@ -33,6 +35,9 @@ class Dashboard extends React.Component {
 		this.clearSearchFilters = this.clearSearchFilters.bind(this);
 		this.deleteCPDRecord = this.deleteCPDRecord.bind(this);
 		this.downloadExcel = this.downloadExcel.bind(this);
+		this.getHoursData = this.getHoursData.bind(this);
+		this.getHoursList = this.getHoursList.bind(this);
+
 
 		this.state = {
 			host_dict: {},
@@ -49,7 +54,8 @@ class Dashboard extends React.Component {
 			host_name: '',
 			location_name: '',
 			host_id: '',
-			year: '',
+			year: new Date().getFullYear(),
+			dashBoxYear: '',
 			date_selected: '',
 			totalPages: 0,
 			totalCount: 0,
@@ -77,9 +83,9 @@ class Dashboard extends React.Component {
 
     handleInputChange(name, value) {
         let newValue = value;
-        console.log(name, value);
         if (name == 'start_date') {
-            let newDate = new Date(value);
+			var mydate = moment(value, 'DD/MM/YYYY'); 
+            let newDate = new Date(moment(mydate).format("MM/DD/YYYY"));
             newValue = newDate.toISOString();
             this.setState({
                 start_date_iso: newValue
@@ -153,6 +159,12 @@ class Dashboard extends React.Component {
 	      })
 	    }, 1000);
 
+		// Hours Data
+		this.getHoursList();
+		this.getHoursData();
+	}
+
+	getHoursList() {
 		// Hosts List
 		axios.get(Hosts_URL, {
 			method: 'GET',
@@ -164,35 +176,36 @@ class Dashboard extends React.Component {
 				'Content-Type': 'application/json'
 			}
 		})
-			.then(response => response.data)
-			.then((data) => {
-				if(data){
-					let host_dic = {};
-					for(let i = 0; i < data.length; i++){
-						host_dic[data[i]['ID']] = data[i]['Name'];
-					}
-
-					this.setState({
-						host_list: data,
-						host_dict: host_dic
-					});
-
-	                if(data){
-	                    hostList = data.map((item)=>{
-	                        return {
-	                        	label: item.Name,
-	                        	value: item.ID
-	                        }
-	                    });
-	                }
+		.then(response => response.data)
+		.then((data) => {
+			if(data){
+				let host_dic = {};
+				for(let i = 0; i < data.length; i++){
+					host_dic[data[i]['ID']] = data[i]['Name'];
 				}
-			}).catch(console.log);
 
+				this.setState({
+					host_list: data,
+					host_dict: host_dic
+				});
+                if(data){
+                    hostList = data.map((item)=>{
+                        return {
+                        	label: item.Name,
+                        	value: item.ID
+                        }
+                    });
+                }
+			}
+		}).catch(console.log);
+	}
+
+	getHoursData() {
 		// Hours Data
 		axios.get(Hours_URL, {
 			params: {
 				UserName: 'UserName',
-				Year: 2019,
+				Year: this.state.year,
 			},
 			method: 'GET',
 			withCredentials: true,
@@ -203,18 +216,19 @@ class Dashboard extends React.Component {
 				'Content-Type': 'application/json'
 			}
 		})
-			.then(response => response.data)
-			.then((data) => {
-				if (data){
-					this.setState({
-						overdue_hours: data[0].OverdueHours,
-						overdue_minutes: data[0].OverdueMinutes,
-						required_hours: data[0].RequiredHours,
-						total_hours: data[0].TotalHours,
-						total_minutes: data[0].TotalMinutes
-					});
-				}
-			}).catch(console.log);
+		.then(response => response.data)
+		.then((data) => {
+			if (data){
+				this.setState({
+					dashBoxYear: this.state.year,
+					overdue_hours: data[0].OverdueHours,
+					overdue_minutes: data[0].OverdueMinutes,
+					required_hours: data[0].RequiredHours,
+					total_hours: data[0].TotalHours,
+					total_minutes: data[0].TotalMinutes
+				});
+			}
+		}).catch(console.log);
 	}
 
 	makeHttpRequestWithPage(pageNumber, column, direction) {
@@ -234,6 +248,7 @@ class Dashboard extends React.Component {
 		}
 
 		let self = this;
+		this.getHoursData();
 		axios.get(Listing_URL, {
 			params: {
 				CPDTypeId: this.state.cpd_type_id,
@@ -391,7 +406,7 @@ class Dashboard extends React.Component {
 					<td><img src={ (dashboard_record.ImagePath) ? dashboard_record.ImagePath.replace('app/','') : ''} /></td>
 					<td>{dashboard_record.CPDTypeName}</td>
 					<td>{dashboard_record.CourseName}</td>
-					<td>{dashboard_record.Hours}h</td>
+					<td>{dashboard_record.Hours}h { dashboard_record.Minutes? `${dashboard_record.Minutes}m`:'' }</td>
 					<td>{(dashboard_record.CompletionDate) ? moment(dashboard_record.CompletionDate).format('ll') : 'na'}</td>
 					<td>{dashboard_record.Venue}</td>
 					<td>{dashboard_record.Trainer}</td>
@@ -439,7 +454,7 @@ class Dashboard extends React.Component {
 			<div>
           		{ this.state.mainLoading && <LinearProgress id="main-loader"  /> }
 				<div>
-					<div className="row" style={{ marginBottom: '3rem' }}>
+					<div className="row" style={{ marginBottom: '1.8rem' }}>
 						<div className="col-md-4">
 							<div className="dashboard_box">
 								<div className="pull-right green_icon">
@@ -452,7 +467,7 @@ class Dashboard extends React.Component {
 								<div className="dashboard-box-footer" id="dashBox1">
 									<div id="courseToDo">
 										<span>Required</span>
-										<span style={{float:'right'}}>2019</span>
+										<span style={{float:'right'}}>{this.state.dashBoxYear}</span>
 									</div>
 								</div>
 							</div>
@@ -469,7 +484,7 @@ class Dashboard extends React.Component {
 								<div className="dashboard-box-footer" id="remainingdashBox">
 									<div id="courseToDo">
 										<span>Remaining</span>
-										<span style={{float:'right'}}>2019</span>
+										<span style={{float:'right'}}>{this.state.dashBoxYear}</span>
 									</div>
 								</div>
 							</div>
@@ -479,15 +494,14 @@ class Dashboard extends React.Component {
 								<div className="pull-right green_icon">
 									<i className="fa fa-trophy"> </i>
 								</div>
-								{this.state.total_hours}
-								<span className="mediumfont">Hour {this.state.total_minutes}  Mins</span>
+								{this.state.total_hours} <span className="mediumfont">Hour {this.state.total_minutes}  Mins</span>
 								<div className="white_progress">
 									<div className="white_progress_inner" style={{width:'100%'}}> </div>
 								</div>
 								<div className="dashboard-box-footer" id="completedDashBox">
 									<div id="courseToDo">
 										<span>COMPLETED</span>
-										<span style={{float:'right'}}>2019</span>
+										<span style={{float:'right'}}>{this.state.dashBoxYear}</span>
 									</div>
 								</div>
 							</div>
@@ -500,7 +514,7 @@ class Dashboard extends React.Component {
 						</div>
 	                    <div className="shadow">
 	                        <div className="layout-gt-sm-row">
-	                            <div style={{padding: '1rem'}}>
+	                            <div style={{padding: '0 1rem 1rem'}}>
 	                                <div className="md-grid">
 	                                    <TextField
 	                                          id="courseName"
@@ -541,7 +555,7 @@ class Dashboard extends React.Component {
 	                                          id="start_date"
 	                                          label="Enter Start Date"
 	                                          name="start_date"
-											  value={this.state.start_date}
+	                                          locales="en-GB"
 	                                          onChange={(value) => {this.handleInputChange('start_date',value)}}
 	                                          className="md-cell md-cell--6 md-cell--bottom"
 	                                    />
@@ -557,18 +571,16 @@ class Dashboard extends React.Component {
 										    menuItems={hostList}
 											value={this.state.host_id}
 	                                        onChange={(value) => {this.handleInputChange('host_id',value)}}
-										    className="md-cell md-cell--6 md-cell--bottom"
+										    className="md-cell md-cell--6"
 										/>
 
 	                                </div>
 	                                <div>
 	                                    <button className="btn btn-primary" style={{marginRight: '10px'}} onClick={() => this.makeHttpRequestWithPage(1)}>
-	                                        <span className="glyphicon glyphicon-search"> </span>
-	                                        Search
+	                                        <span className="glyphicon glyphicon-search"> </span> Search
 	                                    </button>
 	                                    <button className="btn btn-primary" onClick={() => this.clearSearchFilters()}>
-	                                        <span className="glyphicon glyphicon-remove-sign"> </span>
-	                                        Clear
+	                                        <span className="glyphicon glyphicon-remove-sign"> </span> Clear
 	                                    </button>
 	                                </div>
 	                            </div>
@@ -576,7 +588,7 @@ class Dashboard extends React.Component {
 						</div>
 					</div>
 				</div>
-				<div className="row" style={{paddingBottom: '30px'}}>
+				<div className="row">
 					<div className="gridTopButtons">
 						<button type="button" onClick={() => window.print()}
 								className="btn btn-danger btn-circle btn-lg ">

@@ -8,6 +8,8 @@ import {NotificationManager} from 'react-notifications';
 import "bootstrap-datepicker/js/bootstrap-datepicker.js";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 
+const moment = require('moment');
+
 const MAX_DATE = new Date();
 
 const CPDRecord_Info_URL = 'http://34.248.242.178/CPDCompliance/api/Member/GetMemberCPD';
@@ -500,7 +502,9 @@ class RecordCPD extends React.Component {
 
         if (field_name == 'date_completed') {
             let newValue = event;
-            let newDate = new Date(event);
+
+            var mydate = moment(newValue, 'DD/MM/YYYY'); 
+            let newDate = new Date(moment(mydate).format("MM/DD/YYYY"));
             newValue = newDate.toISOString();
             this.setState({
                 start_date_iso: newValue,
@@ -843,8 +847,8 @@ class RecordCPD extends React.Component {
                                                     id="date_completed"
                                                     label="Enter Completed Date"
                                                     name="date_completed"
-                                                    value={this.state.date_completed}
                                                     maxDate={MAX_DATE}
+                                                    locales="en-GB"
                                                     onChange={(value) => {this.handleInputChange(value,'date_completed')}}
                                                 />
                                             </div>

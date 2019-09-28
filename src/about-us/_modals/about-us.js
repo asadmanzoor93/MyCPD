@@ -8,8 +8,8 @@ class AboutUsModal extends React.Component {
             <Modal {...this.props} >
             <Modal.Header className="modal-header-primary">
               <Modal.Title id="contained-modal-title-lg">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onClick={this.props.onHide}>
-                  <i class="fa fa-close"></i>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"  onClick={this.props.onHide}>
+                  <i className="fa fa-close"></i>
                 </button>
                   About Us
               </Modal.Title>

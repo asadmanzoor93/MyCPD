@@ -5574,6 +5574,8 @@ button.close {
 }
 .modal-title {
   margin: 0;
+  color: #fff;
+  font-weight: bold;
   line-height: 1.42857143;
 }
 .modal-body {
