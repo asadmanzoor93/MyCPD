@@ -214,31 +214,35 @@ class RecordCPD extends React.Component {
             }).catch(console.log);
     }
 
-    fetchCourses (TypeId) {
+    fetchCourses (TypeId, checkStates) {
         let self = this;
         let cpd_type_id = this.state.cpd_type_id;
         if(TypeId){
             cpd_type_id = TypeId;
         }
 
-        this.setState( {
-            cpd_type_id: TypeId,
-            course_format: 'Online',
-            course_id: '',
-            course_name: '',
-            course_description: '',
-            venue: '',
-            cpd_hours: '',
-            cpd_mins: '',
-            cpd_year: '',
-            date_completed: null,
-            start_date_iso: '',
-            file_upload: null,
-            file_name: null,
-            host_id: '',
-            trainer: '',
-            location_id: '',
-        });
+        if(checkStates !== 'edit' && TypeId != null){
+            this.setState( {
+                cpd_type_id: TypeId,
+                course_format: 'Online',
+                course_id: '',
+                course_name: '',
+                course_description: '',
+                venue: '',
+                cpd_hours: '',
+                cpd_mins: '',
+                cpd_year: '',
+                date_completed: null,
+                start_date_iso: '',
+                file_upload: null,
+                file_name: null,
+                host_id: '',
+                trainer: '',
+                location_id: '',
+            });
+        }
+
+
 
         axios.get(Courses_URL, {
             params: {
@@ -535,7 +539,6 @@ class RecordCPD extends React.Component {
             }
 
             if (name === 'cpd_type_id'){
-                console.log(value);
                 this.fetchCourses(value);
             }
 
@@ -576,6 +579,7 @@ class RecordCPD extends React.Component {
                     data.Items.forEach((element) => {
                         if(element.CPDWorkflowId == self.state.workFlowId){
                             self.setState({
+                                cpd_type_id: element.CPDTypeId,
                                 course_format: element.CPDFormatId,
                                 course_id: element.CourseId,
                                 course_name: element.CourseName,
@@ -592,6 +596,7 @@ class RecordCPD extends React.Component {
                                 location_id: element.LocationId,
                                 is_declared: element.IsDeclared,
                             });
+                            this.fetchCourses(element.CPDTypeId, 'edit');
                         }
                     });
                 }
