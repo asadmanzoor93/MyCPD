@@ -23,6 +23,7 @@ const Course_Detail_URL = 'http://34.248.242.178/CPDCompliance/api/Lookup/GetCou
 const ADD_Record_URL = 'http://34.248.242.178/CPDCompliance/api/Workflow/add';
 const File_Upload_URL = 'http://34.248.242.178/CPDCompliance/api/Workflow/file/upload';
 
+let default_date_completed = '';
 
 //On view load: Call member info, types, formats, hosts, locations api. Fill data for first step automatically
 class RecordCPD extends React.Component {
@@ -577,6 +578,8 @@ class RecordCPD extends React.Component {
                 if(data.Items){
 
                     data.Items.forEach((element) => {
+                        default_date_completed = moment(element.CompletionDate).format('MM/DD/YYYY').toString();
+                        // default_date_completed = element.CompletionDate.toString();
                         if(element.CPDWorkflowId == self.state.workFlowId){
                             self.setState({
                                 cpd_type_id: element.CPDTypeId,
@@ -858,6 +861,7 @@ class RecordCPD extends React.Component {
                                                     label="Enter Completed Date"
                                                     name="date_completed"
                                                     maxDate={MAX_DATE}
+                                                    defaultValue={default_date_completed}
                                                     locales="en-GB"
                                                     onChange={(value) => {this.handleInputChange(value,'date_completed')}}
                                                 />
