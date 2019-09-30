@@ -623,22 +623,29 @@ class RecordCPD extends React.Component {
             return <Redirect to='/dashboard'/>;
         }
 
-        let ListItemOne, ListItemTwo;
+        let ListItemOne, ListItemTwo, ListItemThree, currentActiveClass, nextTabClass, prevTabClass;
+        currentActiveClass = 'current';
+        prevTabClass = 'done';
+        nextTabClass = 'default';
 
-        if(this.state.currentStep > 1) {
-            ListItemOne = <li className="done"><a onClick={this.handlePrevStep} href="#">Submitter Details</a></li>
-        } else {
-            ListItemOne = <li className="current"><a>Submitter Details</a></li>
+        if(this.state.mode === 'edit'){
+            currentActiveClass = 'editing';
+            nextTabClass = 'done';
         }
 
-        if(this.state.currentStep > 2) {
-            ListItemTwo = <li className="done"><a onClick={this.handlePrevStep} href="#">Confirm CPD Activity Details</a></li>
+        if(this.state.currentStep === 1) {
+            ListItemOne = <li className={currentActiveClass}><a>Submitter Details</a></li>
+            ListItemTwo = <li className={nextTabClass}><a>Confirm CPD Activity Details</a></li>
+            ListItemThree = <li className={nextTabClass}><a>CPD Details</a></li>
         } else if(this.state.currentStep === 2) {
-            ListItemTwo = <li className="current"><a>Confirm CPD Activity Details</a></li>
-        } else {
-            ListItemTwo = <li className="default"><a>Confirm CPD Activity Details</a></li>
+            ListItemOne = <li className={prevTabClass}><a onClick={()=>this.setState({ currentStep: 1 })} href="#">Submitter Details</a></li>
+            ListItemTwo = <li className={currentActiveClass}><a>Confirm CPD Activity Details</a></li>
+            ListItemThree = <li className={nextTabClass}><a>CPD Details</a></li>
+        } else if(this.state.currentStep === 3) {
+            ListItemOne = <li className={prevTabClass}><a onClick={()=>this.setState({ currentStep: 1 })} href="#">Submitter Details</a></li>
+            ListItemTwo = <li className={prevTabClass}><a onClick={()=>this.setState({ currentStep: 2 })} href="#">Confirm CPD Activity Details</a></li>
+            ListItemThree = <li className={currentActiveClass}><a>CPD Details</a></li>
         }
-
 
         return (
             <div>
@@ -646,9 +653,7 @@ class RecordCPD extends React.Component {
                     <ul className="steps-indicator steps-3">
                         { ListItemOne }
                         { ListItemTwo }
-                        <li className="default">
-                            <a>CPD Details</a>
-                        </li>
+                        { ListItemThree }
                     </ul>
                     <div className="steps ">
                         <section className="step" style={{display: (this.state.currentStep === 1) ? 'block' : 'none' }}>
