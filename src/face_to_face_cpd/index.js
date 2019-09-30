@@ -116,12 +116,12 @@ class FaceToFace extends React.Component {
     }
 
     makeHttpRequestWithPage(pageNumber, column, direction) {
+        let reverse= this.state.sort.direction;
+        let sortBy= this.state.sort.column;
+
         this.setState({
             mainLoading: true
         });
-
-        let reverse= (this.state.sort.direction === 'asc') ? false : true;
-        let sortBy= this.state.sort.column;
 
         if(column){
             sortBy = column;
@@ -130,6 +130,8 @@ class FaceToFace extends React.Component {
         if(direction){
             reverse = direction;
         }
+
+        reverse= (reverse === 'asc') ? false : true;
 
         let self = this;
         axios.get(FaceToFace_URL, {

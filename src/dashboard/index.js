@@ -232,7 +232,7 @@ class Dashboard extends React.Component {
 	}
 
 	makeHttpRequestWithPage(pageNumber, column, direction) {
-		let reverse= (this.state.sort.direction === 'asc') ? false : true;
+		let reverse= this.state.sort.direction;
 		let sortBy= this.state.sort.column;
 
 		this.setState({
@@ -246,6 +246,8 @@ class Dashboard extends React.Component {
 		if(direction){
 			reverse = direction;
 		}
+
+		reverse= (reverse === 'asc') ? false : true;
 
 		let self = this;
 		this.getHoursData();
