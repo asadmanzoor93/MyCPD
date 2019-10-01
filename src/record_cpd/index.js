@@ -507,6 +507,7 @@ class RecordCPD extends React.Component {
 
         if (field_name == 'date_completed') {
             let newValue = event;
+            default_date_completed = '';
 
             var mydate = moment(newValue, 'DD/MM/YYYY'); 
             let newDate = new Date(moment(mydate).format("MM/DD/YYYY"));
@@ -578,8 +579,7 @@ class RecordCPD extends React.Component {
                 if(data.Items){
 
                     data.Items.forEach((element) => {
-                        default_date_completed = moment(element.CompletionDate).format('MM/DD/YYYY').toString();
-                        // default_date_completed = element.CompletionDate.toString();
+                        default_date_completed = moment(element.CompletionDate).format('DD/MM/YYYY').toString();
                         if(element.CPDWorkflowId == self.state.workFlowId){
                             self.setState({
                                 cpd_type_id: element.CPDTypeId,
@@ -600,6 +600,9 @@ class RecordCPD extends React.Component {
                                 is_declared: element.IsDeclared,
                             });
                             this.fetchCourses(element.CPDTypeId, 'edit');
+                            setTimeout(() => {
+                                this.makeThirdTabActive();
+                            }, 500);
                         }
                     });
                 }
@@ -858,10 +861,9 @@ class RecordCPD extends React.Component {
                                                 </label>
                                                 <DatePicker
                                                     id="date_completed"
-                                                    label="Enter Completed Date"
+                                                    label={(this.state.mode === 'edit') ? default_date_completed : "Enter Completed Date"}
                                                     name="date_completed"
                                                     maxDate={MAX_DATE}
-                                                    defaultValue={default_date_completed}
                                                     locales="en-GB"
                                                     onChange={(value) => {this.handleInputChange(value,'date_completed')}}
                                                 />
