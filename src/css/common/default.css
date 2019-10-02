@@ -1462,7 +1462,6 @@ html.md-default-theme, html, body.md-default-theme, body {
 }
 
 .nav-page-headers {
-    padding-top:15px;
-    padding-left:15px;
-    padding-bottom:10px;
+    padding: 10px 15px;
+    font-weight: bold;
 }

@@ -103,7 +103,7 @@ class App extends React.Component {
                   <div id="bs-example-navbar-collapse-1" className="collapse navbar-collapse animated fadeIn">
                     <ul className="nav navbar-nav animated fadeIn text16">
                       <li style={{display: this.props.location.pathname === '/home' ? 'none' : 'block' }}>
-                        <Link to={'/home'}><i className="fa fa-home"> </i> Home </Link>
+                        <Link to={'/home'} onClick={()=>{ this.setState({ quickNavShown: false }) }}><i className="fa fa-home"> </i> Home </Link>
                       </li>
                       <li className="active" style={{display: this.props.location.pathname === '/home' ? 'none' : 'block' }}>
                         <a href="#" onClick={e => { e.preventDefault(); this.setState({quickNavShown: !this.state.quickNavShown }); }} >
