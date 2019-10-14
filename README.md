@@ -1,5 +1,7 @@
 ## MyCPD - Continuing Professional Development
 
+MyCPD - Continuing Professional Development is a systematic maintenance, improvement and broadening of knowledge, understanding and skills, and the development of personal qualities necessary for the execution of professional duties throughout the individual's working life.
+
 ![mycpd](https://user-images.githubusercontent.com/17013371/64925397-5d1d0900-d809-11e9-990e-95cbc62916a3.jpg)
 
 
